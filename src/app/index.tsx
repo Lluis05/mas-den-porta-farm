@@ -1,51 +1,41 @@
-import { Stack } from 'expo-router';
+import { Link, Stack, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-type Recompte = {
-  sales: number;
-  corrals: number;
-  places: number;
-  bandes: number;
-  tipusPinso: number;
-  porcs: number;
-};
+import { llistaCicles, porcsALaGranja, type CicleLlista } from '@/db/queries';
+import { colors, mides } from '@/theme';
 
-/**
- * Pantalla provisional: encara no hi ha funcionalitat, només serveix per
- * comprovar que la base de dades s'ha creat bé al mòbil.
- */
 export default function Index() {
   const db = useSQLiteContext();
-  const [dades, setDades] = useState<Recompte | null>(null);
+  const [porcs, setPorcs] = useState<number | null>(null);
+  const [cicles, setCicles] = useState<CicleLlista[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let viu = true;
-
-    async function carrega() {
-      try {
-        const fila = await db.getFirstAsync<Recompte>(`
-          SELECT
-            (SELECT COUNT(*) FROM sala)                  AS sales,
-            (SELECT COUNT(*) FROM corral)                AS corrals,
-            (SELECT COALESCE(SUM(capacitat), 0) FROM corral) AS places,
-            (SELECT COUNT(*) FROM banda)                 AS bandes,
-            (SELECT COUNT(*) FROM tipus_pinso)           AS tipusPinso,
-            (SELECT COALESCE(SUM(porcs), 0) FROM v_ocupacio_actual) AS porcs
-        `);
-        if (viu) setDades(fila);
-      } catch (e) {
-        if (viu) setError(e instanceof Error ? e.message : String(e));
-      }
-    }
-
-    carrega();
-    return () => {
-      viu = false;
-    };
-  }, [db]);
+  // useFocusEffect i no useEffect: així es refresca en tornar d'una altra
+  // pantalla, per exemple després de crear un cicle.
+  useFocusEffect(
+    useCallback(() => {
+      let viu = true;
+      (async () => {
+        try {
+          const [total, llista] = await Promise.all([
+            porcsALaGranja(db),
+            llistaCicles(db),
+          ]);
+          if (!viu) return;
+          setPorcs(total);
+          setCicles(llista);
+          setError(null);
+        } catch (e) {
+          if (viu) setError(e instanceof Error ? e.message : String(e));
+        }
+      })();
+      return () => {
+        viu = false;
+      };
+    }, [db])
+  );
 
   return (
     <>
@@ -58,70 +48,96 @@ export default function Index() {
           </View>
         )}
 
-        {!error && !dades && <Text style={styles.discret}>Carregant…</Text>}
+        <View style={styles.targeta}>
+          <Text style={styles.titolSeccio}>Porcs a la granja</Text>
+          <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
+        </View>
 
-        {dades && (
-          <>
-            <View style={styles.targeta}>
-              <Text style={styles.titol}>Base de dades creada</Text>
-              <Text style={styles.discret}>
-                L&apos;estructura de la granja ja hi és. Encara no hi ha cap porc
-                registrat.
-              </Text>
-            </View>
+        <Link href="/cicle/nou" asChild>
+          <Pressable style={styles.botoPrincipal} accessibilityRole="button">
+            <Text style={styles.botoText}>Nou cicle d&apos;engreix</Text>
+          </Pressable>
+        </Link>
 
-            <View style={styles.targeta}>
-              <Text style={styles.titolSeccio}>Estructura</Text>
-              <Fila etiqueta="Sales" valor={dades.sales} />
-              <Fila etiqueta="Corrals" valor={dades.corrals} />
-              <Fila etiqueta="Places totals" valor={dades.places} />
-              <Fila etiqueta="Bandes" valor={dades.bandes} />
-              <Fila etiqueta="Tipus de pinso" valor={dades.tipusPinso} />
-            </View>
-
-            <View style={styles.targeta}>
-              <Text style={styles.titolSeccio}>Ara mateix</Text>
-              <Fila etiqueta="Porcs a la granja" valor={dades.porcs} />
-            </View>
-          </>
-        )}
+        <View style={styles.targeta}>
+          <Text style={styles.titolSeccio}>Cicles</Text>
+          {cicles.length === 0 && (
+            <Text style={styles.ajuda}>
+              Encara no n&apos;hi ha cap. Comença&apos;n un amb el botó de dalt.
+            </Text>
+          )}
+          {cicles.map((c) => (
+            <Link key={c.id} href={`/cicle/${c.id}`} asChild>
+              <Pressable style={styles.filaCicle} accessibilityRole="button">
+                <View style={styles.bandaRodona}>
+                  <Text style={styles.bandaNum}>{c.banda}</Text>
+                </View>
+                <View style={styles.flex}>
+                  <Text style={styles.cicleTitol}>
+                    {c.queden} porcs · {c.num_corrals} corralines
+                  </Text>
+                  <Text style={styles.ajuda}>
+                    Entrada {c.data_entrada} · {c.porcs_entrada} porcs
+                    {c.porcs_sortida > 0 ? ` · han sortit ${c.porcs_sortida}` : ''}
+                  </Text>
+                </View>
+                <Text style={styles.fletxa}>›</Text>
+              </Pressable>
+            </Link>
+          ))}
+        </View>
       </ScrollView>
     </>
   );
 }
 
-function Fila({ etiqueta, valor }: { etiqueta: string; valor: number }) {
-  return (
-    <View style={styles.fila}>
-      <Text style={styles.etiqueta}>{etiqueta}</Text>
-      <Text style={styles.valor}>{valor}</Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  pagina: { padding: 16, gap: 12 },
+  flex: { flex: 1 },
+  pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: 40 },
   targeta: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: colors.targeta,
+    borderRadius: mides.radi,
+    padding: mides.espai,
     gap: 4,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ddd',
+    borderColor: colors.vora,
   },
-  targetaError: { backgroundColor: '#fff4f4', borderColor: '#f0c0c0' },
-  titol: { fontSize: 18, fontWeight: '600' },
-  titolSeccio: { fontSize: 13, fontWeight: '600', color: '#888', marginBottom: 8 },
-  titolError: { fontSize: 16, fontWeight: '600', color: '#a11' },
-  textError: { color: '#a11', fontFamily: 'monospace' },
-  discret: { color: '#777' },
-  fila: {
+  targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
+  titolSeccio: { fontSize: 13, fontWeight: '600', color: colors.discret },
+  titolError: { fontSize: 16, fontWeight: '600', color: colors.perill },
+  textError: { color: colors.perill },
+  granTotal: {
+    fontSize: 40,
+    fontWeight: '700',
+    color: colors.text,
+    fontVariant: ['tabular-nums'],
+  },
+  ajuda: { fontSize: 13, color: colors.discret },
+  botoPrincipal: {
+    height: 52,
+    borderRadius: mides.radi,
+    backgroundColor: colors.primari,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  filaCicle: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 6,
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 10,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#eee',
+    borderTopColor: colors.vora,
   },
-  etiqueta: { color: '#333' },
-  valor: { fontWeight: '600', fontVariant: ['tabular-nums'] },
+  bandaRodona: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: colors.primariFluix,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bandaNum: { fontSize: 17, fontWeight: '700', color: colors.primari },
+  cicleTitol: { fontSize: 16, fontWeight: '600', color: colors.text },
+  fletxa: { fontSize: 24, color: colors.discret },
 });

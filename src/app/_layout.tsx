@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { DATABASE_NAME, initDatabase } from '@/db';
+import { colors } from '@/theme';
 
 /**
  * SQLiteProvider obre la base de dades un sol cop i la deixa disponible
@@ -13,7 +14,14 @@ export default function RootLayout() {
   return (
     <Suspense fallback={<Carregant />}>
       <SQLiteProvider databaseName={DATABASE_NAME} onInit={initDatabase} useSuspense>
-        <Stack />
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: colors.targeta },
+            headerTintColor: colors.primari,
+            headerTitleStyle: { color: colors.text },
+            contentStyle: { backgroundColor: colors.fons },
+          }}
+        />
       </SQLiteProvider>
     </Suspense>
   );
