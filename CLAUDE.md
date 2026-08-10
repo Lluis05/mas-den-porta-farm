@@ -1,28 +1,44 @@
 # Farm App
 
+@AGENTS.md
+
 ## Purpose
 An app for the user's parents (pig farmers) to track their farm operations. Built by the user with Claude Code's help; the user is learning as they go.
 
 ## Core features (initial scope)
-- Track how many pigs are in each **farm** and each **room** within a farm.
-- Flag/track pigs that are ill or need attention.
-- Track feeding needs/schedule.
+_Revised 2026-08-10 after the father answered the open questions — see `docs/excel-analisi.md` §7–8._
+- Track pig counts down to **corral level**: 1 site → 27 fattening rooms → 12 corrals each (~132 pigs/room).
+- Record the **7-band batch cycle**: weaning (`Cens24`), fattening cycle, exits to slaughterhouse.
+- **Kill the duplicate data entry** between truck-level and room-level exit records — this is the parents' #1 pain point. The room record holds only the pig count; the app fills in load date and average weight from the truck record.
+- **Feed forecasting**: use consumption history (mainly gestation + farrowing) to notify a few days before feed runs out. This — not feed distribution — is what "feeding" means here.
+- Everything is **append-only history**; nothing is ever overwritten (the Excel's rotating sheet numbering is a limitation, not a requirement).
+- ~~Flag/track pigs that are ill~~ — **dropped from initial scope.** The parents keep no health records and don't need them. What they do want, as *optional* entries: manual death records (deaths are still primarily derived by difference) and a treatment log.
 - More features to be added as the user thinks of them — check in with the user before assuming scope.
 
 ## Key constraints (do not lose these when planning features)
 - **Must work offline.** The farm(s) may have no internet connection. Data entry (pig counts, health status, feeding) must be stored locally on the phone first, and sync to the shared/remote database opportunistically when a connection is available. Do not design any feature that requires a live connection to function.
 - **Two surfaces sharing one dataset**: a mobile app (primary, used out in the barn/field) and a web/PC app (secondary, used e.g. at a desk). Both need to see the same data once synced.
-- The parents have an **existing Excel spreadsheet** with farm data. At some point we need to import that into the app so they don't have to re-enter everything by hand. Ask the user for the spreadsheet/structure when we get to that step.
+- The parents have an **existing Excel spreadsheet** with farm data: `~/Documents/estat granja.xlsm`. Analysed in `docs/excel-analisi.md`. We need to import it so they don't re-enter everything by hand.
 - The user is non-technical / learning to code through this project. Explain setup steps plainly, don't assume prior knowledge of the toolchain.
 
 ## Tech decisions made so far
 - **Framework**: Expo (React Native) — one codebase, runs as a mobile app (iOS/Android via Expo Go for testing) and exports to a web app, so we don't maintain two separate frontends.
-- **Local storage**: TBD — need an offline-first local DB on-device (e.g. Expo SQLite or WatermelonDB) since connectivity can't be assumed.
+- **Expo SDK version: pinned to 54** (2026-08-10, after 57 → 56 → 54). Reason: **Expo Go only ever supports one SDK**, and the user's iPhone can only install **Expo Go 54.0.2** from the App Store — the newer builds aren't offered for that device/iOS version, so this is a hard ceiling, not a temporary lag. Do **not** bump the SDK; the phone will reject the project again ("incompatible with this version of Expo Go"). The durable fix, once the app matters, is a **development build** (EAS) instead of Expo Go — that decouples the SDK from the App Store and is required anyway before the parents can use it for real.
+- **Testing on device**: the user's phone and PC are on **separate networks that can't see each other**, so plain LAN mode doesn't reach the phone. Use `npx expo start --tunnel`. `@expo/ngrok` is a **local devDependency on purpose** — Expo CLI's "install it globally" prompt installs to `~/.local` but then can't resolve it, failing with `CommandError: Install @expo/ngrok and try again`. Do not remove it. If the tunnel itself errors (`failed to start tunnel / remote gone away`), the fallback that avoids ngrok entirely is: turn on the **iPhone's personal hotspot, connect the PC to it**, then plain `npx expo start` — both devices are then on one network.
+- **Local storage**: **Expo SQLite** (decided 2026-08-10). Chosen over WatermelonDB deliberately: it's plain SQL the user can read and learn from, and we write the Supabase sync ourselves rather than adopting a framework's sync model.
+- **Data model**: designed in `docs/model-dades.md` — **read it before writing any DB or screen code.**
+- **Project layout**: `src/app` = screens + layouts only (expo-router file-based routing); all other code elsewhere in `src/`.
+- **`metro.config.js` is load-bearing — do not delete.** `expo-sqlite` on web runs as WebAssembly; without `assetExts.push('wasm')` the web build fails to resolve `wa-sqlite.wasm`, and without the COOP/COEP headers the browser refuses SharedArrayBuffer. The dev server gets those headers from `enhanceMiddleware`; **whoever hosts the production web build must send them too**, or the web app won't open its database.
 - **Remote/sync backend**: Supabase (hosted Postgres + API) proposed as the shared backend the local data syncs to when online. Not yet set up.
 - **Editor**: VS Code, installed on this machine (Arch/CachyOS) via pacman, for the user's own visibility into the code. Claude Code does the actual editing via terminal.
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
+- 2026-08-10 (schema): **SQLite schema built** in `src/db/` — `schema.ts` (tables + views), `seed.ts` (fixed farm structure), `index.ts` (migration runner keyed on `PRAGMA user_version`). Wired into the app via `SQLiteProvider` in `src/app/_layout.tsx`; `src/app/index.tsx` is a temporary screen showing the row counts so the DB can be verified on the phone. Seeds 27 rooms / 324 corrals / 3,564 places, 7 bands, 7 reproduction locations, 9 feed types. Derived values are **SQL generated columns + views**, never writable: `v_ocupacio_actual` (pigs per corral now), `v_cicle_resum` (deaths by difference, sale ages), `v_consum_pinso` (feed rate for the forecast). Verified by running the whole schema against real SQLite with sample data — calculations correct and all CHECK/FK/unique constraints reject bad input. **To change the schema: bump `VERSIO_ESQUEMA` and add a new migration step; never edit a published one.**
+- 2026-08-10 (scaffold): **First code exists.** Expo SDK 57 / React Native 0.86 / React 19, TypeScript, expo-router (file-based routing, `src/app`), demo content stripped via `reset-project`. `expo-sqlite` installed. Verified: `npx tsc --noEmit` clean and `npx expo export --platform web` bundles. Also resolved: corral numbering is **1–6 per half** (`E`/`D`), so `26 E+5-6-D` is one room with uneven halves, not two rooms — `docs/model-dades.md` §1 has the full decoding table for the Excel's room codes. Entry UX decided: type the pig count per room, tap which corrals are occupied, app splits the number across them. Next: SQLite schema from `docs/model-dades.md`, then the first real screen.
+- 2026-08-10 (later): Follow-up questions G1–G4 answered too. Notable correction: the `LLAVORES` block in the *Porcs escorxador* sheet is **incoming** replacement gilts, not sales. Feed forecasting is **per feed type** (gestation silo ~25,000 kg, farrowing ~12,000 kg). All 12 corrals per room hold 11 pigs. **Data model written to `docs/model-dades.md`** — entities, calculated-vs-entered fields, Excel→table import mapping. Three things still open before coding: which corral numbers are `E` vs `D`, whether delivery-rate-based feed forecasting is good enough, and Expo SQLite vs WatermelonDB. Next: pick the local DB, then `npx create-expo-app`.
+- 2026-08-10: The user + their father answered **all 30 open questions** (raw text in `docs/respostes-pare.md`, folded into `docs/excel-analisi.md` §7, with implications in the new §8). Biggest consequences: the app must reach **corral level** (27 rooms × 12 corrals, 132 pigs/room); **individual health tracking is out of scope** (they keep no such records); "feeding" means **feed-runout forecasting + notification**, not distribution; nothing may ever be overwritten; transition happens **at a different farm**. Import scope narrowed to **current year + full feed history**. Four new questions raised in §8.4 (G1–G4). Next: design the data model / entity schema from §8.2, then scaffold with `npx create-expo-app`. Still no code.
+- 2026-08-09: Read the parents' spreadsheet (`~/Documents/estat granja.xlsm`, 42 sheets, in Catalan). Full structural analysis + open-question log written to `docs/excel-analisi.md` — **read that file before any data-model work**. Key finding: the farm runs a **7-band batch system** (weaning every 3 weeks per band); the data model is batch/room-level, not individual-animal. Waiting on the user's answers to the open questions in section 7 of that doc. Still no code scaffolded.
 - 2026-08-04: Folder created at ~/Documents/farm-app. No code scaffolded yet. VS Code installed by the user directly. Node/npm/git already present on the machine — no other software installs are blocking. Paused here: the user wants to think through app design first (feature scope, how modular to make it) before scaffolding any code. Next session: pick up with data-model/feature planning (farms, rooms, pigs, health status, feeding — matching the parents' existing Excel structure where possible), then run `npx create-expo-app` once ready.
 
 ## Notes for future sessions
