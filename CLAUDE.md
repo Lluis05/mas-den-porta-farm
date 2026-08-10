@@ -38,6 +38,7 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
+- 2026-08-10 (feed forecast): The third initial-scope feature is in. `src/lib/pinso.ts` is pure, tested logic: consumption rate = kg delivered between the first and last delivery in a 180-day window, divided by the days between them (the last delivery is excluded — it hasn't been eaten yet); days remaining = last delivery's kg ÷ rate, minus days elapsed. Screens: `/pinso` per feed type, plus a home-screen alert, plus `/pinso/nova` to record a delivery — **without which the whole feature decays**, since the forecast needs deliveries entered. Sanity check on real data: per-type rates sum to 6,458 kg/day against 6,589 kg/day computed independently from the 3-year total. **`dadesEndarrerides()` guards the alarm**: if nothing has been recorded for longer than twice the shortest typical delivery interval, the screen says "entries are missing" instead of showing nine silos as empty — which is what the imported (stale) spreadsheet produces. **Not done: OS notifications.** F4 asked for a notification a few days ahead; what exists is an in-app warning. That needs `expo-notifications` and scheduling.
 - 2026-08-10 (imported for real): The user ran the import on their phone and it looks right. **A corrected spreadsheet is coming later** — the current one has known gaps (recycled sheets, missing `Nº porc sala`, pigs "leaving" rooms two months after the data says they were emptied). **Do not spend effort chasing those inconsistencies**; they are source-data problems the user will fix at the source. When the corrected file arrives: `npm run importar`, undo the old import from the `/importar` screen, and import again — that path is tested and keeps hand-entered data.
 - 2026-08-10 (undo import): The import is now **fully reversible**, added before the user ran it for real. Every data table carries an `importacio_id` (part of `COMUNES`, so all 19 tables have it); undo soft-deletes every row carrying that id and hard-deletes the `importacio` bookkeeping row so the same file can be imported again. **Rows entered by hand are untouched** — they carry no import id. Verified: import → 3,638 pigs, add a manual cycle → 3,738, undo → only the manual 100 remain and all 666 feed rows survive as soft-deleted, re-import → back to 3,738 with no duplicates. Also applied the father's answers H1–H3: room capacity of 11/corral is a grown-pig figure and **not a limit** (the app no longer warns when more go in), feed dates in the wrong sheet get the sheet's year, missing `Nº porc sala` becomes 132, and a room whose recorded exits exceed its entry has its entry raised to match.
 - 2026-08-10 (Excel import): `npm run importar` reads `~/Documents/estat granja.xlsm` and writes `assets/import/granja.json` (133 kB, committed); the in-app screen `/importar` loads it once, tracked in the `importacio` table so it can't double-import. Imports all feed history (666 deliveries / 200 invoices, **6,173,821 kg — matches the spreadsheet exactly**), 2026 weanings + transition, 2026 fattening cycles from the numbered sheets, and slaughterhouse loads with per-room lines re-joined to their truck. `analitzaCodiSala()` in `src/lib/corrals.ts` is the inverse of `codiSala()` and decodes the handwritten room codes. **The importer never guesses**: anything it can't read goes to `avisos` and is left out. It refuses cycles whose numbers are impossible (missing `Nº porc sala` in recycled sheets) — importing those produced corrals with negative pigs. Scope stays as agreed (F6): current year + all feed history. **`xlsx` is a devDependency only** (SheetJS has open advisories and no fixed version on npm); it never ships in the app bundle.
@@ -52,6 +53,37 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - 2026-08-09: Read the parents' spreadsheet (`~/Documents/estat granja.xlsm`, 42 sheets, in Catalan). Full structural analysis + open-question log written to `docs/excel-analisi.md` — **read that file before any data-model work**. Key finding: the farm runs a **7-band batch system** (weaning every 3 weeks per band); the data model is batch/room-level, not individual-animal. Waiting on the user's answers to the open questions in section 7 of that doc. Still no code scaffolded.
 - 2026-08-04: Folder created at ~/Documents/farm-app. No code scaffolded yet. VS Code installed by the user directly. Node/npm/git already present on the machine — no other software installs are blocking. Paused here: the user wants to think through app design first (feature scope, how modular to make it) before scaffolding any code. Next session: pick up with data-model/feature planning (farms, rooms, pigs, health status, feeding — matching the parents' existing Excel structure where possible), then run `npx create-expo-app` once ready.
 
+## Where to pick up (as of 2026-08-10)
+
+All three initial-scope features exist and work: pig counts to corral level,
+slaughterhouse loads without duplicate entry, and feed forecasting. The
+spreadsheet is imported and the user has seen it on their phone.
+
+**The user has said changes are coming**, so ask before building on top of the
+current screens.
+
+Open, roughly in the order that unblocks the most:
+
+1. **A corrected spreadsheet is coming.** Don't chase data inconsistencies in
+   the current one (see the note under Project status). Re-import path:
+   `npm run importar` → undo on `/importar` → import.
+2. **OS notifications for feed** — F4 asked for a notification a few days
+   ahead; only an in-app warning exists. Needs `expo-notifications`.
+3. **Nothing syncs anywhere.** Supabase is proposed but not set up, so the
+   "two surfaces, one dataset" constraint is unmet — the phone and the web
+   build each have their own separate database. Every table already carries
+   `sincronitzat_el` for this.
+4. **Development build (EAS)** before the parents use it for real. Expo Go is
+   a testing tool and pins us to SDK 54.
+5. **Tables with no screens yet**: `moviment` (the "sobrants" transfers),
+   `baixa` (optional manual deaths), `tractament`, `cens_truges`,
+   `entrada_llavores`, `factura_pinso`. All are imported or importable; none
+   can be entered or viewed in the app.
+6. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
+   estimate good enough, or do they want to record the actual silo level now
+   and then to correct it?
+
 ## Notes for future sessions
 - Always re-read this file at the start of a session in this project.
 - Update "Project status" as things change — this is the source of truth for where the project stands between sessions.
+- **Verify against real SQLite, not just types.** Every real bug in this project (the cycle-attribution view, the UNIQUE-vs-soft-delete clash, the migration crash, negative corrals, the rounding bias in exits) was caught by running the actual SQL over the actual data in a throwaway `node --experimental-sqlite` script, and none of them by `tsc`. Keep doing that.

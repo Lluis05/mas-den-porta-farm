@@ -700,6 +700,68 @@ export async function esborraCarrega(
   });
 }
 
+// ---------------------------------------------------------------------------
+// Pinso
+// ---------------------------------------------------------------------------
+
+export type TipusAmbEntregues = {
+  id: string;
+  codi: string;
+  descripcio: string | null;
+  capacitat_sitja_kg: number | null;
+  entregues: { data: string; kg: number }[];
+};
+
+/**
+ * Cada tipus de pinso amb el seu històric d'entregues, per calcular la
+ * previsió. Són poques files (uns centenars) i el càlcul es fa a
+ * `src/lib/pinso.ts`, que és codi provable.
+ */
+export async function tipusPinsoAmbEntregues(
+  db: SQLiteDatabase
+): Promise<TipusAmbEntregues[]> {
+  const tipus = await db.getAllAsync<{
+    id: string;
+    codi: string;
+    descripcio: string | null;
+    capacitat_sitja_kg: number | null;
+  }>(
+    `SELECT id, codi, descripcio, capacitat_sitja_kg FROM tipus_pinso
+     WHERE esborrat_el IS NULL ORDER BY codi`
+  );
+
+  const entregues = await db.getAllAsync<{
+    tipus_pinso_id: string;
+    data: string;
+    kg: number;
+  }>(
+    `SELECT tipus_pinso_id, data, kg FROM entrega_pinso
+     WHERE esborrat_el IS NULL ORDER BY data`
+  );
+
+  const perTipus = new Map<string, { data: string; kg: number }[]>();
+  for (const e of entregues) {
+    const llista = perTipus.get(e.tipus_pinso_id);
+    if (llista) llista.push({ data: e.data, kg: e.kg });
+    else perTipus.set(e.tipus_pinso_id, [{ data: e.data, kg: e.kg }]);
+  }
+
+  return tipus.map((t) => ({ ...t, entregues: perTipus.get(t.id) ?? [] }));
+}
+
+export async function creaEntregaPinso(
+  db: SQLiteDatabase,
+  dades: { data: string; tipusPinsoId: string; kg: number }
+): Promise<void> {
+  await db.runAsync(
+    `INSERT INTO entrega_pinso (id, data, tipus_pinso_id, kg) VALUES (?, ?, ?, ?)`,
+    Crypto.randomUUID(),
+    dades.data,
+    dades.tipusPinsoId,
+    dades.kg
+  );
+}
+
 /** Porcs que hi ha ara mateix a tota la granja. */
 export async function porcsALaGranja(db: SQLiteDatabase): Promise<number> {
   const fila = await db.getFirstAsync<{ total: number }>(

@@ -7,16 +7,22 @@ import {
   llistaCarregues,
   llistaCicles,
   porcsALaGranja,
+  tipusPinsoAmbEntregues,
   type CarregaLlista,
   type CicleLlista,
 } from '@/db/queries';
+import { calculaPrevisio, dadesEndarrerides, urgencia } from '@/lib/pinso';
 import { colors, mides } from '@/theme';
+
+type AvisPinso = { codi: string; dies: number; urgent: boolean };
 
 export default function Index() {
   const db = useSQLiteContext();
   const [porcs, setPorcs] = useState<number | null>(null);
   const [cicles, setCicles] = useState<CicleLlista[]>([]);
   const [carregues, setCarregues] = useState<CarregaLlista[]>([]);
+  const [avisosPinso, setAvisosPinso] = useState<AvisPinso[]>([]);
+  const [pinsoEndarrerit, setPinsoEndarrerit] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // useFocusEffect i no useEffect: així es refresca en tornar d'una altra
@@ -26,15 +32,38 @@ export default function Index() {
       let viu = true;
       (async () => {
         try {
-          const [total, llista, carr] = await Promise.all([
+          const [total, llista, carr, pinso] = await Promise.all([
             porcsALaGranja(db),
             llistaCicles(db),
             llistaCarregues(db),
+            tipusPinsoAmbEntregues(db),
           ]);
           if (!viu) return;
           setPorcs(total);
           setCicles(llista);
           setCarregues(carr);
+
+          // Només surten a la portada els que s'acaben aviat: si sortissin
+          // tots, deixaria de ser un avís.
+          const dia = new Date().toISOString().slice(0, 10);
+          // Si fa setmanes que no s'apunta cap entrega, l'avís no vol dir que
+          // la granja s'hagi quedat sense pinso: vol dir que falten dades.
+          const estatPinso = dadesEndarrerides(
+            pinso.map((t) => t.entregues),
+            dia
+          );
+          setPinsoEndarrerit(estatPinso?.endarrerit ?? false);
+          setAvisosPinso(
+            pinso
+              .map((t) => ({ codi: t.codi, p: calculaPrevisio(t.entregues, dia) }))
+              .filter((x) => ['esgotat', 'aviat'].includes(urgencia(x.p)))
+              .map((x) => ({
+                codi: x.codi,
+                dies: Math.round(x.p.diesRestants ?? 0),
+                urgent: (x.p.diesRestants ?? 0) <= 0,
+              }))
+              .sort((a, b) => a.dies - b.dies)
+          );
           setError(null);
         } catch (e) {
           if (viu) setError(e instanceof Error ? e.message : String(e));
@@ -62,6 +91,42 @@ export default function Index() {
           <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
         </View>
 
+        {pinsoEndarrerit && (
+          <Link href="/pinso" asChild>
+            <Pressable
+              style={[styles.targeta, styles.targetaAvis]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.titolAvis}>Falten entregues de pinso</Text>
+              <Text style={styles.textAvis}>
+                Fa setmanes que no se n&apos;apunta cap, així que la previsió no
+                és de fiar.
+              </Text>
+              <Text style={styles.ajuda}>Toca per apuntar-ne una ›</Text>
+            </Pressable>
+          </Link>
+        )}
+
+        {!pinsoEndarrerit && avisosPinso.length > 0 && (
+          <Link href="/pinso" asChild>
+            <Pressable
+              style={[styles.targeta, styles.targetaAvis]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.titolAvis}>S&apos;acaba el pinso</Text>
+              {avisosPinso.map((a) => (
+                <Text key={a.codi} style={styles.textAvis}>
+                  · {a.codi}:{' '}
+                  {a.urgent
+                    ? `ja hauria d'haver arribat (fa ${Math.abs(a.dies)} dies)`
+                    : `queden uns ${a.dies} dies`}
+                </Text>
+              ))}
+              <Text style={styles.ajuda}>Toca per veure-ho tot ›</Text>
+            </Pressable>
+          </Link>
+        )}
+
         <View style={styles.botons}>
           <Link href="/cicle/nou" asChild>
             <Pressable style={styles.botoPrincipal} accessibilityRole="button">
@@ -75,11 +140,18 @@ export default function Index() {
           </Link>
         </View>
 
-        <Link href="/importar" asChild>
-          <Pressable style={styles.botoSecundari} accessibilityRole="button">
-            <Text style={styles.botoSecundariText}>Importar de l&apos;Excel</Text>
-          </Pressable>
-        </Link>
+        <View style={styles.botons}>
+          <Link href="/pinso" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Pinso</Text>
+            </Pressable>
+          </Link>
+          <Link href="/importar" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Importar de l&apos;Excel</Text>
+            </Pressable>
+          </Link>
+        </View>
 
         <View style={styles.targeta}>
           <Text style={styles.titolSeccio}>Cicles</Text>
@@ -169,7 +241,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  targetaAvis: { backgroundColor: colors.avisFluix, borderColor: colors.avis },
+  titolAvis: { fontSize: 16, fontWeight: '700', color: colors.avis },
+  textAvis: { color: colors.avis, fontSize: 14 },
   botoSecundari: {
+    flex: 1,
     height: 48,
     borderRadius: mides.radi,
     backgroundColor: colors.targeta,
