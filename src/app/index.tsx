@@ -3,13 +3,20 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { llistaCicles, porcsALaGranja, type CicleLlista } from '@/db/queries';
+import {
+  llistaCarregues,
+  llistaCicles,
+  porcsALaGranja,
+  type CarregaLlista,
+  type CicleLlista,
+} from '@/db/queries';
 import { colors, mides } from '@/theme';
 
 export default function Index() {
   const db = useSQLiteContext();
   const [porcs, setPorcs] = useState<number | null>(null);
   const [cicles, setCicles] = useState<CicleLlista[]>([]);
+  const [carregues, setCarregues] = useState<CarregaLlista[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // useFocusEffect i no useEffect: així es refresca en tornar d'una altra
@@ -19,13 +26,15 @@ export default function Index() {
       let viu = true;
       (async () => {
         try {
-          const [total, llista] = await Promise.all([
+          const [total, llista, carr] = await Promise.all([
             porcsALaGranja(db),
             llistaCicles(db),
+            llistaCarregues(db),
           ]);
           if (!viu) return;
           setPorcs(total);
           setCicles(llista);
+          setCarregues(carr);
           setError(null);
         } catch (e) {
           if (viu) setError(e instanceof Error ? e.message : String(e));
@@ -53,11 +62,18 @@ export default function Index() {
           <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
         </View>
 
-        <Link href="/cicle/nou" asChild>
-          <Pressable style={styles.botoPrincipal} accessibilityRole="button">
-            <Text style={styles.botoText}>Nou cicle d&apos;engreix</Text>
-          </Pressable>
-        </Link>
+        <View style={styles.botons}>
+          <Link href="/cicle/nou" asChild>
+            <Pressable style={styles.botoPrincipal} accessibilityRole="button">
+              <Text style={styles.botoText}>Nou cicle</Text>
+            </Pressable>
+          </Link>
+          <Link href="/carrega/nova" asChild>
+            <Pressable style={styles.botoPrincipal} accessibilityRole="button">
+              <Text style={styles.botoText}>Nova càrrega</Text>
+            </Pressable>
+          </Link>
+        </View>
 
         <View style={styles.targeta}>
           <Text style={styles.titolSeccio}>Cicles</Text>
@@ -86,6 +102,30 @@ export default function Index() {
             </Link>
           ))}
         </View>
+
+        {carregues.length > 0 && (
+          <View style={styles.targeta}>
+            <Text style={styles.titolSeccio}>Últimes càrregues</Text>
+            {carregues.slice(0, 8).map((c) => (
+              <Link key={c.id} href={`/carrega/${c.id}`} asChild>
+                <Pressable style={styles.filaCicle} accessibilityRole="button">
+                  <View style={styles.flex}>
+                    <Text style={styles.cicleTitol}>
+                      {c.data_carrega} · {c.unitats ?? c.porcs_linies}{' '}
+                      {c.tipus === 'truges_rebuig' ? 'truges' : 'porcs'}
+                    </Text>
+                    <Text style={styles.ajuda}>
+                      {c.promig_kg != null
+                        ? `${c.promig_kg.toFixed(1)} kg de mitjana`
+                        : 'falten les dades de la factura'}
+                    </Text>
+                  </View>
+                  <Text style={styles.fletxa}>›</Text>
+                </Pressable>
+              </Link>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </>
   );
@@ -113,7 +153,9 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   ajuda: { fontSize: 13, color: colors.discret },
+  botons: { flexDirection: 'row', gap: mides.espai },
   botoPrincipal: {
+    flex: 1,
     height: 52,
     borderRadius: mides.radi,
     backgroundColor: colors.primari,

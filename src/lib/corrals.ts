@@ -24,6 +24,51 @@ export function reparteix(total: number, parts: number): number[] {
   return Array.from({ length: parts }, (_, i) => base + (i < resta ? 1 : 0));
 }
 
+/**
+ * Reparteix `total` porcs que surten entre corrals que tenen quantitats
+ * diferents, proporcionalment al que hi ha a cada un.
+ *
+ * A diferència de `reparteix`, aquí els corrals no són iguals: un pot tenir 11
+ * porcs i un altre 3. Mai en treu més dels que hi ha, i si es demanen més dels
+ * que hi ha a tot arreu, els buida tots.
+ *
+ * reparteixProporcional(30, [11, 11, 11, 11]) -> [8, 8, 7, 7]
+ * reparteixProporcional(10, [11, 3])          -> [8, 2]
+ */
+export function reparteixProporcional(total: number, disponibles: number[]): number[] {
+  const suma = disponibles.reduce((s, d) => s + d, 0);
+  if (total <= 0 || suma <= 0) return disponibles.map(() => 0);
+  if (total >= suma) return [...disponibles];
+
+  // Part sencera de cada proporció, i ens quedem la part decimal per després.
+  const exactes = disponibles.map((d) => (total * d) / suma);
+  const resultat = exactes.map((e) => Math.floor(e));
+  let assignats = resultat.reduce((s, r) => s + r, 0);
+
+  // El que sobra va als corrals amb la part decimal més gran (mètode del
+  // residu més gran), sense passar-se mai del que hi ha disponible.
+  const ordre = exactes
+    .map((e, i) => ({ i, decimal: e - Math.floor(e) }))
+    .sort((a, b) => b.decimal - a.decimal);
+
+  let volta = 0;
+  while (assignats < total && volta < ordre.length * 2) {
+    let s_ha_afegit = false;
+    for (const { i } of ordre) {
+      if (assignats >= total) break;
+      if (resultat[i] < disponibles[i]) {
+        resultat[i]++;
+        assignats++;
+        s_ha_afegit = true;
+      }
+    }
+    if (!s_ha_afegit) break;
+    volta++;
+  }
+
+  return resultat;
+}
+
 const CORRALS_PER_MEITAT = 6;
 
 /**
