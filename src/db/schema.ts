@@ -18,8 +18,35 @@ const COMUNES = `
   creat_el         TEXT NOT NULL DEFAULT (datetime('now')),
   modificat_el     TEXT NOT NULL DEFAULT (datetime('now')),
   esborrat_el      TEXT,
-  sincronitzat_el  TEXT
+  sincronitzat_el  TEXT,
+  importacio_id    TEXT
 `;
+
+/**
+ * Totes les taules de dades porten les columnes de `COMUNES`.
+ * La llista serveix per a les migracions que hi han d'afegir una columna.
+ */
+export const TAULES_DE_DADES = [
+  'sala',
+  'corral',
+  'ubicacio_reproduccio',
+  'banda',
+  'deslletament',
+  'cens_truges',
+  'entrada_llavores',
+  'transicio',
+  'cicle_engreix',
+  'ocupacio_corral',
+  'moviment',
+  'baixa',
+  'carrega_escorxador',
+  'linia_carrega',
+  'decomis',
+  'tipus_pinso',
+  'factura_pinso',
+  'entrega_pinso',
+  'tractament',
+];
 
 /**
  * Aquesta vista va a part perquè una migració la pugui tornar a crear
@@ -157,6 +184,21 @@ GROUP BY tp.id;
 `;
 
 export const SCHEMA_SQL = `
+-- ---------------------------------------------------------------------------
+-- 0. Registre d'importacions de l'Excel
+-- ---------------------------------------------------------------------------
+
+-- Una fila per cada importació feta. Quan es desfà, la fila s'esborra de
+-- debò (és paperassa nostra, no dades de la granja) i les files que havia
+-- creat es marquen com esborrades sense perdre'n el rastre.
+CREATE TABLE IF NOT EXISTS importacio (
+  id         TEXT PRIMARY KEY,
+  generat    TEXT NOT NULL UNIQUE,
+  origen     TEXT,
+  fet_el     TEXT NOT NULL,
+  problemes  INTEGER NOT NULL DEFAULT 0
+);
+
 -- ---------------------------------------------------------------------------
 -- 1. Estructura física
 -- ---------------------------------------------------------------------------

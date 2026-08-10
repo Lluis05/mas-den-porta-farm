@@ -75,6 +75,12 @@ export default function Index() {
           </Link>
         </View>
 
+        <Link href="/importar" asChild>
+          <Pressable style={styles.botoSecundari} accessibilityRole="button">
+            <Text style={styles.botoSecundariText}>Importar de l&apos;Excel</Text>
+          </Pressable>
+        </Link>
+
         <View style={styles.targeta}>
           <Text style={styles.titolSeccio}>Cicles</Text>
           {cicles.length === 0 && (
@@ -163,6 +169,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  botoSecundari: {
+    height: 48,
+    borderRadius: mides.radi,
+    backgroundColor: colors.targeta,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.vora,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botoSecundariText: { fontSize: 16, fontWeight: '600', color: colors.primari },
   filaCicle: {
     flexDirection: 'row',
     alignItems: 'center',

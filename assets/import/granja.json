@@ -1,0 +1,7398 @@
+{
+  "generat": "2026-08-10T18:42:46.845Z",
+  "origen": "/home/lluis/Documents/estat granja.xlsm",
+  "any": 2026,
+  "pinso": {
+    "entregues": [
+      {
+        "data": "2024-01-12",
+        "tipus": "ENGREIX",
+        "kg": 17033,
+        "factura": 0
+      },
+      {
+        "data": "2024-01-12",
+        "tipus": "82",
+        "kg": 10019,
+        "factura": 0
+      },
+      {
+        "data": "2024-01-18",
+        "tipus": "ENGREIX",
+        "kg": 19003,
+        "factura": 1
+      },
+      {
+        "data": "2024-01-18",
+        "tipus": "82",
+        "kg": 5016,
+        "factura": 1
+      },
+      {
+        "data": "2024-01-18",
+        "tipus": "LLAVORES",
+        "kg": 3163,
+        "factura": 1
+      },
+      {
+        "data": "2024-01-23",
+        "tipus": "ENTRADES",
+        "kg": 9010,
+        "factura": 2
+      },
+      {
+        "data": "2024-01-23",
+        "tipus": "ENGREIX",
+        "kg": 12978,
+        "factura": 2
+      },
+      {
+        "data": "2024-01-23",
+        "tipus": "82",
+        "kg": 4987,
+        "factura": 2
+      },
+      {
+        "data": "2024-01-25",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 3
+      },
+      {
+        "data": "2024-01-31",
+        "tipus": "ENGREIX",
+        "kg": 8816,
+        "factura": 4
+      },
+      {
+        "data": "2024-01-31",
+        "tipus": "82",
+        "kg": 9010,
+        "factura": 4
+      },
+      {
+        "data": "2024-01-31",
+        "tipus": "GESTACIO",
+        "kg": 9008,
+        "factura": 4
+      },
+      {
+        "data": "2024-02-01",
+        "tipus": "STARTER",
+        "kg": 8080,
+        "factura": 4
+      },
+      {
+        "data": "2024-02-01",
+        "tipus": "CREIXEMENT",
+        "kg": 8100,
+        "factura": 4
+      },
+      {
+        "data": "2024-02-01",
+        "tipus": "LACTACIO",
+        "kg": 9080,
+        "factura": 4
+      },
+      {
+        "data": "2024-02-02",
+        "tipus": "ENGREIX",
+        "kg": 17002,
+        "factura": 5
+      },
+      {
+        "data": "2024-02-02",
+        "tipus": "82",
+        "kg": 9997,
+        "factura": 5
+      },
+      {
+        "data": "2024-02-06",
+        "tipus": "H10",
+        "kg": 200,
+        "factura": 5
+      },
+      {
+        "data": "2024-02-08",
+        "tipus": "ENTRADES",
+        "kg": 9030,
+        "factura": 6
+      },
+      {
+        "data": "2024-02-08",
+        "tipus": "ENGREIX",
+        "kg": 9009,
+        "factura": 6
+      },
+      {
+        "data": "2024-02-08",
+        "tipus": "82",
+        "kg": 9035,
+        "factura": 6
+      },
+      {
+        "data": "2024-02-13",
+        "tipus": "ENGREIX",
+        "kg": 13001,
+        "factura": 7
+      },
+      {
+        "data": "2024-02-13",
+        "tipus": "GESTACIO",
+        "kg": 13970,
+        "factura": 7
+      },
+      {
+        "data": "2024-02-18",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 8
+      },
+      {
+        "data": "2024-02-19",
+        "tipus": "CREIXEMENT",
+        "kg": 8873,
+        "factura": 9
+      },
+      {
+        "data": "2024-02-19",
+        "tipus": "ENGREIX",
+        "kg": 9071,
+        "factura": 9
+      },
+      {
+        "data": "2024-02-19",
+        "tipus": "82",
+        "kg": 8998,
+        "factura": 9
+      },
+      {
+        "data": "2024-02-25",
+        "tipus": "ENGREIX",
+        "kg": 15012,
+        "factura": 10
+      },
+      {
+        "data": "2024-02-25",
+        "tipus": "82",
+        "kg": 8994,
+        "factura": 10
+      },
+      {
+        "data": "2024-02-25",
+        "tipus": "LLAVORES",
+        "kg": 3056,
+        "factura": 10
+      },
+      {
+        "data": "2024-02-27",
+        "tipus": "ENGREIX",
+        "kg": 17038,
+        "factura": 10
+      },
+      {
+        "data": "2024-02-27",
+        "tipus": "82",
+        "kg": 4997,
+        "factura": 10
+      },
+      {
+        "data": "2024-02-27",
+        "tipus": "LACTACIO",
+        "kg": 4987,
+        "factura": 10
+      },
+      {
+        "data": "2024-03-04",
+        "tipus": "CREIXEMENT",
+        "kg": 5008,
+        "factura": 11
+      },
+      {
+        "data": "2024-03-04",
+        "tipus": "ENGREIX",
+        "kg": 11987,
+        "factura": 11
+      },
+      {
+        "data": "2024-03-04",
+        "tipus": "82",
+        "kg": 9995,
+        "factura": 11
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 11
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "STARTER",
+        "kg": 8040,
+        "factura": 12
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "ENTRADES",
+        "kg": 9260,
+        "factura": 12
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "LACTACIO",
+        "kg": 8010,
+        "factura": 12
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "ENTRADES",
+        "kg": 8999,
+        "factura": 13
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "ENGREIX",
+        "kg": 9007,
+        "factura": 13
+      },
+      {
+        "data": "2024-03-07",
+        "tipus": "82",
+        "kg": 8998,
+        "factura": 13
+      },
+      {
+        "data": "2024-03-10",
+        "tipus": "ENGREIX",
+        "kg": 6998,
+        "factura": 14
+      },
+      {
+        "data": "2024-03-10",
+        "tipus": "GESTACIO",
+        "kg": 19994,
+        "factura": 14
+      },
+      {
+        "data": "2024-03-20",
+        "tipus": "H10",
+        "kg": 760,
+        "factura": 15
+      },
+      {
+        "data": "2024-03-21",
+        "tipus": "ENGREIX",
+        "kg": 16952,
+        "factura": 16
+      },
+      {
+        "data": "2024-03-21",
+        "tipus": "82",
+        "kg": 10003,
+        "factura": 16
+      },
+      {
+        "data": "2024-03-26",
+        "tipus": "ENTRADES",
+        "kg": 5004,
+        "factura": 17
+      },
+      {
+        "data": "2024-03-26",
+        "tipus": "CREIXEMENT",
+        "kg": 5015,
+        "factura": 17
+      },
+      {
+        "data": "2024-03-26",
+        "tipus": "ENGREIX",
+        "kg": 16999,
+        "factura": 17
+      },
+      {
+        "data": "2024-03-27",
+        "tipus": "H10",
+        "kg": 200,
+        "factura": 18
+      },
+      {
+        "data": "2024-03-31",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 19
+      },
+      {
+        "data": "2024-04-03",
+        "tipus": "ENGREIX",
+        "kg": 10005,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-03",
+        "tipus": "82",
+        "kg": 14004,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-03",
+        "tipus": "LLAVORES",
+        "kg": 3118,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-05",
+        "tipus": "ENTRADES",
+        "kg": 9014,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-05",
+        "tipus": "GESTACIO",
+        "kg": 18202,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-07",
+        "tipus": "STARTER",
+        "kg": 8040,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-07",
+        "tipus": "CREIXEMENT",
+        "kg": 9420,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-07",
+        "tipus": "LACTACIO",
+        "kg": 8960,
+        "factura": 20
+      },
+      {
+        "data": "2024-04-11",
+        "tipus": "ENGREIX",
+        "kg": 16985,
+        "factura": 21
+      },
+      {
+        "data": "2024-04-11",
+        "tipus": "82",
+        "kg": 10006,
+        "factura": 21
+      },
+      {
+        "data": "2024-04-18",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 22
+      },
+      {
+        "data": "2024-04-18",
+        "tipus": "ENTRADES",
+        "kg": 10002,
+        "factura": 23
+      },
+      {
+        "data": "2024-04-18",
+        "tipus": "ENGREIX",
+        "kg": 17003,
+        "factura": 23
+      },
+      {
+        "data": "2024-04-24",
+        "tipus": "H10",
+        "kg": 200,
+        "factura": 24
+      },
+      {
+        "data": "2024-04-28",
+        "tipus": "H10",
+        "kg": 160,
+        "factura": 25
+      },
+      {
+        "data": "2024-04-29",
+        "tipus": "ENGREIX",
+        "kg": 16996,
+        "factura": 25
+      },
+      {
+        "data": "2024-04-29",
+        "tipus": "82",
+        "kg": 10027,
+        "factura": 25
+      },
+      {
+        "data": "2024-05-02",
+        "tipus": "ENGREIX",
+        "kg": 17036,
+        "factura": 26
+      },
+      {
+        "data": "2024-05-02",
+        "tipus": "82",
+        "kg": 9998,
+        "factura": 26
+      },
+      {
+        "data": "2024-05-05",
+        "tipus": "ENTRADES",
+        "kg": 8996,
+        "factura": 27
+      },
+      {
+        "data": "2024-05-05",
+        "tipus": "ENGREIX",
+        "kg": 8993,
+        "factura": 27
+      },
+      {
+        "data": "2024-05-05",
+        "tipus": "GESTACIO",
+        "kg": 9003,
+        "factura": 27
+      },
+      {
+        "data": "2024-05-06",
+        "tipus": "STARTER",
+        "kg": 8100,
+        "factura": 28
+      },
+      {
+        "data": "2024-05-06",
+        "tipus": "CREIXEMENT",
+        "kg": 9380,
+        "factura": 28
+      },
+      {
+        "data": "2024-05-06",
+        "tipus": "LACTACIO",
+        "kg": 7940,
+        "factura": 28
+      },
+      {
+        "data": "2024-05-06",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 29
+      },
+      {
+        "data": "2024-05-09",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 30
+      },
+      {
+        "data": "2024-05-12",
+        "tipus": "ENGREIX",
+        "kg": 12998,
+        "factura": 31
+      },
+      {
+        "data": "2024-05-12",
+        "tipus": "82",
+        "kg": 13943,
+        "factura": 31
+      },
+      {
+        "data": "2024-05-14",
+        "tipus": "ENGREIX",
+        "kg": 13832,
+        "factura": 31
+      },
+      {
+        "data": "2024-05-14",
+        "tipus": "GESTACIO",
+        "kg": 10123,
+        "factura": 31
+      },
+      {
+        "data": "2024-05-14",
+        "tipus": "LLAVORES",
+        "kg": 3052,
+        "factura": 31
+      },
+      {
+        "data": "2024-05-20",
+        "tipus": "H10",
+        "kg": 200,
+        "factura": 32
+      },
+      {
+        "data": "2024-05-21",
+        "tipus": "ENGREIX",
+        "kg": 17005,
+        "factura": 33
+      },
+      {
+        "data": "2024-05-21",
+        "tipus": "82",
+        "kg": 10023,
+        "factura": 33
+      },
+      {
+        "data": "2024-05-28",
+        "tipus": "ENTRADES",
+        "kg": 10015,
+        "factura": 34
+      },
+      {
+        "data": "2024-05-28",
+        "tipus": "ENGREIX",
+        "kg": 12003,
+        "factura": 34
+      },
+      {
+        "data": "2024-05-28",
+        "tipus": "LACTACIO",
+        "kg": 4994,
+        "factura": 34
+      },
+      {
+        "data": "2024-05-29",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 35
+      },
+      {
+        "data": "2024-06-02",
+        "tipus": "H10",
+        "kg": 750,
+        "factura": 36
+      },
+      {
+        "data": "2024-06-04",
+        "tipus": "H10",
+        "kg": 1000,
+        "factura": 37
+      },
+      {
+        "data": "2024-06-04",
+        "tipus": "CREIXEMENT",
+        "kg": 4997,
+        "factura": 38
+      },
+      {
+        "data": "2024-06-04",
+        "tipus": "ENGREIX",
+        "kg": 13004,
+        "factura": 38
+      },
+      {
+        "data": "2024-06-04",
+        "tipus": "GESTACIO",
+        "kg": 8997,
+        "factura": 38
+      },
+      {
+        "data": "2024-06-06",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 38
+      },
+      {
+        "data": "2024-06-07",
+        "tipus": "ENGREIX",
+        "kg": 16998,
+        "factura": 39
+      },
+      {
+        "data": "2024-06-07",
+        "tipus": "82",
+        "kg": 9993,
+        "factura": 39
+      },
+      {
+        "data": "2024-06-14",
+        "tipus": "ENGREIX",
+        "kg": 13505,
+        "factura": 40
+      },
+      {
+        "data": "2024-06-14",
+        "tipus": "82",
+        "kg": 13520,
+        "factura": 40
+      },
+      {
+        "data": "2024-06-14",
+        "tipus": "STARTER",
+        "kg": 7920,
+        "factura": 41
+      },
+      {
+        "data": "2024-06-14",
+        "tipus": "CREIXEMENT",
+        "kg": 9360,
+        "factura": 41
+      },
+      {
+        "data": "2024-06-14",
+        "tipus": "LACTACIO",
+        "kg": 8940,
+        "factura": 41
+      },
+      {
+        "data": "2024-06-17",
+        "tipus": "ENGREIX",
+        "kg": 13584,
+        "factura": 42
+      },
+      {
+        "data": "2024-06-17",
+        "tipus": "GESTACIO",
+        "kg": 13494,
+        "factura": 42
+      },
+      {
+        "data": "2024-06-20",
+        "tipus": "ENTRADES",
+        "kg": 10022,
+        "factura": 42
+      },
+      {
+        "data": "2024-06-20",
+        "tipus": "ENGREIX",
+        "kg": 11991,
+        "factura": 42
+      },
+      {
+        "data": "2024-06-20",
+        "tipus": "82",
+        "kg": 4992,
+        "factura": 42
+      },
+      {
+        "data": "2024-06-25",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 43
+      },
+      {
+        "data": "2024-06-25",
+        "tipus": "ENGREIX",
+        "kg": 13995,
+        "factura": 44
+      },
+      {
+        "data": "2024-06-25",
+        "tipus": "GESTACIO",
+        "kg": 10023,
+        "factura": 44
+      },
+      {
+        "data": "2024-06-25",
+        "tipus": "LLAVORES",
+        "kg": 3034,
+        "factura": 44
+      },
+      {
+        "data": "2024-07-05",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 45
+      },
+      {
+        "data": "2024-07-04",
+        "tipus": "ENGREIX",
+        "kg": 18007,
+        "factura": 46
+      },
+      {
+        "data": "2024-07-04",
+        "tipus": "82",
+        "kg": 8987,
+        "factura": 46
+      },
+      {
+        "data": "2024-07-08",
+        "tipus": "STARTER",
+        "kg": 8020,
+        "factura": 47
+      },
+      {
+        "data": "2024-07-08",
+        "tipus": "CREIXEMENT",
+        "kg": 8260,
+        "factura": 47
+      },
+      {
+        "data": "2024-07-08",
+        "tipus": "LACTACIO",
+        "kg": 10120,
+        "factura": 47
+      },
+      {
+        "data": "2024-07-11",
+        "tipus": "ENTRADES",
+        "kg": 9010,
+        "factura": 48
+      },
+      {
+        "data": "2024-07-11",
+        "tipus": "ENGREIX",
+        "kg": 8495,
+        "factura": 48
+      },
+      {
+        "data": "2024-07-11",
+        "tipus": "82",
+        "kg": 9009,
+        "factura": 48
+      },
+      {
+        "data": "2024-07-11",
+        "tipus": "H10",
+        "kg": 1540,
+        "factura": 49
+      },
+      {
+        "data": "2024-07-17",
+        "tipus": "ENGREIX",
+        "kg": 8991,
+        "factura": 50
+      },
+      {
+        "data": "2024-07-17",
+        "tipus": "82",
+        "kg": 8989,
+        "factura": 50
+      },
+      {
+        "data": "2024-07-17",
+        "tipus": "GESTACIO",
+        "kg": 8994,
+        "factura": 50
+      },
+      {
+        "data": "2024-07-21",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 51
+      },
+      {
+        "data": "2024-07-24",
+        "tipus": "ENGREIX",
+        "kg": 22007,
+        "factura": 52
+      },
+      {
+        "data": "2024-07-24",
+        "tipus": "82",
+        "kg": 4980,
+        "factura": 52
+      },
+      {
+        "data": "2024-07-31",
+        "tipus": "ENTRADES",
+        "kg": 8988,
+        "factura": 53
+      },
+      {
+        "data": "2024-07-31",
+        "tipus": "ENGREIX",
+        "kg": 8985,
+        "factura": 53
+      },
+      {
+        "data": "2024-07-31",
+        "tipus": "GESTACIO",
+        "kg": 8991,
+        "factura": 53
+      },
+      {
+        "data": "2024-08-01",
+        "tipus": "STARTER",
+        "kg": 7900,
+        "factura": 54
+      },
+      {
+        "data": "2024-08-01",
+        "tipus": "CREIXEMENT",
+        "kg": 9140,
+        "factura": 54
+      },
+      {
+        "data": "2024-08-01",
+        "tipus": "LACTACIO",
+        "kg": 8940,
+        "factura": 54
+      },
+      {
+        "data": "2024-08-04",
+        "tipus": "H10",
+        "kg": 1000,
+        "factura": 55
+      },
+      {
+        "data": "2024-08-05",
+        "tipus": "ENGREIX",
+        "kg": 13996,
+        "factura": 56
+      },
+      {
+        "data": "2024-08-05",
+        "tipus": "82",
+        "kg": 9988,
+        "factura": 56
+      },
+      {
+        "data": "2024-08-05",
+        "tipus": "LLAVORES",
+        "kg": 3036,
+        "factura": 56
+      },
+      {
+        "data": "2024-08-06",
+        "tipus": "H10",
+        "kg": 375,
+        "factura": 57
+      },
+      {
+        "data": "2024-08-07",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 58
+      },
+      {
+        "data": "2024-08-12",
+        "tipus": "ENGREIX",
+        "kg": 16993,
+        "factura": 59
+      },
+      {
+        "data": "2024-08-12",
+        "tipus": "82",
+        "kg": 9984,
+        "factura": 59
+      },
+      {
+        "data": "2024-08-15",
+        "tipus": "CREIXEMENT",
+        "kg": 4993,
+        "factura": 59
+      },
+      {
+        "data": "2024-08-15",
+        "tipus": "GESTACIO",
+        "kg": 22117,
+        "factura": 59
+      },
+      {
+        "data": "2024-08-19",
+        "tipus": "ENTRADES",
+        "kg": 9001,
+        "factura": 60
+      },
+      {
+        "data": "2024-08-19",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 60
+      },
+      {
+        "data": "2024-08-19",
+        "tipus": "82",
+        "kg": 9000,
+        "factura": 60
+      },
+      {
+        "data": "2024-08-19",
+        "tipus": "H10",
+        "kg": 1000,
+        "factura": 60
+      },
+      {
+        "data": "2024-08-23",
+        "tipus": "ENTRADES",
+        "kg": 5078,
+        "factura": 61
+      },
+      {
+        "data": "2024-08-23",
+        "tipus": "ENGREIX",
+        "kg": 17198,
+        "factura": 61
+      },
+      {
+        "data": "2024-08-23",
+        "tipus": "LACTACIO",
+        "kg": 4802,
+        "factura": 61
+      },
+      {
+        "data": "2024-08-27",
+        "tipus": "STARTER",
+        "kg": 9010,
+        "factura": 62
+      },
+      {
+        "data": "2024-08-27",
+        "tipus": "CREIXEMENT",
+        "kg": 9005,
+        "factura": 62
+      },
+      {
+        "data": "2024-08-27",
+        "tipus": "82",
+        "kg": 8991,
+        "factura": 62
+      },
+      {
+        "data": "2024-08-28",
+        "tipus": "H10",
+        "kg": 1400,
+        "factura": 63
+      },
+      {
+        "data": "2024-09-01",
+        "tipus": "ENGREIX",
+        "kg": 22003,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-01",
+        "tipus": "82",
+        "kg": 5007,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-08",
+        "tipus": "ENTRADES",
+        "kg": 9002,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-08",
+        "tipus": "CREIXEMENT",
+        "kg": 9001,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-08",
+        "tipus": "82",
+        "kg": 9019,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-11",
+        "tipus": "ENGREIX",
+        "kg": 9999,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-11",
+        "tipus": "82",
+        "kg": 9994,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-11",
+        "tipus": "LACTACIO",
+        "kg": 6047,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-13",
+        "tipus": "ENGREIX",
+        "kg": 9017,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-13",
+        "tipus": "GESTACIO",
+        "kg": 17999,
+        "factura": 64
+      },
+      {
+        "data": "2024-09-16",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-16",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-18",
+        "tipus": "ENGREIX",
+        "kg": 17002,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-18",
+        "tipus": "82",
+        "kg": 10007,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-22",
+        "tipus": "ENGREIX",
+        "kg": 17008,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-22",
+        "tipus": "82",
+        "kg": 10030,
+        "factura": 65
+      },
+      {
+        "data": "2024-09-25",
+        "tipus": "CREIXEMENT",
+        "kg": 10002,
+        "factura": 66
+      },
+      {
+        "data": "2024-09-25",
+        "tipus": "ENGREIX",
+        "kg": 14012,
+        "factura": 66
+      },
+      {
+        "data": "2024-09-25",
+        "tipus": "LLAVORES",
+        "kg": 3080,
+        "factura": 66
+      },
+      {
+        "data": "2024-09-29",
+        "tipus": "CREIXEMENT",
+        "kg": 7500,
+        "factura": 66
+      },
+      {
+        "data": "2024-09-29",
+        "tipus": "82",
+        "kg": 7494,
+        "factura": 66
+      },
+      {
+        "data": "2024-09-29",
+        "tipus": "LACTACIO",
+        "kg": 5873,
+        "factura": 66
+      },
+      {
+        "data": "2024-10-02",
+        "tipus": "STARTER",
+        "kg": 5996,
+        "factura": 67
+      },
+      {
+        "data": "2024-10-02",
+        "tipus": "ENTRADES",
+        "kg": 10007,
+        "factura": 67
+      },
+      {
+        "data": "2024-10-02",
+        "tipus": "ENGREIX",
+        "kg": 10012,
+        "factura": 67
+      },
+      {
+        "data": "2024-10-03",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 68
+      },
+      {
+        "data": "2024-10-07",
+        "tipus": "CREIXEMENT",
+        "kg": 8988,
+        "factura": 69
+      },
+      {
+        "data": "2024-10-07",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 69
+      },
+      {
+        "data": "2024-10-07",
+        "tipus": "82",
+        "kg": 8997,
+        "factura": 69
+      },
+      {
+        "data": "2024-10-10",
+        "tipus": "ENGREIX",
+        "kg": 13505,
+        "factura": 69
+      },
+      {
+        "data": "2024-10-10",
+        "tipus": "82",
+        "kg": 13619,
+        "factura": 69
+      },
+      {
+        "data": "2024-10-13",
+        "tipus": "82",
+        "kg": 8993,
+        "factura": 70
+      },
+      {
+        "data": "2024-10-13",
+        "tipus": "GESTACIO",
+        "kg": 9005,
+        "factura": 70
+      },
+      {
+        "data": "2024-10-13",
+        "tipus": "LACTACIO",
+        "kg": 9240,
+        "factura": 70
+      },
+      {
+        "data": "2024-10-15",
+        "tipus": "ENGREIX",
+        "kg": 21999,
+        "factura": 70
+      },
+      {
+        "data": "2024-10-15",
+        "tipus": "82",
+        "kg": 4992,
+        "factura": 70
+      },
+      {
+        "data": "2024-10-21",
+        "tipus": "STARTER",
+        "kg": 5994,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-21",
+        "tipus": "ENTRADES",
+        "kg": 10009,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-21",
+        "tipus": "ENGREIX",
+        "kg": 9967,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-24",
+        "tipus": "CREIXEMENT",
+        "kg": 9012,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-24",
+        "tipus": "ENGREIX",
+        "kg": 9009,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-24",
+        "tipus": "82",
+        "kg": 8987,
+        "factura": 71
+      },
+      {
+        "data": "2024-10-27",
+        "tipus": "H10",
+        "kg": 1475,
+        "factura": 72
+      },
+      {
+        "data": "2024-10-28",
+        "tipus": "ENGREIX",
+        "kg": 13509,
+        "factura": 72
+      },
+      {
+        "data": "2024-10-28",
+        "tipus": "82",
+        "kg": 13494,
+        "factura": 72
+      },
+      {
+        "data": "2024-10-30",
+        "tipus": "82",
+        "kg": 5024,
+        "factura": 72
+      },
+      {
+        "data": "2024-10-30",
+        "tipus": "GESTACIO",
+        "kg": 18997,
+        "factura": 72
+      },
+      {
+        "data": "2024-10-30",
+        "tipus": "LLAVORES",
+        "kg": 3006,
+        "factura": 72
+      },
+      {
+        "data": "2024-11-05",
+        "tipus": "ENGREIX",
+        "kg": 13503,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-05",
+        "tipus": "82",
+        "kg": 13523,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-07",
+        "tipus": "STARTER",
+        "kg": 6001,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-07",
+        "tipus": "CREIXEMENT",
+        "kg": 9994,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-07",
+        "tipus": "LACTACIO",
+        "kg": 9040,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-11",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 73
+      },
+      {
+        "data": "2024-11-12",
+        "tipus": "ENTRADES",
+        "kg": 8992,
+        "factura": 74
+      },
+      {
+        "data": "2024-11-12",
+        "tipus": "ENGREIX",
+        "kg": 9002,
+        "factura": 74
+      },
+      {
+        "data": "2024-11-12",
+        "tipus": "82",
+        "kg": 8984,
+        "factura": 74
+      },
+      {
+        "data": "2024-11-14",
+        "tipus": "ENGREIX",
+        "kg": 13507,
+        "factura": 74
+      },
+      {
+        "data": "2024-11-14",
+        "tipus": "82",
+        "kg": 13535,
+        "factura": 74
+      },
+      {
+        "data": "2024-11-17",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 75
+      },
+      {
+        "data": "2024-11-20",
+        "tipus": "CREIXEMENT",
+        "kg": 8999,
+        "factura": 76
+      },
+      {
+        "data": "2024-11-20",
+        "tipus": "ENGREIX",
+        "kg": 8997,
+        "factura": 76
+      },
+      {
+        "data": "2024-11-20",
+        "tipus": "82",
+        "kg": 9007,
+        "factura": 76
+      },
+      {
+        "data": "2024-11-24",
+        "tipus": "ENGREIX",
+        "kg": 13506,
+        "factura": 76
+      },
+      {
+        "data": "2024-11-24",
+        "tipus": "82",
+        "kg": 13617,
+        "factura": 76
+      },
+      {
+        "data": "2024-11-29",
+        "tipus": "GESTACIO",
+        "kg": 17986,
+        "factura": 77
+      },
+      {
+        "data": "2024-11-29",
+        "tipus": "LACTACIO",
+        "kg": 9076,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-02",
+        "tipus": "CREIXEMENT",
+        "kg": 10000,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-02",
+        "tipus": "82",
+        "kg": 16906,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-04",
+        "tipus": "ENTRADES",
+        "kg": 9241,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-04",
+        "tipus": "ENGREIX",
+        "kg": 17993,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-05",
+        "tipus": "STARTER",
+        "kg": 6003,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-05",
+        "tipus": "82",
+        "kg": 20006,
+        "factura": 77
+      },
+      {
+        "data": "2024-12-09",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 78
+      },
+      {
+        "data": "2024-12-11",
+        "tipus": "CREIXEMENT",
+        "kg": 10009,
+        "factura": 79
+      },
+      {
+        "data": "2024-12-11",
+        "tipus": "ENGREIX",
+        "kg": 14014,
+        "factura": 79
+      },
+      {
+        "data": "2024-12-11",
+        "tipus": "LLAVORES",
+        "kg": 3159,
+        "factura": 79
+      },
+      {
+        "data": "2024-12-17",
+        "tipus": "ENGREIX",
+        "kg": 13493,
+        "factura": 80
+      },
+      {
+        "data": "2024-12-17",
+        "tipus": "82",
+        "kg": 13496,
+        "factura": 80
+      },
+      {
+        "data": "2024-12-15",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 80
+      },
+      {
+        "data": "2024-12-20",
+        "tipus": "CREIXEMENT",
+        "kg": 8995,
+        "factura": 81
+      },
+      {
+        "data": "2024-12-20",
+        "tipus": "ENGREIX",
+        "kg": 8999,
+        "factura": 81
+      },
+      {
+        "data": "2024-12-20",
+        "tipus": "82",
+        "kg": 9034,
+        "factura": 81
+      },
+      {
+        "data": "2024-12-23",
+        "tipus": "ENTRADES",
+        "kg": 8989,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-23",
+        "tipus": "GESTACIO",
+        "kg": 9001,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-23",
+        "tipus": "LACTACIO",
+        "kg": 9129,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-29",
+        "tipus": "STARTER",
+        "kg": 5992,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-29",
+        "tipus": "ENGREIX",
+        "kg": 10010,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-29",
+        "tipus": "82",
+        "kg": 9989,
+        "factura": 82
+      },
+      {
+        "data": "2024-12-30",
+        "tipus": "CREIXEMENT",
+        "kg": 4488,
+        "factura": 83
+      },
+      {
+        "data": "2024-12-30",
+        "tipus": "ENGREIX",
+        "kg": 13477,
+        "factura": 83
+      },
+      {
+        "data": "2024-12-30",
+        "tipus": "GESTACIO",
+        "kg": 8993,
+        "factura": 83
+      },
+      {
+        "data": "2024-12-29",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 84
+      },
+      {
+        "data": "2025-01-02",
+        "tipus": "ENGREIX",
+        "kg": 13404,
+        "factura": 85
+      },
+      {
+        "data": "2025-01-02",
+        "tipus": "82",
+        "kg": 13486,
+        "factura": 85
+      },
+      {
+        "data": "2025-01-13",
+        "tipus": "ENGREIX",
+        "kg": 9944,
+        "factura": 85
+      },
+      {
+        "data": "2025-01-13",
+        "tipus": "82",
+        "kg": 14000,
+        "factura": 85
+      },
+      {
+        "data": "2025-01-13",
+        "tipus": "LACTACIO",
+        "kg": 3044,
+        "factura": 85
+      },
+      {
+        "data": "2025-01-16",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 86
+      },
+      {
+        "data": "2025-01-16",
+        "tipus": "ENTRADES",
+        "kg": 8985,
+        "factura": 87
+      },
+      {
+        "data": "2025-01-16",
+        "tipus": "CREIXEMENT",
+        "kg": 8995,
+        "factura": 87
+      },
+      {
+        "data": "2025-01-16",
+        "tipus": "GESTACIO",
+        "kg": 8992,
+        "factura": 87
+      },
+      {
+        "data": "2025-01-17",
+        "tipus": "ENGREIX",
+        "kg": 27068,
+        "factura": 87
+      },
+      {
+        "data": "2025-01-20",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 88
+      },
+      {
+        "data": "2025-01-22",
+        "tipus": "82",
+        "kg": 18201,
+        "factura": 89
+      },
+      {
+        "data": "2025-01-22",
+        "tipus": "LACTACIO",
+        "kg": 9217,
+        "factura": 89
+      },
+      {
+        "data": "2025-01-26",
+        "tipus": "STARTER",
+        "kg": 6006,
+        "factura": 90
+      },
+      {
+        "data": "2025-01-26",
+        "tipus": "GESTACIO",
+        "kg": 19991,
+        "factura": 90
+      },
+      {
+        "data": "2025-01-29",
+        "tipus": "ENGREIX",
+        "kg": 16873,
+        "factura": 90
+      },
+      {
+        "data": "2025-01-29",
+        "tipus": "82",
+        "kg": 10004,
+        "factura": 90
+      },
+      {
+        "data": "2025-02-02",
+        "tipus": "ENTRADES",
+        "kg": 9007,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-02",
+        "tipus": "CREIXEMENT",
+        "kg": 9002,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-02",
+        "tipus": "82",
+        "kg": 9107,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-06",
+        "tipus": "STARTER",
+        "kg": 3001,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-06",
+        "tipus": "ENGREIX",
+        "kg": 14988,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-06",
+        "tipus": "LACTACIO",
+        "kg": 8993,
+        "factura": 91
+      },
+      {
+        "data": "2025-02-06",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 92
+      },
+      {
+        "data": "2025-02-12",
+        "tipus": "ENGREIX",
+        "kg": 13509,
+        "factura": 93
+      },
+      {
+        "data": "2025-02-12",
+        "tipus": "82",
+        "kg": 13551,
+        "factura": 93
+      },
+      {
+        "data": "2025-02-16",
+        "tipus": "CREIXEMENT",
+        "kg": 4997,
+        "factura": 94
+      },
+      {
+        "data": "2025-02-16",
+        "tipus": "ENGREIX",
+        "kg": 17019,
+        "factura": 94
+      },
+      {
+        "data": "2025-02-16",
+        "tipus": "82",
+        "kg": 5024,
+        "factura": 94
+      },
+      {
+        "data": "2025-02-23",
+        "tipus": "82",
+        "kg": 13998,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-23",
+        "tipus": "GESTACIO",
+        "kg": 10024,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-23",
+        "tipus": "LLAVORES",
+        "kg": 3031,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-26",
+        "tipus": "STARTER",
+        "kg": 6007,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-26",
+        "tipus": "ENTRADES",
+        "kg": 9999,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-26",
+        "tipus": "ENGREIX",
+        "kg": 10004,
+        "factura": 95
+      },
+      {
+        "data": "2025-02-26",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 96
+      },
+      {
+        "data": "2025-03-03",
+        "tipus": "CREIXEMENT",
+        "kg": 9992,
+        "factura": 97
+      },
+      {
+        "data": "2025-03-03",
+        "tipus": "ENGREIX",
+        "kg": 16991,
+        "factura": 97
+      },
+      {
+        "data": "2025-03-03",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 97
+      },
+      {
+        "data": "2025-03-04",
+        "tipus": "82",
+        "kg": 17973,
+        "factura": 98
+      },
+      {
+        "data": "2025-03-04",
+        "tipus": "LACTACIO",
+        "kg": 9003,
+        "factura": 98
+      },
+      {
+        "data": "2025-03-09",
+        "tipus": "ENGREIX",
+        "kg": 9032,
+        "factura": 99
+      },
+      {
+        "data": "2025-03-09",
+        "tipus": "82",
+        "kg": 9011,
+        "factura": 99
+      },
+      {
+        "data": "2025-03-09",
+        "tipus": "GESTACIO",
+        "kg": 8999,
+        "factura": 99
+      },
+      {
+        "data": "2025-03-13",
+        "tipus": "ENGREIX",
+        "kg": 13499,
+        "factura": 99
+      },
+      {
+        "data": "2025-03-13",
+        "tipus": "82",
+        "kg": 13596,
+        "factura": 99
+      },
+      {
+        "data": "2025-03-16",
+        "tipus": "STARTER",
+        "kg": 5996,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-16",
+        "tipus": "ENGREIX",
+        "kg": 10004,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-16",
+        "tipus": "GESTACIO",
+        "kg": 10005,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "ENTRADES",
+        "kg": 8933,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "CREIXEMENT",
+        "kg": 4504,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "ENGREIX",
+        "kg": 8976,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "LACTACIO",
+        "kg": 4502,
+        "factura": 100
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "H10",
+        "kg": 1475,
+        "factura": 101
+      },
+      {
+        "data": "2025-03-20",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 102
+      },
+      {
+        "data": "2025-03-24",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 103
+      },
+      {
+        "data": "2025-03-24",
+        "tipus": "82",
+        "kg": 17974,
+        "factura": 103
+      },
+      {
+        "data": "2025-03-31",
+        "tipus": "STARTER",
+        "kg": 6000,
+        "factura": 104
+      },
+      {
+        "data": "2025-03-31",
+        "tipus": "82",
+        "kg": 10005,
+        "factura": 104
+      },
+      {
+        "data": "2025-03-31",
+        "tipus": "GESTACIO",
+        "kg": 10008,
+        "factura": 104
+      },
+      {
+        "data": "2025-04-03",
+        "tipus": "ENTRADES",
+        "kg": 9053,
+        "factura": 104
+      },
+      {
+        "data": "2025-04-03",
+        "tipus": "ENGREIX",
+        "kg": 18004,
+        "factura": 104
+      },
+      {
+        "data": "2025-04-06",
+        "tipus": "H10",
+        "kg": 1000,
+        "factura": 105
+      },
+      {
+        "data": "2025-04-07",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 106
+      },
+      {
+        "data": "2025-04-10",
+        "tipus": "CREIXEMENT",
+        "kg": 8980,
+        "factura": 107
+      },
+      {
+        "data": "2025-04-10",
+        "tipus": "ENGREIX",
+        "kg": 4992,
+        "factura": 107
+      },
+      {
+        "data": "2025-04-10",
+        "tipus": "82",
+        "kg": 12954,
+        "factura": 107
+      },
+      {
+        "data": "2025-04-16",
+        "tipus": "STARTER",
+        "kg": 6006,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-16",
+        "tipus": "ENTRADES",
+        "kg": 9985,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-16",
+        "tipus": "ENGREIX",
+        "kg": 9991,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-13",
+        "tipus": "GESTACIO",
+        "kg": 14998,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-13",
+        "tipus": "LACTACIO",
+        "kg": 9004,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-13",
+        "tipus": "LLAVORES",
+        "kg": 3035,
+        "factura": 108
+      },
+      {
+        "data": "2025-04-21",
+        "tipus": "ENTRADES",
+        "kg": 8994,
+        "factura": 109
+      },
+      {
+        "data": "2025-04-21",
+        "tipus": "CREIXEMENT",
+        "kg": 8997,
+        "factura": 109
+      },
+      {
+        "data": "2025-04-21",
+        "tipus": "ENGREIX",
+        "kg": 9001,
+        "factura": 109
+      },
+      {
+        "data": "2025-04-21",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 109
+      },
+      {
+        "data": "2025-04-23",
+        "tipus": "ENGREIX",
+        "kg": 13502,
+        "factura": 110
+      },
+      {
+        "data": "2025-04-23",
+        "tipus": "82",
+        "kg": 13513,
+        "factura": 110
+      },
+      {
+        "data": "2025-04-28",
+        "tipus": "STARTER",
+        "kg": 5996,
+        "factura": 111
+      },
+      {
+        "data": "2025-04-28",
+        "tipus": "ENGREIX",
+        "kg": 9994,
+        "factura": 111
+      },
+      {
+        "data": "2025-04-28",
+        "tipus": "82",
+        "kg": 10017,
+        "factura": 111
+      },
+      {
+        "data": "2025-05-01",
+        "tipus": "H10",
+        "kg": 1000,
+        "factura": 112
+      },
+      {
+        "data": "2025-05-02",
+        "tipus": "ENTRADES",
+        "kg": 9005,
+        "factura": 113
+      },
+      {
+        "data": "2025-05-02",
+        "tipus": "CREIXEMENT",
+        "kg": 9005,
+        "factura": 113
+      },
+      {
+        "data": "2025-05-02",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 113
+      },
+      {
+        "data": "2025-05-05",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 113
+      },
+      {
+        "data": "2025-05-07",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-07",
+        "tipus": "82",
+        "kg": 8996,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-07",
+        "tipus": "GESTACIO",
+        "kg": 9011,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-11",
+        "tipus": "CREIXEMENT",
+        "kg": 8985,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-11",
+        "tipus": "ENGREIX",
+        "kg": 8993,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-11",
+        "tipus": "LACTACIO",
+        "kg": 9004,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-13",
+        "tipus": "STARTER",
+        "kg": 6001,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-13",
+        "tipus": "ENGREIX",
+        "kg": 5009,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-13",
+        "tipus": "82",
+        "kg": 15028,
+        "factura": 114
+      },
+      {
+        "data": "2025-05-18",
+        "tipus": "ENTRADES",
+        "kg": 9006,
+        "factura": 115
+      },
+      {
+        "data": "2025-05-18",
+        "tipus": "ENGREIX",
+        "kg": 8992,
+        "factura": 115
+      },
+      {
+        "data": "2025-05-18",
+        "tipus": "82",
+        "kg": 8999,
+        "factura": 115
+      },
+      {
+        "data": "2025-05-21",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 115
+      },
+      {
+        "data": "2025-05-21",
+        "tipus": "STARTER",
+        "kg": 6037,
+        "factura": 116
+      },
+      {
+        "data": "2025-05-21",
+        "tipus": "ENGREIX",
+        "kg": 10013,
+        "factura": 116
+      },
+      {
+        "data": "2025-05-21",
+        "tipus": "82",
+        "kg": 10004,
+        "factura": 116
+      },
+      {
+        "data": "2025-05-23",
+        "tipus": "ENGREIX",
+        "kg": 13497,
+        "factura": 116
+      },
+      {
+        "data": "2025-05-23",
+        "tipus": "GESTACIO",
+        "kg": 13505,
+        "factura": 116
+      },
+      {
+        "data": "2025-05-25",
+        "tipus": "ENTRADES",
+        "kg": 12014,
+        "factura": 117
+      },
+      {
+        "data": "2025-05-25",
+        "tipus": "CREIXEMENT",
+        "kg": 10003,
+        "factura": 117
+      },
+      {
+        "data": "2025-05-25",
+        "tipus": "82",
+        "kg": 5012,
+        "factura": 117
+      },
+      {
+        "data": "2025-05-25",
+        "tipus": "H10",
+        "kg": 740,
+        "factura": 117
+      },
+      {
+        "data": "2025-05-28",
+        "tipus": "ENGREIX",
+        "kg": 9491,
+        "factura": 118
+      },
+      {
+        "data": "2025-05-28",
+        "tipus": "82",
+        "kg": 5001,
+        "factura": 118
+      },
+      {
+        "data": "2025-05-28",
+        "tipus": "LACTACIO",
+        "kg": 9506,
+        "factura": 118
+      },
+      {
+        "data": "2025-05-28",
+        "tipus": "LLAVORES",
+        "kg": 3152,
+        "factura": 118
+      },
+      {
+        "data": "2025-06-03",
+        "tipus": "ENGREIX",
+        "kg": 13502,
+        "factura": 119
+      },
+      {
+        "data": "2025-06-03",
+        "tipus": "82",
+        "kg": 13505,
+        "factura": 119
+      },
+      {
+        "data": "2025-06-06",
+        "tipus": "STARTER",
+        "kg": 6020,
+        "factura": 119
+      },
+      {
+        "data": "2025-06-06",
+        "tipus": "ENGREIX",
+        "kg": 9976,
+        "factura": 119
+      },
+      {
+        "data": "2025-06-06",
+        "tipus": "GESTACIO",
+        "kg": 9998,
+        "factura": 119
+      },
+      {
+        "data": "2025-06-12",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 120
+      },
+      {
+        "data": "2025-06-13",
+        "tipus": "ENTRADES",
+        "kg": 8997,
+        "factura": 121
+      },
+      {
+        "data": "2025-06-13",
+        "tipus": "CREIXEMENT",
+        "kg": 9012,
+        "factura": 121
+      },
+      {
+        "data": "2025-06-13",
+        "tipus": "82",
+        "kg": 8985,
+        "factura": 121
+      },
+      {
+        "data": "2025-06-16",
+        "tipus": "ENGREIX",
+        "kg": 18011,
+        "factura": 122
+      },
+      {
+        "data": "2025-06-16",
+        "tipus": "GESTACIO",
+        "kg": 8993,
+        "factura": 122
+      },
+      {
+        "data": "2025-06-20",
+        "tipus": "STARTER",
+        "kg": 6002,
+        "factura": 122
+      },
+      {
+        "data": "2025-06-20",
+        "tipus": "82",
+        "kg": 15008,
+        "factura": 122
+      },
+      {
+        "data": "2025-06-20",
+        "tipus": "GESTACIO",
+        "kg": 5008,
+        "factura": 122
+      },
+      {
+        "data": "2025-06-22",
+        "tipus": "CREIXEMENT",
+        "kg": 8990,
+        "factura": 123
+      },
+      {
+        "data": "2025-06-22",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 123
+      },
+      {
+        "data": "2025-06-22",
+        "tipus": "LACTACIO",
+        "kg": 8997,
+        "factura": 123
+      },
+      {
+        "data": "2025-06-29",
+        "tipus": "ENTRADES",
+        "kg": 8995,
+        "factura": 123
+      },
+      {
+        "data": "2025-06-29",
+        "tipus": "CREIXEMENT",
+        "kg": 8997,
+        "factura": 123
+      },
+      {
+        "data": "2025-06-29",
+        "tipus": "82",
+        "kg": 8955,
+        "factura": 123
+      },
+      {
+        "data": "2025-07-02",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 124
+      },
+      {
+        "data": "2025-07-03",
+        "tipus": "ENGREIX",
+        "kg": 13499,
+        "factura": 125
+      },
+      {
+        "data": "2025-07-03",
+        "tipus": "GESTACIO",
+        "kg": 13499,
+        "factura": 125
+      },
+      {
+        "data": "2025-07-06",
+        "tipus": "STARTER",
+        "kg": 5995,
+        "factura": 125
+      },
+      {
+        "data": "2025-07-06",
+        "tipus": "ENGREIX",
+        "kg": 19993,
+        "factura": 125
+      },
+      {
+        "data": "2025-07-06",
+        "tipus": "H10",
+        "kg": 2020,
+        "factura": 125
+      },
+      {
+        "data": "2025-07-11",
+        "tipus": "ENGREIX",
+        "kg": 9008,
+        "factura": 126
+      },
+      {
+        "data": "2025-07-11",
+        "tipus": "82",
+        "kg": 8998,
+        "factura": 126
+      },
+      {
+        "data": "2025-07-11",
+        "tipus": "LACTACIO",
+        "kg": 9003,
+        "factura": 126
+      },
+      {
+        "data": "2025-07-17",
+        "tipus": "CREIXEMENT",
+        "kg": 9004,
+        "factura": 127
+      },
+      {
+        "data": "2025-07-17",
+        "tipus": "ENGREIX",
+        "kg": 8992,
+        "factura": 127
+      },
+      {
+        "data": "2025-07-17",
+        "tipus": "82",
+        "kg": 8972,
+        "factura": 127
+      },
+      {
+        "data": "2025-07-20",
+        "tipus": "STARTER",
+        "kg": 6000,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-20",
+        "tipus": "ENTRADES",
+        "kg": 9942,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-20",
+        "tipus": "ENGREIX",
+        "kg": 10001,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-23",
+        "tipus": "ENGREIX",
+        "kg": 13997,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-23",
+        "tipus": "82",
+        "kg": 10003,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-23",
+        "tipus": "LLAVORES",
+        "kg": 3045,
+        "factura": 128
+      },
+      {
+        "data": "2025-07-24",
+        "tipus": "H10",
+        "kg": 1540,
+        "factura": 129
+      },
+      {
+        "data": "2025-07-27",
+        "tipus": "ENGREIX",
+        "kg": 13499,
+        "factura": 130
+      },
+      {
+        "data": "2025-07-27",
+        "tipus": "GESTACIO",
+        "kg": 13501,
+        "factura": 130
+      },
+      {
+        "data": "2025-07-30",
+        "tipus": "CREIXEMENT",
+        "kg": 9007,
+        "factura": 130
+      },
+      {
+        "data": "2025-07-30",
+        "tipus": "ENGREIX",
+        "kg": 9003,
+        "factura": 130
+      },
+      {
+        "data": "2025-07-30",
+        "tipus": "82",
+        "kg": 8992,
+        "factura": 130
+      },
+      {
+        "data": "2025-08-03",
+        "tipus": "STARTER",
+        "kg": 6018,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-03",
+        "tipus": "ENTRADES",
+        "kg": 9994,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-03",
+        "tipus": "ENGREIX",
+        "kg": 9983,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-08",
+        "tipus": "ENTRADES",
+        "kg": 8998,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-08",
+        "tipus": "ENGREIX",
+        "kg": 9002,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-08",
+        "tipus": "82",
+        "kg": 9002,
+        "factura": 131
+      },
+      {
+        "data": "2025-08-12",
+        "tipus": "ENGREIX",
+        "kg": 13508,
+        "factura": 132
+      },
+      {
+        "data": "2025-08-12",
+        "tipus": "GESTACIO",
+        "kg": 13515,
+        "factura": 132
+      },
+      {
+        "data": "2025-08-13",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 132
+      },
+      {
+        "data": "2025-08-15",
+        "tipus": "ENGREIX",
+        "kg": 16989,
+        "factura": 133
+      },
+      {
+        "data": "2025-08-15",
+        "tipus": "82",
+        "kg": 9995,
+        "factura": 133
+      },
+      {
+        "data": "2025-08-18",
+        "tipus": "ENGREIX",
+        "kg": 17986,
+        "factura": 134
+      },
+      {
+        "data": "2025-08-18",
+        "tipus": "LACTACIO",
+        "kg": 8995,
+        "factura": 134
+      },
+      {
+        "data": "2025-08-22",
+        "tipus": "STARTER",
+        "kg": 6032,
+        "factura": 134
+      },
+      {
+        "data": "2025-08-22",
+        "tipus": "CREIXEMENT",
+        "kg": 4998,
+        "factura": 134
+      },
+      {
+        "data": "2025-08-22",
+        "tipus": "82",
+        "kg": 15009,
+        "factura": 134
+      },
+      {
+        "data": "2025-08-27",
+        "tipus": "ENGREIX",
+        "kg": 15005,
+        "factura": 135
+      },
+      {
+        "data": "2025-08-27",
+        "tipus": "82",
+        "kg": 9010,
+        "factura": 135
+      },
+      {
+        "data": "2025-08-27",
+        "tipus": "LLAVORES",
+        "kg": 3034,
+        "factura": 135
+      },
+      {
+        "data": "2025-09-01",
+        "tipus": "ENTRADES",
+        "kg": 9015,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-01",
+        "tipus": "ENGREIX",
+        "kg": 9015,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-01",
+        "tipus": "82",
+        "kg": 9029,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-03",
+        "tipus": "ENGREIX",
+        "kg": 8965,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-03",
+        "tipus": "GESTACIO",
+        "kg": 18035,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-04",
+        "tipus": "CREIXEMENT",
+        "kg": 9005,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-04",
+        "tipus": "ENGREIX",
+        "kg": 8862,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-04",
+        "tipus": "82",
+        "kg": 8990,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-07",
+        "tipus": "ENGREIX",
+        "kg": 13510,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-07",
+        "tipus": "82",
+        "kg": 13506,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-09",
+        "tipus": "ENGREIX",
+        "kg": 8991,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-09",
+        "tipus": "82",
+        "kg": 9124,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-09",
+        "tipus": "LACTACIO",
+        "kg": 8999,
+        "factura": 136
+      },
+      {
+        "data": "2025-09-14",
+        "tipus": "H10",
+        "kg": 700,
+        "factura": 137
+      },
+      {
+        "data": "2025-09-07",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 138
+      },
+      {
+        "data": "2025-09-15",
+        "tipus": "CREIXEMENT",
+        "kg": 9005,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-15",
+        "tipus": "ENGREIX",
+        "kg": 9006,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-15",
+        "tipus": "82",
+        "kg": 9010,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-18",
+        "tipus": "STARTER",
+        "kg": 6001,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-18",
+        "tipus": "ENGREIX",
+        "kg": 9989,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-18",
+        "tipus": "82",
+        "kg": 10002,
+        "factura": 139
+      },
+      {
+        "data": "2025-09-25",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 140
+      },
+      {
+        "data": "2025-09-22",
+        "tipus": "ENTRADES",
+        "kg": 9003,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-22",
+        "tipus": "CREIXEMENT",
+        "kg": 8996,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-22",
+        "tipus": "ENGREIX",
+        "kg": 9005,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-28",
+        "tipus": "CREIXEMENT",
+        "kg": 4969,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-28",
+        "tipus": "ENGREIX",
+        "kg": 9019,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-28",
+        "tipus": "82",
+        "kg": 13142,
+        "factura": 141
+      },
+      {
+        "data": "2025-09-30",
+        "tipus": "ENGREIX",
+        "kg": 8999,
+        "factura": 142
+      },
+      {
+        "data": "2025-09-30",
+        "tipus": "82",
+        "kg": 9012,
+        "factura": 142
+      },
+      {
+        "data": "2025-09-30",
+        "tipus": "GESTACIO",
+        "kg": 8981,
+        "factura": 142
+      },
+      {
+        "data": "2025-10-03",
+        "tipus": "CREIXEMENT",
+        "kg": 8995,
+        "factura": 142
+      },
+      {
+        "data": "2025-10-03",
+        "tipus": "82",
+        "kg": 18095,
+        "factura": 142
+      },
+      {
+        "data": "2025-10-07",
+        "tipus": "STARTER",
+        "kg": 5873,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-07",
+        "tipus": "ENGREIX",
+        "kg": 9998,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-07",
+        "tipus": "82",
+        "kg": 10007,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-08",
+        "tipus": "ENTRADES",
+        "kg": 10000,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-08",
+        "tipus": "82",
+        "kg": 14007,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-08",
+        "tipus": "LLAVORES",
+        "kg": 3014,
+        "factura": 143
+      },
+      {
+        "data": "2025-10-12",
+        "tipus": "CREIXEMENT",
+        "kg": 5010,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-12",
+        "tipus": "GESTACIO",
+        "kg": 13002,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-12",
+        "tipus": "LACTACIO",
+        "kg": 8997,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-14",
+        "tipus": "ENGREIX",
+        "kg": 13506,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-14",
+        "tipus": "82",
+        "kg": 13482,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-19",
+        "tipus": "ENGREIX",
+        "kg": 13487,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-19",
+        "tipus": "82",
+        "kg": 13570,
+        "factura": 144
+      },
+      {
+        "data": "2025-10-16",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 145
+      },
+      {
+        "data": "2025-10-22",
+        "tipus": "ENGREIX",
+        "kg": 13496,
+        "factura": 146
+      },
+      {
+        "data": "2025-10-22",
+        "tipus": "82",
+        "kg": 13505,
+        "factura": 146
+      },
+      {
+        "data": "2025-10-27",
+        "tipus": "STARTER",
+        "kg": 6015,
+        "factura": 147
+      },
+      {
+        "data": "2025-10-27",
+        "tipus": "ENGREIX",
+        "kg": 9993,
+        "factura": 147
+      },
+      {
+        "data": "2025-10-27",
+        "tipus": "GESTACIO",
+        "kg": 9983,
+        "factura": 147
+      },
+      {
+        "data": "2025-10-30",
+        "tipus": "ENTRADES",
+        "kg": 9003,
+        "factura": 147
+      },
+      {
+        "data": "2025-10-30",
+        "tipus": "82",
+        "kg": 18079,
+        "factura": 147
+      },
+      {
+        "data": "2025-11-02",
+        "tipus": "ENGREIX",
+        "kg": 18001,
+        "factura": 148
+      },
+      {
+        "data": "2025-11-02",
+        "tipus": "LACTACIO",
+        "kg": 8994,
+        "factura": 148
+      },
+      {
+        "data": "2025-11-06",
+        "tipus": "CREIXEMENT",
+        "kg": 8996,
+        "factura": 148
+      },
+      {
+        "data": "2025-11-06",
+        "tipus": "82",
+        "kg": 17997,
+        "factura": 148
+      },
+      {
+        "data": "2025-11-09",
+        "tipus": "ENGREIX",
+        "kg": 18022,
+        "factura": 149
+      },
+      {
+        "data": "2025-11-09",
+        "tipus": "82",
+        "kg": 9002,
+        "factura": 149
+      },
+      {
+        "data": "2025-11-09",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 149
+      },
+      {
+        "data": "2025-11-11",
+        "tipus": "ENGREIX",
+        "kg": 9993,
+        "factura": 150
+      },
+      {
+        "data": "2025-11-11",
+        "tipus": "GESTACIO",
+        "kg": 13998,
+        "factura": 150
+      },
+      {
+        "data": "2025-11-11",
+        "tipus": "LLAVORES",
+        "kg": 3500,
+        "factura": 150
+      },
+      {
+        "data": "2025-11-16",
+        "tipus": "ENTRADES",
+        "kg": 4998,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-16",
+        "tipus": "ENGREIX",
+        "kg": 9008,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-16",
+        "tipus": "82",
+        "kg": 13088,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-20",
+        "tipus": "STARTER",
+        "kg": 5995,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-20",
+        "tipus": "CREIXEMENT",
+        "kg": 10003,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-20",
+        "tipus": "ENGREIX",
+        "kg": 9986,
+        "factura": 151
+      },
+      {
+        "data": "2025-11-18",
+        "tipus": "H10",
+        "kg": 600,
+        "factura": 152
+      },
+      {
+        "data": "2025-11-27",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 153
+      },
+      {
+        "data": "2025-11-28",
+        "tipus": "ENTRADES",
+        "kg": 8989,
+        "factura": 154
+      },
+      {
+        "data": "2025-11-28",
+        "tipus": "ENGREIX",
+        "kg": 8990,
+        "factura": 154
+      },
+      {
+        "data": "2025-11-28",
+        "tipus": "82",
+        "kg": 9001,
+        "factura": 154
+      },
+      {
+        "data": "2025-12-01",
+        "tipus": "CREIXEMENT",
+        "kg": 9001,
+        "factura": 155
+      },
+      {
+        "data": "2025-12-01",
+        "tipus": "ENGREIX",
+        "kg": 8979,
+        "factura": 155
+      },
+      {
+        "data": "2025-12-01",
+        "tipus": "GESTACIO",
+        "kg": 9007,
+        "factura": 155
+      },
+      {
+        "data": "2025-12-03",
+        "tipus": "ENGREIX",
+        "kg": 13498,
+        "factura": 155
+      },
+      {
+        "data": "2025-12-03",
+        "tipus": "82",
+        "kg": 13495,
+        "factura": 155
+      },
+      {
+        "data": "2025-12-14",
+        "tipus": "ENGREIX",
+        "kg": 9256,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-14",
+        "tipus": "82",
+        "kg": 18033,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-18",
+        "tipus": "ENTRADES",
+        "kg": 8990,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-18",
+        "tipus": "ENGREIX",
+        "kg": 8995,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-18",
+        "tipus": "82",
+        "kg": 9072,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-21",
+        "tipus": "STARTER",
+        "kg": 6019,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-21",
+        "tipus": "GESTACIO",
+        "kg": 14992,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-21",
+        "tipus": "LACTACIO",
+        "kg": 4991,
+        "factura": 156
+      },
+      {
+        "data": "2025-12-22",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 157
+      },
+      {
+        "data": "2025-12-21",
+        "tipus": "H10",
+        "kg": 500,
+        "factura": 158
+      },
+      {
+        "data": "2025-12-26",
+        "tipus": "ENGREIX",
+        "kg": 9002,
+        "factura": 159
+      },
+      {
+        "data": "2025-12-26",
+        "tipus": "82",
+        "kg": 15016,
+        "factura": 159
+      },
+      {
+        "data": "2025-12-26",
+        "tipus": "LACTACIO",
+        "kg": 3058,
+        "factura": 159
+      },
+      {
+        "data": "2025-12-28",
+        "tipus": "ENTRADES",
+        "kg": 4486,
+        "factura": 160
+      },
+      {
+        "data": "2025-12-28",
+        "tipus": "CREIXEMENT",
+        "kg": 8998,
+        "factura": 160
+      },
+      {
+        "data": "2025-12-28",
+        "tipus": "ENGREIX",
+        "kg": 4502,
+        "factura": 160
+      },
+      {
+        "data": "2025-12-28",
+        "tipus": "82",
+        "kg": 8997,
+        "factura": 160
+      },
+      {
+        "data": "2025-12-30",
+        "tipus": "ENGREIX",
+        "kg": 13491,
+        "factura": 160
+      },
+      {
+        "data": "2025-12-30",
+        "tipus": "82",
+        "kg": 13507,
+        "factura": 160
+      },
+      {
+        "data": "2026-01-06",
+        "tipus": "ENGREIX",
+        "kg": 9007,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-06",
+        "tipus": "82",
+        "kg": 18035,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-07",
+        "tipus": "ENTRADES",
+        "kg": 9000,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-07",
+        "tipus": "CREIXEMENT",
+        "kg": 9017,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-07",
+        "tipus": "GESTACIO",
+        "kg": 9011,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-11",
+        "tipus": "ENGREIX",
+        "kg": 17971,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-11",
+        "tipus": "82",
+        "kg": 9474,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-14",
+        "tipus": "ENGREIX",
+        "kg": 13491,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-14",
+        "tipus": "82",
+        "kg": 13582,
+        "factura": 161
+      },
+      {
+        "data": "2026-01-12",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 162
+      },
+      {
+        "data": "2026-01-19",
+        "tipus": "ENGREIX",
+        "kg": 9007,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-19",
+        "tipus": "82",
+        "kg": 9099,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-19",
+        "tipus": "LACTACIO",
+        "kg": 8996,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-21",
+        "tipus": "CREIXEMENT",
+        "kg": 9001,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-21",
+        "tipus": "ENGREIX",
+        "kg": 8998,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-21",
+        "tipus": "82",
+        "kg": 9021,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-23",
+        "tipus": "STARTER",
+        "kg": 5987,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-23",
+        "tipus": "GESTACIO",
+        "kg": 20008,
+        "factura": 163
+      },
+      {
+        "data": "2026-01-28",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 164
+      },
+      {
+        "data": "2026-01-28",
+        "tipus": "H10",
+        "kg": 1170,
+        "factura": 165
+      },
+      {
+        "data": "2026-01-28",
+        "tipus": "ENTRADES",
+        "kg": 5023,
+        "factura": 166
+      },
+      {
+        "data": "2026-01-28",
+        "tipus": "ENGREIX",
+        "kg": 22001,
+        "factura": 166
+      },
+      {
+        "data": "2026-02-01",
+        "tipus": "ENGREIX",
+        "kg": 14002,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-01",
+        "tipus": "82",
+        "kg": 10031,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-01",
+        "tipus": "LLAVORES",
+        "kg": 3002,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-05",
+        "tipus": "CREIXEMENT",
+        "kg": 10007,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-05",
+        "tipus": "ENGREIX",
+        "kg": 17005,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-10",
+        "tipus": "ENTRADES",
+        "kg": 9021,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-10",
+        "tipus": "82",
+        "kg": 18013,
+        "factura": 167
+      },
+      {
+        "data": "2026-02-11",
+        "tipus": "STARTER",
+        "kg": 8995,
+        "factura": 168
+      },
+      {
+        "data": "2026-02-11",
+        "tipus": "GESTACIO",
+        "kg": 8994,
+        "factura": 168
+      },
+      {
+        "data": "2026-02-11",
+        "tipus": "LACTACIO",
+        "kg": 9007,
+        "factura": 168
+      },
+      {
+        "data": "2026-02-15",
+        "tipus": "ENGREIX",
+        "kg": 13501,
+        "factura": 169
+      },
+      {
+        "data": "2026-02-15",
+        "tipus": "82",
+        "kg": 13488,
+        "factura": 169
+      },
+      {
+        "data": "2026-02-23",
+        "tipus": "ENGREIX",
+        "kg": 13504,
+        "factura": 170
+      },
+      {
+        "data": "2026-02-23",
+        "tipus": "82",
+        "kg": 13770,
+        "factura": 170
+      },
+      {
+        "data": "2026-02-23",
+        "tipus": "GESTACIO",
+        "kg": 13995,
+        "factura": 170
+      },
+      {
+        "data": "2026-02-19",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 171
+      },
+      {
+        "data": "2026-03-04",
+        "tipus": "ENGREIX",
+        "kg": 18001,
+        "factura": 172
+      },
+      {
+        "data": "2026-03-04",
+        "tipus": "82",
+        "kg": 9010,
+        "factura": 172
+      },
+      {
+        "data": "2026-03-01",
+        "tipus": "ENTRADES",
+        "kg": 9005,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-01",
+        "tipus": "CREIXEMENT",
+        "kg": 9000,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-01",
+        "tipus": "82",
+        "kg": 9000,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-08",
+        "tipus": "STARTER",
+        "kg": 8986,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-08",
+        "tipus": "ENGREIX",
+        "kg": 9001,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-08",
+        "tipus": "82",
+        "kg": 8990,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-13",
+        "tipus": "ENGREIX",
+        "kg": 13491,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-13",
+        "tipus": "82",
+        "kg": 13518,
+        "factura": 173
+      },
+      {
+        "data": "2026-03-11",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 174
+      },
+      {
+        "data": "2026-03-16",
+        "tipus": "ENTRADES",
+        "kg": 9450,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-16",
+        "tipus": "CREIXEMENT",
+        "kg": 9507,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-16",
+        "tipus": "82",
+        "kg": 5009,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-16",
+        "tipus": "LLAVORES",
+        "kg": 2998,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-18",
+        "tipus": "ENTRADES",
+        "kg": 8974,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-18",
+        "tipus": "GESTACIO",
+        "kg": 18012,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-19",
+        "tipus": "ENGREIX",
+        "kg": 5994,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-19",
+        "tipus": "LACTACIO",
+        "kg": 9997,
+        "factura": 175
+      },
+      {
+        "data": "2026-03-19",
+        "tipus": "H10",
+        "kg": 790,
+        "factura": 176
+      },
+      {
+        "data": "2026-03-24",
+        "tipus": "ENGREIX",
+        "kg": 13492,
+        "factura": 177
+      },
+      {
+        "data": "2026-03-24",
+        "tipus": "82",
+        "kg": 13578,
+        "factura": 177
+      },
+      {
+        "data": "2026-03-30",
+        "tipus": "CREIXEMENT",
+        "kg": 9002,
+        "factura": 178
+      },
+      {
+        "data": "2026-03-30",
+        "tipus": "ENGREIX",
+        "kg": 8991,
+        "factura": 178
+      },
+      {
+        "data": "2026-03-30",
+        "tipus": "82",
+        "kg": 9047,
+        "factura": 178
+      },
+      {
+        "data": "2026-04-01",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 179
+      },
+      {
+        "data": "2026-04-06",
+        "tipus": "STARTER",
+        "kg": 9004,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-06",
+        "tipus": "ENGREIX",
+        "kg": 9026,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-06",
+        "tipus": "GESTACIO",
+        "kg": 8997,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-12",
+        "tipus": "CREIXEMENT",
+        "kg": 8992,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-12",
+        "tipus": "ENGREIX",
+        "kg": 8996,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-12",
+        "tipus": "82",
+        "kg": 9000,
+        "factura": 180
+      },
+      {
+        "data": "2026-04-15",
+        "tipus": "ENGREIX",
+        "kg": 17003,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-15",
+        "tipus": "82",
+        "kg": 9996,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-22",
+        "tipus": "ENTRADES",
+        "kg": 8996,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-22",
+        "tipus": "ENGREIX",
+        "kg": 9001,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-22",
+        "tipus": "LACTACIO",
+        "kg": 9010,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-23",
+        "tipus": "82",
+        "kg": 10078,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-23",
+        "tipus": "GESTACIO",
+        "kg": 17007,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-26",
+        "tipus": "H10",
+        "kg": 1160,
+        "factura": 181
+      },
+      {
+        "data": "2026-04-26",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 182
+      },
+      {
+        "data": "2026-05-01",
+        "tipus": "ENGREIX",
+        "kg": 13496,
+        "factura": 182
+      },
+      {
+        "data": "2026-05-01",
+        "tipus": "82",
+        "kg": 13431,
+        "factura": 182
+      },
+      {
+        "data": "2026-05-04",
+        "tipus": "STARTER",
+        "kg": 9038,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-04",
+        "tipus": "ENTRADES",
+        "kg": 9994,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-04",
+        "tipus": "ENGREIX",
+        "kg": 4996,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-04",
+        "tipus": "LLAVORES",
+        "kg": 3071,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-07",
+        "tipus": "CREIXEMENT",
+        "kg": 9999,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-07",
+        "tipus": "ENGREIX",
+        "kg": 16985,
+        "factura": 183
+      },
+      {
+        "data": "2026-05-14",
+        "tipus": "ENGREIX",
+        "kg": 13490,
+        "factura": 184
+      },
+      {
+        "data": "2026-05-14",
+        "tipus": "GESTACIO",
+        "kg": 13505,
+        "factura": 184
+      },
+      {
+        "data": "2026-05-17",
+        "tipus": "CREIXEMENT",
+        "kg": 8996,
+        "factura": 185
+      },
+      {
+        "data": "2026-05-17",
+        "tipus": "82",
+        "kg": 9020,
+        "factura": 185
+      },
+      {
+        "data": "2026-05-17",
+        "tipus": "LACTACIO",
+        "kg": 8997,
+        "factura": 185
+      },
+      {
+        "data": "2026-05-21",
+        "tipus": "ENGREIX",
+        "kg": 18014,
+        "factura": 185
+      },
+      {
+        "data": "2026-05-21",
+        "tipus": "82",
+        "kg": 10016,
+        "factura": 185
+      },
+      {
+        "data": "2026-05-17",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 186
+      },
+      {
+        "data": "2026-05-28",
+        "tipus": "ENGREIX",
+        "kg": 10000,
+        "factura": 187
+      },
+      {
+        "data": "2026-05-28",
+        "tipus": "GESTACIO",
+        "kg": 16994,
+        "factura": 187
+      },
+      {
+        "data": "2026-05-31",
+        "tipus": "ENTRADES",
+        "kg": 9009,
+        "factura": 188
+      },
+      {
+        "data": "2026-05-31",
+        "tipus": "82",
+        "kg": 15008,
+        "factura": 188
+      },
+      {
+        "data": "2026-05-31",
+        "tipus": "LLAVORES",
+        "kg": 3076,
+        "factura": 188
+      },
+      {
+        "data": "2026-06-04",
+        "tipus": "H10",
+        "kg": 1100,
+        "factura": 188
+      },
+      {
+        "data": "2026-06-04",
+        "tipus": "H10",
+        "kg": 1520,
+        "factura": 189
+      },
+      {
+        "data": "2026-06-04",
+        "tipus": "CREIXEMENT",
+        "kg": 9000,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-04",
+        "tipus": "ENGREIX",
+        "kg": 18000,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-07",
+        "tipus": "ENTRADES",
+        "kg": 8991,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-07",
+        "tipus": "CREIXEMENT",
+        "kg": 8997,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-07",
+        "tipus": "82",
+        "kg": 8994,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-03",
+        "tipus": "ENGREIX",
+        "kg": 17005,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-03",
+        "tipus": "LACTACIO",
+        "kg": 9996,
+        "factura": 190
+      },
+      {
+        "data": "2026-06-11",
+        "tipus": "STARTER",
+        "kg": 9011,
+        "factura": 191
+      },
+      {
+        "data": "2026-06-11",
+        "tipus": "CREIXEMENT",
+        "kg": 9002,
+        "factura": 191
+      },
+      {
+        "data": "2026-06-11",
+        "tipus": "82",
+        "kg": 9012,
+        "factura": 191
+      },
+      {
+        "data": "2026-06-14",
+        "tipus": "ENTRADES",
+        "kg": 9998,
+        "factura": 192
+      },
+      {
+        "data": "2026-06-14",
+        "tipus": "ENGREIX",
+        "kg": 17001,
+        "factura": 192
+      },
+      {
+        "data": "2026-06-19",
+        "tipus": "ENGREIX",
+        "kg": 10501,
+        "factura": 192
+      },
+      {
+        "data": "2026-06-19",
+        "tipus": "82",
+        "kg": 10532,
+        "factura": 192
+      },
+      {
+        "data": "2026-06-25",
+        "tipus": "CREIXEMENT",
+        "kg": 5003,
+        "factura": 193
+      },
+      {
+        "data": "2026-06-25",
+        "tipus": "ENGREIX",
+        "kg": 16989,
+        "factura": 193
+      },
+      {
+        "data": "2026-06-25",
+        "tipus": "GESTACIO",
+        "kg": 4987,
+        "factura": 193
+      },
+      {
+        "data": "2026-07-01",
+        "tipus": "ENGREIX",
+        "kg": 13508,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-01",
+        "tipus": "82",
+        "kg": 13488,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-06",
+        "tipus": "ENGREIX",
+        "kg": 15001,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-06",
+        "tipus": "GESTACIO",
+        "kg": 8992,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-06",
+        "tipus": "LLAVORES",
+        "kg": 3036,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-09",
+        "tipus": "STARTER",
+        "kg": 8981,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-09",
+        "tipus": "82",
+        "kg": 9003,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-09",
+        "tipus": "LACTACIO",
+        "kg": 8982,
+        "factura": 194
+      },
+      {
+        "data": "2026-07-15",
+        "tipus": "CREIXEMENT",
+        "kg": 4491,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-15",
+        "tipus": "ENGREIX",
+        "kg": 9008,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-15",
+        "tipus": "82",
+        "kg": 13523,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-16",
+        "tipus": "ENTRADES",
+        "kg": 8985,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-16",
+        "tipus": "ENGREIX",
+        "kg": 18003,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-17",
+        "tipus": "GESTACIO",
+        "kg": 16007,
+        "factura": 195
+      },
+      {
+        "data": "2026-07-19",
+        "tipus": "H10",
+        "kg": 1500,
+        "factura": 196
+      },
+      {
+        "data": "2026-07-20",
+        "tipus": "H10",
+        "kg": 1160,
+        "factura": 197
+      },
+      {
+        "data": "2026-07-24",
+        "tipus": "CREIXEMENT",
+        "kg": 8989,
+        "factura": 198
+      },
+      {
+        "data": "2026-07-24",
+        "tipus": "ENGREIX",
+        "kg": 9004,
+        "factura": 198
+      },
+      {
+        "data": "2026-07-24",
+        "tipus": "82",
+        "kg": 9037,
+        "factura": 198
+      },
+      {
+        "data": "2026-07-29",
+        "tipus": "CREIXEMENT",
+        "kg": 5002,
+        "factura": 199
+      },
+      {
+        "data": "2026-07-29",
+        "tipus": "ENGREIX",
+        "kg": 12025,
+        "factura": 199
+      },
+      {
+        "data": "2026-07-29",
+        "tipus": "82",
+        "kg": 10016,
+        "factura": 199
+      }
+    ],
+    "factures": [
+      {
+        "data": "2024-01-12",
+        "importPinso": 11045.583,
+        "importMedicaments": 611.4570000000001,
+        "importMedicamentsSenseIva": 555.87,
+        "entregues": 2
+      },
+      {
+        "data": "2024-01-18",
+        "importPinso": 11223.340999999999,
+        "importMedicaments": 612.7990000000001,
+        "importMedicamentsSenseIva": 557.09,
+        "entregues": 3
+      },
+      {
+        "data": "2024-01-23",
+        "importPinso": 11458.431999999999,
+        "importMedicaments": 1327.458,
+        "importMedicamentsSenseIva": 1206.78,
+        "entregues": 3
+      },
+      {
+        "data": "2024-01-25",
+        "importPinso": 2038.85,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-02-01",
+        "importPinso": 10221.83,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2024-02-06",
+        "importPinso": 371.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-02-08",
+        "importPinso": 31208.499,
+        "importMedicaments": 2124.1110000000003,
+        "importMedicamentsSenseIva": 1931.01,
+        "entregues": 3
+      },
+      {
+        "data": "2024-02-13",
+        "importPinso": 10046.23,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2024-02-18",
+        "importPinso": 1951.57,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-02-19",
+        "importPinso": 10471.600999999999,
+        "importMedicaments": 664.6090000000002,
+        "importMedicamentsSenseIva": 604.19,
+        "entregues": 3
+      },
+      {
+        "data": "2024-02-27",
+        "importPinso": 20974.628,
+        "importMedicaments": 934.032,
+        "importMedicamentsSenseIva": 849.12,
+        "entregues": 6
+      },
+      {
+        "data": "2024-03-07",
+        "importPinso": 2025.65,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2024-03-07",
+        "importPinso": 9789.02,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-03-07",
+        "importPinso": 21203.862,
+        "importMedicaments": 1296.438,
+        "importMedicamentsSenseIva": 1178.58,
+        "entregues": 3
+      },
+      {
+        "data": "2024-03-10",
+        "importPinso": 9895.971,
+        "importMedicaments": 423.379,
+        "importMedicamentsSenseIva": 384.89,
+        "entregues": 2
+      },
+      {
+        "data": "2024-03-20",
+        "importPinso": 2475.88,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-03-21",
+        "importPinso": 10328.509,
+        "importMedicaments": 913.671,
+        "importMedicamentsSenseIva": 830.61,
+        "entregues": 2
+      },
+      {
+        "data": "2024-03-26",
+        "importPinso": 10748.873,
+        "importMedicaments": 1249.7870000000003,
+        "importMedicamentsSenseIva": 1136.17,
+        "entregues": 3
+      },
+      {
+        "data": "2024-03-27",
+        "importPinso": 371.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-03-31",
+        "importPinso": 2016.85,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-04-07",
+        "importPinso": 10211.5,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 8
+      },
+      {
+        "data": "2024-04-11",
+        "importPinso": 30249.282,
+        "importMedicaments": 2958.2080000000005,
+        "importMedicamentsSenseIva": 2689.28,
+        "entregues": 2
+      },
+      {
+        "data": "2024-04-18",
+        "importPinso": 1956.08,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-04-18",
+        "importPinso": 10678.723,
+        "importMedicaments": 110.077,
+        "importMedicamentsSenseIva": 100.07,
+        "entregues": 2
+      },
+      {
+        "data": "2024-04-24",
+        "importPinso": 367.4,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-04-29",
+        "importPinso": 10140.145,
+        "importMedicaments": 896.5550000000001,
+        "importMedicamentsSenseIva": 815.05,
+        "entregues": 3
+      },
+      {
+        "data": "2024-05-02",
+        "importPinso": 10144.52,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2024-05-05",
+        "importPinso": 10354.939999999999,
+        "importMedicaments": 815.8700000000001,
+        "importMedicamentsSenseIva": 741.7,
+        "entregues": 3
+      },
+      {
+        "data": "2024-05-06",
+        "importPinso": 9889.72,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-05-06",
+        "importPinso": 4906,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-05-09",
+        "importPinso": 2014.65,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-05-14",
+        "importPinso": 20113.434999999998,
+        "importMedicaments": 1984.3450000000003,
+        "importMedicamentsSenseIva": 1803.95,
+        "entregues": 5
+      },
+      {
+        "data": "2024-05-20",
+        "importPinso": 367.4,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-05-21",
+        "importPinso": 10142.07,
+        "importMedicaments": 47.08,
+        "importMedicamentsSenseIva": 42.8,
+        "entregues": 2
+      },
+      {
+        "data": "2024-05-28",
+        "importPinso": 10809.95,
+        "importMedicaments": 1113.4530000000002,
+        "importMedicamentsSenseIva": 1012.23,
+        "entregues": 3
+      },
+      {
+        "data": "2024-05-29",
+        "importPinso": 2014.65,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-06-02",
+        "importPinso": 1377.75,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-06-04",
+        "importPinso": 3982,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-06-06",
+        "importPinso": 2032.25,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2024-06-07",
+        "importPinso": 20272.949,
+        "importMedicaments": 802.571,
+        "importMedicamentsSenseIva": 729.61,
+        "entregues": 2
+      },
+      {
+        "data": "2024-06-14",
+        "importPinso": 10113.233,
+        "importMedicaments": 1212.827,
+        "importMedicamentsSenseIva": 1102.57,
+        "entregues": 2
+      },
+      {
+        "data": "2024-06-14",
+        "importPinso": 10529.32,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-06-20",
+        "importPinso": 20472.166,
+        "importMedicaments": 1935.7140000000002,
+        "importMedicamentsSenseIva": 1759.74,
+        "entregues": 5
+      },
+      {
+        "data": "2024-06-25",
+        "importPinso": 2032.25,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-06-25",
+        "importPinso": 10056.206,
+        "importMedicaments": 63.184000000000005,
+        "importMedicamentsSenseIva": 57.44,
+        "entregues": 3
+      },
+      {
+        "data": "2024-07-05",
+        "importPinso": 4169,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-07-04",
+        "importPinso": 9674.746,
+        "importMedicaments": 855.5140000000001,
+        "importMedicamentsSenseIva": 777.74,
+        "entregues": 2
+      },
+      {
+        "data": "2024-07-08",
+        "importPinso": 10229.86,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-07-11",
+        "importPinso": 9920.306999999999,
+        "importMedicaments": 1700.7430000000002,
+        "importMedicamentsSenseIva": 1546.13,
+        "entregues": 3
+      },
+      {
+        "data": "2024-07-11",
+        "importPinso": 2098.91,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-07-17",
+        "importPinso": 9423.5,
+        "importMedicaments": 464.29,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-07-21",
+        "importPinso": 2102.65,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-07-24",
+        "importPinso": 9695.701,
+        "importMedicaments": 2321.429,
+        "importMedicamentsSenseIva": 2110.39,
+        "entregues": 2
+      },
+      {
+        "data": "2024-07-31",
+        "importPinso": 9845.180999999999,
+        "importMedicaments": 278.619,
+        "importMedicamentsSenseIva": 253.29,
+        "entregues": 3
+      },
+      {
+        "data": "2024-08-01",
+        "importPinso": 10075.07,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-08-04",
+        "importPinso": 1596.1,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-08-05",
+        "importPinso": 9804.493999999999,
+        "importMedicaments": 679.6460000000001,
+        "importMedicamentsSenseIva": 617.86,
+        "entregues": 3
+      },
+      {
+        "data": "2024-08-06",
+        "importPinso": 688.88,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-08-07",
+        "importPinso": 605.55,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-08-15",
+        "importPinso": 18793.923,
+        "importMedicaments": 1840.2670000000003,
+        "importMedicamentsSenseIva": 1672.97,
+        "entregues": 4
+      },
+      {
+        "data": "2024-08-19",
+        "importPinso": 3982,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2024-08-23",
+        "importPinso": 20212.961000000003,
+        "importMedicaments": 1320.099,
+        "importMedicamentsSenseIva": 1200.09,
+        "entregues": 3
+      },
+      {
+        "data": "2024-08-27",
+        "importPinso": 11495.33,
+        "importMedicaments": 1884.1900000000003,
+        "importMedicamentsSenseIva": 1712.9,
+        "entregues": 3
+      },
+      {
+        "data": "2024-08-28",
+        "importPinso": 1930.83,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-09-13",
+        "importPinso": 28814.18,
+        "importMedicaments": 437.8,
+        "importMedicamentsSenseIva": 398,
+        "entregues": 10
+      },
+      {
+        "data": "2024-09-22",
+        "importPinso": 67917.86,
+        "importMedicaments": 3518.46,
+        "importMedicamentsSenseIva": 3198.6,
+        "entregues": 6
+      },
+      {
+        "data": "2024-09-29",
+        "importPinso": 7983.14,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2024-10-02",
+        "importPinso": 10960.308,
+        "importMedicaments": 1016.312,
+        "importMedicamentsSenseIva": 923.92,
+        "entregues": 3
+      },
+      {
+        "data": "2024-10-03",
+        "importPinso": 2009.15,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-10-10",
+        "importPinso": 19496.948,
+        "importMedicaments": 1878.0520000000001,
+        "importMedicamentsSenseIva": 1707.32,
+        "entregues": 5
+      },
+      {
+        "data": "2024-10-15",
+        "importPinso": 19695.126,
+        "importMedicaments": 789.9540000000001,
+        "importMedicamentsSenseIva": 718.14,
+        "entregues": 5
+      },
+      {
+        "data": "2024-10-24",
+        "importPinso": 20758.149,
+        "importMedicaments": 405.031,
+        "importMedicamentsSenseIva": 368.21,
+        "entregues": 6
+      },
+      {
+        "data": "2024-10-30",
+        "importPinso": 18476.302,
+        "importMedicaments": 693.418,
+        "importMedicamentsSenseIva": 630.38,
+        "entregues": 6
+      },
+      {
+        "data": "2024-11-11",
+        "importPinso": 907.5,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2024-11-14",
+        "importPinso": 41092.076,
+        "importMedicaments": 1540.1540000000002,
+        "importMedicamentsSenseIva": 1400.14,
+        "entregues": 5
+      },
+      {
+        "data": "2024-11-17",
+        "importPinso": 2100,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-11-24",
+        "importPinso": 9746.525000000001,
+        "importMedicaments": 830.005,
+        "importMedicamentsSenseIva": 754.55,
+        "entregues": 5
+      },
+      {
+        "data": "2024-12-05",
+        "importPinso": 31426.019999999997,
+        "importMedicaments": 2327.82,
+        "importMedicamentsSenseIva": 2116.2,
+        "entregues": 8
+      },
+      {
+        "data": "2024-12-09",
+        "importPinso": 2043.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2024-12-11",
+        "importPinso": 10264.342,
+        "importMedicaments": 1147.938,
+        "importMedicamentsSenseIva": 1043.58,
+        "entregues": 3
+      },
+      {
+        "data": "2024-12-15",
+        "importPinso": 4169,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2024-12-20",
+        "importPinso": 19840.319,
+        "importMedicaments": 6.611000000000001,
+        "importMedicamentsSenseIva": 6.01,
+        "entregues": 3
+      },
+      {
+        "data": "2024-12-29",
+        "importPinso": 21298.822,
+        "importMedicaments": 1260.7980000000002,
+        "importMedicamentsSenseIva": 1146.18,
+        "entregues": 6
+      },
+      {
+        "data": "2024-12-30",
+        "importPinso": 8649.13,
+        "importMedicaments": 990.5170000000002,
+        "importMedicamentsSenseIva": 900.47,
+        "entregues": 3
+      },
+      {
+        "data": "2024-12-29",
+        "importPinso": 2043.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-01-13",
+        "importPinso": 20053.304,
+        "importMedicaments": 2239.446,
+        "importMedicamentsSenseIva": 2035.86,
+        "entregues": 5
+      },
+      {
+        "data": "2025-01-16",
+        "importPinso": 907.5,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-01-17",
+        "importPinso": 20320.32,
+        "importMedicaments": 65.45,
+        "importMedicamentsSenseIva": 59.5,
+        "entregues": 4
+      },
+      {
+        "data": "2025-01-20",
+        "importPinso": 2062.5,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-01-22",
+        "importPinso": 11417.01,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": 471.9,
+        "entregues": 2
+      },
+      {
+        "data": "2025-01-29",
+        "importPinso": 19970.993000000002,
+        "importMedicaments": 1075.6570000000002,
+        "importMedicamentsSenseIva": 977.87,
+        "entregues": 4
+      },
+      {
+        "data": "2025-02-06",
+        "importPinso": 21476.627,
+        "importMedicaments": 1730.9930000000002,
+        "importMedicamentsSenseIva": 1573.63,
+        "entregues": 6
+      },
+      {
+        "data": "2025-02-06",
+        "importPinso": 2085.6,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-02-12",
+        "importPinso": 10008.587,
+        "importMedicaments": 793.793,
+        "importMedicamentsSenseIva": 721.63,
+        "entregues": 2
+      },
+      {
+        "data": "2025-02-16",
+        "importPinso": 10119.652,
+        "importMedicaments": 1272.458,
+        "importMedicamentsSenseIva": 1156.78,
+        "entregues": 3
+      },
+      {
+        "data": "2025-02-26",
+        "importPinso": 21011.805,
+        "importMedicaments": 1099.065,
+        "importMedicamentsSenseIva": 999.15,
+        "entregues": 6
+      },
+      {
+        "data": "2025-02-26",
+        "importPinso": 1881,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-03-03",
+        "importPinso": 2085.6,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2025-03-04",
+        "importPinso": 20413.479,
+        "importMedicaments": 383.36100000000005,
+        "importMedicamentsSenseIva": 348.51,
+        "entregues": 2
+      },
+      {
+        "data": "2025-03-13",
+        "importPinso": 19683.688,
+        "importMedicaments": 1179.7720000000002,
+        "importMedicamentsSenseIva": 1072.52,
+        "entregues": 5
+      },
+      {
+        "data": "2025-03-20",
+        "importPinso": 21044.848,
+        "importMedicaments": 990.3520000000001,
+        "importMedicamentsSenseIva": 900.32,
+        "entregues": 7
+      },
+      {
+        "data": "2025-03-20",
+        "importPinso": 2085,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-03-20",
+        "importPinso": 4000,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-03-24",
+        "importPinso": 9950.255,
+        "importMedicaments": 1526.9650000000001,
+        "importMedicamentsSenseIva": 1388.15,
+        "entregues": 2
+      },
+      {
+        "data": "2025-04-03",
+        "importPinso": 20856.79,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 5
+      },
+      {
+        "data": "2025-04-06",
+        "importPinso": 2288,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-04-07",
+        "importPinso": 2276.45,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-04-10",
+        "importPinso": 10101.048999999999,
+        "importMedicaments": 2331.681,
+        "importMedicamentsSenseIva": 2119.71,
+        "entregues": 3
+      },
+      {
+        "data": "2025-04-13",
+        "importPinso": 21126.27,
+        "importMedicaments": 2674.4300000000003,
+        "importMedicamentsSenseIva": 2431.3,
+        "entregues": 6
+      },
+      {
+        "data": "2025-04-21",
+        "importPinso": 1885.95,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2025-04-23",
+        "importPinso": 20597.67,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2025-04-28",
+        "importPinso": 10758.141,
+        "importMedicaments": 1552.419,
+        "importMedicamentsSenseIva": 1411.29,
+        "entregues": 3
+      },
+      {
+        "data": "2025-05-01",
+        "importPinso": 3762,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-05-05",
+        "importPinso": 2116.18,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2025-05-13",
+        "importPinso": 40738.105,
+        "importMedicaments": 1547.6450000000002,
+        "importMedicamentsSenseIva": 1406.95,
+        "entregues": 9
+      },
+      {
+        "data": "2025-05-21",
+        "importPinso": 2116.18,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2025-05-23",
+        "importPinso": 30189.035,
+        "importMedicaments": 1308.285,
+        "importMedicamentsSenseIva": 1189.35,
+        "entregues": 5
+      },
+      {
+        "data": "2025-05-25",
+        "importPinso": 1676.4,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2025-05-28",
+        "importPinso": 20895.086,
+        "importMedicaments": 838.794,
+        "importMedicamentsSenseIva": 762.54,
+        "entregues": 4
+      },
+      {
+        "data": "2025-06-06",
+        "importPinso": 20037.107,
+        "importMedicaments": 1224.663,
+        "importMedicamentsSenseIva": 1113.33,
+        "entregues": 5
+      },
+      {
+        "data": "2025-06-12",
+        "importPinso": 2107.93,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-06-13",
+        "importPinso": 10386.984,
+        "importMedicaments": 1366.266,
+        "importMedicamentsSenseIva": 1242.06,
+        "entregues": 3
+      },
+      {
+        "data": "2025-06-20",
+        "importPinso": 21578.84,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 5
+      },
+      {
+        "data": "2025-06-29",
+        "importPinso": 20638.477,
+        "importMedicaments": 2418.163,
+        "importMedicamentsSenseIva": 2198.33,
+        "entregues": 6
+      },
+      {
+        "data": "2025-07-02",
+        "importPinso": 2067.45,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-07-06",
+        "importPinso": 6062.32,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 5
+      },
+      {
+        "data": "2025-07-11",
+        "importPinso": 29101.74,
+        "importMedicaments": 451.55,
+        "importMedicamentsSenseIva": 410.5,
+        "entregues": 3
+      },
+      {
+        "data": "2025-07-17",
+        "importPinso": 9682.791000000001,
+        "importMedicaments": 1171.819,
+        "importMedicamentsSenseIva": 1065.29,
+        "entregues": 3
+      },
+      {
+        "data": "2025-07-23",
+        "importPinso": 20378.962,
+        "importMedicaments": 1615.988,
+        "importMedicamentsSenseIva": 1469.08,
+        "entregues": 6
+      },
+      {
+        "data": "2025-07-24",
+        "importPinso": 2107.93,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-07-30",
+        "importPinso": 18703.124,
+        "importMedicaments": 1594.1860000000001,
+        "importMedicamentsSenseIva": 1449.26,
+        "entregues": 5
+      },
+      {
+        "data": "2025-08-08",
+        "importPinso": 20616.488999999998,
+        "importMedicaments": 1752.3110000000001,
+        "importMedicamentsSenseIva": 1593.01,
+        "entregues": 6
+      },
+      {
+        "data": "2025-08-13",
+        "importPinso": 2104.63,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2025-08-15",
+        "importPinso": 18602.95,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2025-08-22",
+        "importPinso": 20147.217999999997,
+        "importMedicaments": 1247.202,
+        "importMedicamentsSenseIva": 1133.82,
+        "entregues": 5
+      },
+      {
+        "data": "2025-08-27",
+        "importPinso": 9725.299,
+        "importMedicaments": 634.711,
+        "importMedicamentsSenseIva": 577.01,
+        "entregues": 3
+      },
+      {
+        "data": "2025-09-09",
+        "importPinso": 47822.229,
+        "importMedicaments": 2298.901,
+        "importMedicamentsSenseIva": 2089.91,
+        "entregues": 13
+      },
+      {
+        "data": "2025-09-14",
+        "importPinso": 1559.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-09-07",
+        "importPinso": 2104.63,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-09-18",
+        "importPinso": 19973.374,
+        "importMedicaments": 1546.336,
+        "importMedicamentsSenseIva": 1405.76,
+        "entregues": 6
+      },
+      {
+        "data": "2025-09-25",
+        "importPinso": 2104.63,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-09-28",
+        "importPinso": 19708.833,
+        "importMedicaments": 2265.197,
+        "importMedicamentsSenseIva": 2059.27,
+        "entregues": 6
+      },
+      {
+        "data": "2025-10-03",
+        "importPinso": 18883.28,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 5
+      },
+      {
+        "data": "2025-10-08",
+        "importPinso": 20284.698,
+        "importMedicaments": 1113.662,
+        "importMedicamentsSenseIva": 1012.42,
+        "entregues": 6
+      },
+      {
+        "data": "2025-10-19",
+        "importPinso": 18863.14,
+        "importMedicaments": 1543.7400000000002,
+        "importMedicamentsSenseIva": 1403.4,
+        "entregues": 7
+      },
+      {
+        "data": "2025-10-16",
+        "importPinso": 2104.63,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-10-22",
+        "importPinso": 19208.43,
+        "importMedicaments": 225.67,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2025-10-30",
+        "importPinso": 19785.694,
+        "importMedicaments": 1159.246,
+        "importMedicamentsSenseIva": 1053.86,
+        "entregues": 5
+      },
+      {
+        "data": "2025-11-06",
+        "importPinso": 19482.288,
+        "importMedicaments": 910.162,
+        "importMedicamentsSenseIva": 827.42,
+        "entregues": 4
+      },
+      {
+        "data": "2025-11-09",
+        "importPinso": 2104.63,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2025-11-11",
+        "importPinso": 18894.201999999997,
+        "importMedicaments": 620.598,
+        "importMedicamentsSenseIva": 564.18,
+        "entregues": 3
+      },
+      {
+        "data": "2025-11-20",
+        "importPinso": 20212.731,
+        "importMedicaments": 1015.729,
+        "importMedicamentsSenseIva": 923.39,
+        "entregues": 6
+      },
+      {
+        "data": "2025-11-18",
+        "importPinso": 1372.8,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-11-27",
+        "importPinso": 2064.15,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-11-28",
+        "importPinso": 19494.275999999998,
+        "importMedicaments": 874.544,
+        "importMedicamentsSenseIva": 795.04,
+        "entregues": 3
+      },
+      {
+        "data": "2025-12-03",
+        "importPinso": 18886.239,
+        "importMedicaments": 805.321,
+        "importMedicamentsSenseIva": 732.11,
+        "entregues": 5
+      },
+      {
+        "data": "2025-12-21",
+        "importPinso": 19810.367,
+        "importMedicaments": 906.9830000000001,
+        "importMedicamentsSenseIva": 824.53,
+        "entregues": 8
+      },
+      {
+        "data": "2025-12-22",
+        "importPinso": 2111.23,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-12-21",
+        "importPinso": 1881,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2025-12-26",
+        "importPinso": 9717.968,
+        "importMedicaments": 2286.702,
+        "importMedicamentsSenseIva": 2078.82,
+        "entregues": 3
+      },
+      {
+        "data": "2025-12-30",
+        "importPinso": 19438.749,
+        "importMedicaments": 171.941,
+        "importMedicamentsSenseIva": 156.31,
+        "entregues": 6
+      },
+      {
+        "data": "2026-01-14",
+        "importPinso": 37189.630999999994,
+        "importMedicaments": 2803.889,
+        "importMedicamentsSenseIva": 2548.99,
+        "entregues": 9
+      },
+      {
+        "data": "2026-01-12",
+        "importPinso": 2107.93,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-01-23",
+        "importPinso": 28106.799,
+        "importMedicaments": 976.3710000000001,
+        "importMedicamentsSenseIva": 887.61,
+        "entregues": 8
+      },
+      {
+        "data": "2026-01-28",
+        "importPinso": 2017.93,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-01-28",
+        "importPinso": 3445.86,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-01-28",
+        "importPinso": 9543.13,
+        "importMedicaments": 1070.45,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-02-10",
+        "importPinso": 18626.84,
+        "importMedicaments": 512.35,
+        "importMedicamentsSenseIva": null,
+        "entregues": 7
+      },
+      {
+        "data": "2026-02-11",
+        "importPinso": 20377.12,
+        "importMedicaments": 1079.06,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-02-15",
+        "importPinso": 9406.77,
+        "importMedicaments": 2017.3,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-02-23",
+        "importPinso": 13690.85,
+        "importMedicaments": 388.22,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-02-19",
+        "importPinso": 2067.45,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-03-04",
+        "importPinso": 18951.579999999998,
+        "importMedicaments": 1012.93,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-03-13",
+        "importPinso": 20018.55,
+        "importMedicaments": 741.97,
+        "importMedicamentsSenseIva": null,
+        "entregues": 8
+      },
+      {
+        "data": "2026-03-11",
+        "importPinso": 2109.03,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-03-19",
+        "importPinso": 24483.01,
+        "importMedicaments": 795.91,
+        "importMedicamentsSenseIva": null,
+        "entregues": 8
+      },
+      {
+        "data": "2026-03-19",
+        "importPinso": 2176.02,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-03-24",
+        "importPinso": 9355.76,
+        "importMedicaments": 1235.35,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-03-30",
+        "importPinso": 9432.35,
+        "importMedicaments": 1164.16,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-04-01",
+        "importPinso": 2088.53,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-04-12",
+        "importPinso": 19988.120000000003,
+        "importMedicaments": 1958.96,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2026-04-26",
+        "importPinso": 3391.08,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 8
+      },
+      {
+        "data": "2026-05-01",
+        "importPinso": 38141.3,
+        "importMedicaments": 1958.61,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-05-07",
+        "importPinso": 21230.489999999998,
+        "importMedicaments": 1044.95,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2026-05-14",
+        "importPinso": 9244.83,
+        "importMedicaments": 1585.25,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-05-21",
+        "importPinso": 19863.53,
+        "importMedicaments": 2104.52,
+        "importMedicamentsSenseIva": null,
+        "entregues": 5
+      },
+      {
+        "data": "2026-05-17",
+        "importPinso": 2136.53,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-05-28",
+        "importPinso": 8998.77,
+        "importMedicaments": 95.24,
+        "importMedicamentsSenseIva": null,
+        "entregues": 2
+      },
+      {
+        "data": "2026-06-04",
+        "importPinso": 3367.1,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2026-06-04",
+        "importPinso": 2136.53,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-06-03",
+        "importPinso": 19671.370000000003,
+        "importMedicaments": 1585.08,
+        "importMedicamentsSenseIva": null,
+        "entregues": 7
+      },
+      {
+        "data": "2026-06-11",
+        "importPinso": 21301.04,
+        "importMedicaments": 1298.8,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-06-19",
+        "importPinso": 17295.11,
+        "importMedicaments": 1068.44,
+        "importMedicamentsSenseIva": null,
+        "entregues": 4
+      },
+      {
+        "data": "2026-06-25",
+        "importPinso": 9546.15,
+        "importMedicaments": 1633.74,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-07-09",
+        "importPinso": 30186.93,
+        "importMedicaments": 1514.41,
+        "importMedicamentsSenseIva": null,
+        "entregues": 8
+      },
+      {
+        "data": "2026-07-17",
+        "importPinso": 24508.329999999998,
+        "importMedicaments": 1449.31,
+        "importMedicamentsSenseIva": null,
+        "entregues": 6
+      },
+      {
+        "data": "2026-07-19",
+        "importPinso": 2107.05,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-07-20",
+        "importPinso": 3506.36,
+        "importMedicaments": 0,
+        "importMedicamentsSenseIva": null,
+        "entregues": 1
+      },
+      {
+        "data": "2026-07-24",
+        "importPinso": 9681.63,
+        "importMedicaments": 1287.45,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      },
+      {
+        "data": "2026-07-29",
+        "importPinso": 9714.74,
+        "importMedicaments": 2072.34,
+        "importMedicamentsSenseIva": null,
+        "entregues": 3
+      }
+    ]
+  },
+  "deslletaments": [
+    {
+      "banda": 7,
+      "dataDesmamat": "2026-02-05",
+      "trugesCriades": 44,
+      "trugesDesmamades": 44,
+      "porcsVius1aSetmana": 613,
+      "porcsDesmamats": 580,
+      "insemTotal": 50,
+      "repetidores": null,
+      "primales": 3,
+      "plenes": 40,
+      "porcsEngreix": 540,
+      "observacions": "VAC PYRSS 17/3/26",
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-03-12",
+      "salesText": "12-13-10-8-14"
+    },
+    {
+      "banda": 1,
+      "dataDesmamat": "2026-02-26",
+      "trugesCriades": 46,
+      "trugesDesmamades": 45,
+      "porcsVius1aSetmana": 658,
+      "porcsDesmamats": 590,
+      "insemTotal": 48,
+      "repetidores": null,
+      "primales": 7,
+      "plenes": 44,
+      "porcsEngreix": 550,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-04-01",
+      "salesText": "15-16-14-19-20"
+    },
+    {
+      "banda": 2,
+      "dataDesmamat": "2026-03-19",
+      "trugesCriades": 48,
+      "trugesDesmamades": null,
+      "porcsVius1aSetmana": 600,
+      "porcsDesmamats": 590,
+      "insemTotal": 45,
+      "repetidores": null,
+      "primales": 5,
+      "plenes": 43,
+      "porcsEngreix": 550,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-04-23",
+      "salesText": "17-18-20-21-22"
+    },
+    {
+      "banda": 3,
+      "dataDesmamat": "2026-04-09",
+      "trugesCriades": 42,
+      "trugesDesmamades": null,
+      "porcsVius1aSetmana": 611,
+      "porcsDesmamats": 590,
+      "insemTotal": 50,
+      "repetidores": 3,
+      "primales": 5,
+      "plenes": 45,
+      "porcsEngreix": 585,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-05-14",
+      "salesText": "23-24-25-26-27"
+    },
+    {
+      "banda": 4,
+      "dataDesmamat": "2026-04-30",
+      "trugesCriades": 40,
+      "trugesDesmamades": 37,
+      "porcsVius1aSetmana": 575,
+      "porcsDesmamats": 525,
+      "insemTotal": 46,
+      "repetidores": 1,
+      "primales": 7,
+      "plenes": 38,
+      "porcsEngreix": 400,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-06-02",
+      "salesText": "27-1-4-7"
+    },
+    {
+      "banda": 5,
+      "dataDesmamat": "2026-05-21",
+      "trugesCriades": 43,
+      "trugesDesmamades": 38,
+      "porcsVius1aSetmana": 488,
+      "porcsDesmamats": 450,
+      "insemTotal": 49,
+      "repetidores": null,
+      "primales": 12,
+      "plenes": 44,
+      "porcsEngreix": 440,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-06-28",
+      "salesText": "2 3 7"
+    },
+    {
+      "banda": 6,
+      "dataDesmamat": "2026-06-11",
+      "trugesCriades": 48,
+      "trugesDesmamades": 38,
+      "porcsVius1aSetmana": 574,
+      "porcsDesmamats": 550,
+      "insemTotal": 50,
+      "repetidores": 4,
+      "primales": 11,
+      "plenes": 45,
+      "porcsEngreix": 500,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": "2026-07-16",
+      "salesText": "5 6"
+    },
+    {
+      "banda": 7,
+      "dataDesmamat": "2026-07-02",
+      "trugesCriades": 39,
+      "trugesDesmamades": null,
+      "porcsVius1aSetmana": 550,
+      "porcsDesmamats": null,
+      "insemTotal": 49,
+      "repetidores": null,
+      "primales": 10,
+      "plenes": null,
+      "porcsEngreix": null,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": null,
+      "salesText": "7 8"
+    },
+    {
+      "banda": 1,
+      "dataDesmamat": "2026-07-23",
+      "trugesCriades": 42,
+      "trugesDesmamades": 40,
+      "porcsVius1aSetmana": null,
+      "porcsDesmamats": 480,
+      "insemTotal": 51,
+      "repetidores": 5,
+      "primales": 10,
+      "plenes": null,
+      "porcsEngreix": null,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": null,
+      "salesText": null
+    },
+    {
+      "banda": 2,
+      "dataDesmamat": "2026-08-13",
+      "trugesCriades": 43,
+      "trugesDesmamades": 39,
+      "porcsVius1aSetmana": null,
+      "porcsDesmamats": null,
+      "insemTotal": null,
+      "repetidores": null,
+      "primales": null,
+      "plenes": null,
+      "porcsEngreix": null,
+      "observacions": null,
+      "posicioInseminar": null,
+      "posicioGestacio": null,
+      "dataEntrada": null,
+      "salesText": null
+    }
+  ],
+  "cicles": [
+    {
+      "full": "16",
+      "dataEntrada": "2025-08-13",
+      "sales": [
+        {
+          "codi": "3",
+          "dataEntrada": "2025-08-13",
+          "porcs": 130,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2025-12-28",
+              "porcs": 51,
+              "pes": 134.05
+            },
+            {
+              "data": "2026-01-08",
+              "porcs": 22,
+              "pes": 132.2
+            },
+            {
+              "data": "2026-01-13",
+              "porcs": 25,
+              "pes": 131.58
+            },
+            {
+              "data": "2026-01-20",
+              "porcs": 20,
+              "pes": 129.16
+            }
+          ]
+        },
+        {
+          "codi": "4",
+          "dataEntrada": "2025-08-13",
+          "porcs": 130,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2025-12-28",
+              "porcs": 35,
+              "pes": 134.05
+            },
+            {
+              "data": "2026-01-08",
+              "porcs": 35,
+              "pes": 132.2
+            },
+            {
+              "data": "2026-01-13",
+              "porcs": 20,
+              "pes": 131.58
+            },
+            {
+              "data": "2026-01-20",
+              "porcs": 16,
+              "pes": 129.16
+            },
+            {
+              "data": "2026-01-27",
+              "porcs": 23,
+              "pes": 126.79
+            }
+          ]
+        },
+        {
+          "codi": "1",
+          "dataEntrada": "2025-09-13",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2025-11-29",
+              "porcs": 14,
+              "pes": 115.2
+            },
+            {
+              "data": "2025-12-28",
+              "porcs": 18,
+              "pes": 134.05
+            },
+            {
+              "data": "2026-01-08",
+              "porcs": 25,
+              "pes": 132.2
+            },
+            {
+              "data": "2026-01-13",
+              "porcs": 25,
+              "pes": 131.58
+            }
+          ]
+        }
+      ],
+      "banda": 4
+    },
+    {
+      "full": "17",
+      "dataEntrada": "2025-09-04",
+      "sales": [
+        {
+          "codi": "9",
+          "dataEntrada": "2025-09-04",
+          "porcs": 275,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-01-13",
+              "porcs": 20,
+              "pes": 131.58
+            },
+            {
+              "data": "2026-01-20",
+              "porcs": 18,
+              "pes": 129.16
+            },
+            {
+              "data": "2026-01-27",
+              "porcs": 14,
+              "pes": 126.79
+            },
+            {
+              "data": "2026-02-03",
+              "porcs": 25,
+              "pes": 125.42
+            },
+            {
+              "data": "2026-02-10",
+              "porcs": 17,
+              "pes": 123.49
+            }
+          ]
+        },
+        {
+          "codi": "10",
+          "dataEntrada": "2025-09-04",
+          "porcs": 263,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-01-08",
+              "porcs": 4,
+              "pes": null
+            },
+            {
+              "data": "2026-01-13",
+              "porcs": 29,
+              "pes": 131.58
+            },
+            {
+              "data": "2026-01-20",
+              "porcs": 26,
+              "pes": 129.16
+            },
+            {
+              "data": "2026-01-27",
+              "porcs": 23,
+              "pes": 126.79
+            },
+            {
+              "data": "2026-02-03",
+              "porcs": 30,
+              "pes": 125.42
+            },
+            {
+              "data": "2026-02-10",
+              "porcs": 10,
+              "pes": 123.49
+            }
+          ]
+        }
+      ],
+      "banda": 5
+    },
+    {
+      "full": "19",
+      "dataEntrada": "2025-09-16",
+      "sales": [
+        {
+          "codi": "15",
+          "dataEntrada": "2025-09-16",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-02-03",
+              "porcs": 1,
+              "pes": 125.42
+            },
+            {
+              "data": "2026-02-10",
+              "porcs": 8,
+              "pes": 123.49
+            },
+            {
+              "data": "2026-02-24",
+              "porcs": 22,
+              "pes": 132.52
+            },
+            {
+              "data": "2026-03-17",
+              "porcs": 35,
+              "pes": 129.95
+            }
+          ]
+        },
+        {
+          "codi": "16",
+          "dataEntrada": "2025-09-16",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-02-03",
+              "porcs": 8,
+              "pes": 125.42
+            },
+            {
+              "data": "2026-02-10",
+              "porcs": 5,
+              "pes": 123.49
+            },
+            {
+              "data": "2026-02-24",
+              "porcs": 26,
+              "pes": 132.52
+            },
+            {
+              "data": "2026-03-03",
+              "porcs": 41,
+              "pes": 129.42
+            },
+            {
+              "data": "2026-03-17",
+              "porcs": 20,
+              "pes": 129.95
+            }
+          ]
+        },
+        {
+          "codi": "20 1-2-3-4-6-D",
+          "dataEntrada": "2025-11-19",
+          "porcs": 75,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-02-24",
+              "porcs": 36,
+              "pes": 132.52
+            },
+            {
+              "data": "2026-03-24",
+              "porcs": 39,
+              "pes": 126.47
+            }
+          ]
+        },
+        {
+          "codi": "19",
+          "dataEntrada": "2025-11-21",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-02-10",
+              "porcs": 7,
+              "pes": 123.49
+            },
+            {
+              "data": "2026-02-24",
+              "porcs": 24,
+              "pes": 132.52
+            },
+            {
+              "data": "2026-03-03",
+              "porcs": 32,
+              "pes": 129.42
+            },
+            {
+              "data": "2026-03-24",
+              "porcs": 48,
+              "pes": 126.47
+            }
+          ]
+        },
+        {
+          "codi": "21 E",
+          "dataEntrada": "2025-11-21",
+          "porcs": 69,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-02-10",
+              "porcs": 4,
+              "pes": 123.49
+            },
+            {
+              "data": "2026-03-03",
+              "porcs": 21,
+              "pes": 129.42
+            }
+          ]
+        }
+      ],
+      "banda": 7
+    },
+    {
+      "full": "20",
+      "dataEntrada": "2025-11-06",
+      "sales": [
+        {
+          "codi": "17",
+          "dataEntrada": "2025-11-06",
+          "porcs": 132,
+          "suposat": true,
+          "sortides": [
+            {
+              "data": "2026-03-17",
+              "porcs": 34,
+              "pes": 129.95
+            },
+            {
+              "data": "2026-03-28",
+              "porcs": 41,
+              "pes": 122.58
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 29,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 15,
+              "pes": 119.75
+            }
+          ]
+        },
+        {
+          "codi": "18",
+          "dataEntrada": "2025-11-06",
+          "porcs": 132,
+          "suposat": true,
+          "sortides": [
+            {
+              "data": "2026-03-17",
+              "porcs": 37,
+              "pes": 129.95
+            },
+            {
+              "data": "2026-03-24",
+              "porcs": 13,
+              "pes": 126.47
+            },
+            {
+              "data": "2026-03-28",
+              "porcs": 23,
+              "pes": 122.58
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 20,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 5,
+              "pes": 119.75
+            }
+          ]
+        },
+        {
+          "codi": "21-D",
+          "dataEntrada": "2025-11-30",
+          "porcs": 88,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-03-08",
+              "porcs": 37,
+              "pes": 121.52
+            },
+            {
+              "data": "2026-03-24",
+              "porcs": 51,
+              "pes": 126.47
+            }
+          ]
+        },
+        {
+          "codi": "22",
+          "dataEntrada": "2025-12-23",
+          "porcs": 149,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-03-08",
+              "porcs": 52,
+              "pes": 121.52
+            },
+            {
+              "data": "2026-03-24",
+              "porcs": 30,
+              "pes": 126.47
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 42,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 25,
+              "pes": 119.75
+            }
+          ]
+        }
+      ],
+      "banda": 1
+    },
+    {
+      "full": "21",
+      "dataEntrada": "2025-11-27",
+      "sales": [
+        {
+          "codi": "24",
+          "dataEntrada": "2025-11-27",
+          "porcs": 132,
+          "suposat": true,
+          "sortides": [
+            {
+              "data": "2026-03-17",
+              "porcs": 26,
+              "pes": 129.95
+            },
+            {
+              "data": "2026-03-28",
+              "porcs": 33,
+              "pes": 122.58
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 23,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 23,
+              "pes": 119.75
+            },
+            {
+              "data": "2026-04-28",
+              "porcs": 26,
+              "pes": 117.1
+            }
+          ]
+        },
+        {
+          "codi": "25",
+          "dataEntrada": "2025-11-27",
+          "porcs": 180,
+          "suposat": true,
+          "sortides": [
+            {
+              "data": "2026-03-17",
+              "porcs": 30,
+              "pes": 129.95
+            },
+            {
+              "data": "2026-03-28",
+              "porcs": 58,
+              "pes": 122.58
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 27,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 29,
+              "pes": 119.75
+            },
+            {
+              "data": "2026-04-28",
+              "porcs": 36,
+              "pes": 117.1
+            }
+          ]
+        },
+        {
+          "codi": "23",
+          "dataEntrada": "2026-01-01",
+          "porcs": 132,
+          "suposat": true,
+          "sortides": [
+            {
+              "data": "2026-03-24",
+              "porcs": 9,
+              "pes": 126.47
+            },
+            {
+              "data": "2026-03-28",
+              "porcs": 25,
+              "pes": null
+            },
+            {
+              "data": "2026-04-07",
+              "porcs": 46,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 21,
+              "pes": 119.75
+            }
+          ]
+        }
+      ],
+      "banda": 2
+    },
+    {
+      "full": "22",
+      "dataEntrada": "2025-12-18",
+      "sales": [
+        {
+          "codi": "26",
+          "dataEntrada": "2025-12-18",
+          "porcs": 190,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-04-07",
+              "porcs": 1,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 44,
+              "pes": 119.75
+            },
+            {
+              "data": "2026-04-28",
+              "porcs": 59,
+              "pes": 117.1
+            },
+            {
+              "data": "2026-05-12",
+              "porcs": 22,
+              "pes": 122.4
+            }
+          ]
+        },
+        {
+          "codi": "27",
+          "dataEntrada": "2025-12-18",
+          "porcs": 190,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-04-07",
+              "porcs": 7,
+              "pes": 121.59
+            },
+            {
+              "data": "2026-04-14",
+              "porcs": 32,
+              "pes": 119.75
+            },
+            {
+              "data": "2026-04-28",
+              "porcs": 46,
+              "pes": 117.1
+            },
+            {
+              "data": "2026-05-12",
+              "porcs": 25,
+              "pes": 122.4
+            }
+          ]
+        },
+        {
+          "codi": "1",
+          "dataEntrada": "2026-01-22",
+          "porcs": 126,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-04-14",
+              "porcs": 6,
+              "pes": 119.75
+            },
+            {
+              "data": "2026-04-28",
+              "porcs": 33,
+              "pes": 117.1
+            },
+            {
+              "data": "2026-05-12",
+              "porcs": 53,
+              "pes": 122.4
+            },
+            {
+              "data": "2026-06-02",
+              "porcs": 34,
+              "pes": 115.55
+            }
+          ]
+        }
+      ],
+      "banda": 3
+    },
+    {
+      "full": "23",
+      "dataEntrada": "2026-01-08",
+      "sales": [
+        {
+          "codi": "2",
+          "dataEntrada": "2026-01-08",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-04-28",
+              "porcs": 6,
+              "pes": 117.1
+            },
+            {
+              "data": "2026-05-12",
+              "porcs": 48,
+              "pes": 122.4
+            },
+            {
+              "data": "2026-05-26",
+              "porcs": 38,
+              "pes": 121.75
+            },
+            {
+              "data": "2026-06-02",
+              "porcs": 25,
+              "pes": 115.55
+            }
+          ]
+        },
+        {
+          "codi": "1/1-2E",
+          "dataEntrada": "2026-01-22",
+          "porcs": 22,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-05-12",
+              "porcs": 5,
+              "pes": 122.4
+            },
+            {
+              "data": "2026-05-26",
+              "porcs": 17,
+              "pes": 121.75
+            }
+          ]
+        }
+      ],
+      "banda": 4
+    },
+    {
+      "full": "24",
+      "dataEntrada": "2026-01-29",
+      "sales": [
+        {
+          "codi": "4",
+          "dataEntrada": "2026-01-29",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-05-12",
+              "porcs": 9,
+              "pes": 122.4
+            },
+            {
+              "data": "2026-05-26",
+              "porcs": 37,
+              "pes": 121.75
+            },
+            {
+              "data": "2026-06-02",
+              "porcs": 32,
+              "pes": 115.55
+            }
+          ]
+        },
+        {
+          "codi": "6",
+          "dataEntrada": "2026-01-29",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-05-26",
+              "porcs": 49,
+              "pes": 121.75
+            },
+            {
+              "data": "2026-06-02",
+              "porcs": 37,
+              "pes": 115.55
+            }
+          ]
+        }
+      ],
+      "banda": 5
+    },
+    {
+      "full": "25",
+      "dataEntrada": "2026-02-19",
+      "sales": [
+        {
+          "codi": "9",
+          "dataEntrada": "2026-02-19",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-06-02",
+              "porcs": 7,
+              "pes": 115.55
+            }
+          ]
+        },
+        {
+          "codi": "11",
+          "dataEntrada": "2026-02-19",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": [
+            {
+              "data": "2026-06-02",
+              "porcs": 5,
+              "pes": 115.55
+            }
+          ]
+        }
+      ],
+      "banda": 6
+    },
+    {
+      "full": "26",
+      "dataEntrada": "2026-03-12",
+      "sales": [
+        {
+          "codi": "12",
+          "dataEntrada": "2026-03-12",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "13",
+          "dataEntrada": "2026-03-12",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "10",
+          "dataEntrada": "2026-04-06",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "8-E",
+          "dataEntrada": "2026-04-12",
+          "porcs": 44,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "14",
+          "dataEntrada": "2026-04-13",
+          "porcs": 86,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 7
+    },
+    {
+      "full": "27",
+      "dataEntrada": "2026-04-13",
+      "sales": [
+        {
+          "codi": "14",
+          "dataEntrada": "2026-04-13",
+          "porcs": 44,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "19",
+          "dataEntrada": "2026-04-19",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "20-D 4-5-6E",
+          "dataEntrada": "2026-04-20",
+          "porcs": 101,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 1
+    },
+    {
+      "full": "28",
+      "dataEntrada": "2026-04-23",
+      "sales": [
+        {
+          "codi": "17",
+          "dataEntrada": "2026-04-23",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "18",
+          "dataEntrada": "2026-04-23",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 2
+    },
+    {
+      "full": "29",
+      "dataEntrada": "2026-05-14",
+      "sales": [
+        {
+          "codi": "23",
+          "dataEntrada": "2026-05-14",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "24",
+          "dataEntrada": "2026-05-14",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "25",
+          "dataEntrada": "2026-05-14",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "26",
+          "dataEntrada": "2026-07-19",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "27",
+          "dataEntrada": "2026-07-20",
+          "porcs": 37,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 3
+    },
+    {
+      "full": "30",
+      "dataEntrada": "2026-06-02",
+      "sales": [
+        {
+          "codi": "27",
+          "dataEntrada": "2026-06-02",
+          "porcs": 95,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "1",
+          "dataEntrada": "2026-06-02",
+          "porcs": 132,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "4",
+          "dataEntrada": "2026-07-19",
+          "porcs": 146,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "7",
+          "dataEntrada": "2026-07-19",
+          "porcs": 55,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 4
+    },
+    {
+      "full": "31",
+      "dataEntrada": "2026-06-28",
+      "sales": [
+        {
+          "codi": "2",
+          "dataEntrada": "2026-06-28",
+          "porcs": 200,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "3",
+          "dataEntrada": "2026-06-28",
+          "porcs": 204,
+          "suposat": false,
+          "sortides": []
+        },
+        {
+          "codi": "7",
+          "dataEntrada": "2026-07-20",
+          "porcs": 36,
+          "suposat": false,
+          "sortides": []
+        }
+      ],
+      "banda": 5
+    }
+  ],
+  "carregues": [
+    {
+      "any": 2025,
+      "data": "2025-11-29",
+      "tipus": "porcs_engreix",
+      "kg": 23040,
+      "kgCanal": 16972.47,
+      "unitats": 200,
+      "totalFactura": 29889.46,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": [
+        {
+          "codi": "D4",
+          "numPorcs": 1
+        }
+      ],
+      "linies": [
+        {
+          "codi": "1",
+          "porcs": 14
+        }
+      ]
+    },
+    {
+      "any": 2025,
+      "data": "2025-12-28",
+      "tipus": "porcs_engreix",
+      "kg": 26810,
+      "kgCanal": 20200,
+      "unitats": 200,
+      "totalFactura": 28738.15,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": [
+        {
+          "codi": "D5",
+          "numPorcs": 1
+        }
+      ],
+      "linies": [
+        {
+          "codi": "3",
+          "porcs": 51
+        },
+        {
+          "codi": "4",
+          "porcs": 35
+        },
+        {
+          "codi": "1",
+          "porcs": 18
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-01-08",
+      "tipus": "porcs_engreix",
+      "kg": 25780,
+      "kgCanal": 19600,
+      "unitats": 195,
+      "totalFactura": 27725.56,
+      "preuKg": 0.9881215370614866,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "3",
+          "porcs": 22
+        },
+        {
+          "codi": "4",
+          "porcs": 35
+        },
+        {
+          "codi": "1",
+          "porcs": 25
+        },
+        {
+          "codi": "10",
+          "porcs": 4
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-01-14",
+      "tipus": "truges_rebuig",
+      "kg": 3260,
+      "kgCanal": null,
+      "unitats": 14,
+      "totalFactura": 1613.7,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-01-13",
+      "tipus": "porcs_engreix",
+      "kg": 25000,
+      "kgCanal": 18613.64,
+      "unitats": 190,
+      "totalFactura": 26291.73,
+      "preuKg": 0.9662557837960818,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "3",
+          "porcs": 25
+        },
+        {
+          "codi": "4",
+          "porcs": 20
+        },
+        {
+          "codi": "1",
+          "porcs": 25
+        },
+        {
+          "codi": "9",
+          "porcs": 20
+        },
+        {
+          "codi": "10",
+          "porcs": 29
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-24",
+      "tipus": "truges_rebuig",
+      "kg": 3750,
+      "kgCanal": 3670,
+      "unitats": 16,
+      "totalFactura": 2422.2,
+      "preuKg": null,
+      "preuReferencia": 0.56,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-01-20",
+      "tipus": "porcs_engreix",
+      "kg": 24540,
+      "kgCanal": 18257.45,
+      "unitats": 190,
+      "totalFactura": 26757.88,
+      "preuKg": 1.0018209164991636,
+      "preuReferencia": null,
+      "decomisos": [
+        {
+          "codi": "D5",
+          "numPorcs": 1
+        }
+      ],
+      "linies": [
+        {
+          "codi": "3",
+          "porcs": 20
+        },
+        {
+          "codi": "4",
+          "porcs": 16
+        },
+        {
+          "codi": "9",
+          "porcs": 18
+        },
+        {
+          "codi": "10",
+          "porcs": 26
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-05-19",
+      "tipus": "truges_rebuig",
+      "kg": 3050,
+      "kgCanal": 2980,
+      "unitats": 14,
+      "totalFactura": 1704.56,
+      "preuKg": null,
+      "preuReferencia": 0.45,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-01-27",
+      "tipus": "porcs_engreix",
+      "kg": 24090,
+      "kgCanal": 18893.8,
+      "unitats": 190,
+      "totalFactura": 27534.25,
+      "preuKg": 1.050145323764822,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "4",
+          "porcs": 23
+        },
+        {
+          "codi": "9",
+          "porcs": 14
+        },
+        {
+          "codi": "10",
+          "porcs": 23
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-07-28",
+      "tipus": "truges_rebuig",
+      "kg": 2160,
+      "kgCanal": null,
+      "unitats": 10,
+      "totalFactura": null,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-02-03",
+      "tipus": "porcs_engreix",
+      "kg": 23830,
+      "kgCanal": 17687.84,
+      "unitats": 190,
+      "totalFactura": 24578.01,
+      "preuKg": 0.9476230713456263,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "9",
+          "porcs": 25
+        },
+        {
+          "codi": "10",
+          "porcs": 30
+        },
+        {
+          "codi": "15",
+          "porcs": 1
+        },
+        {
+          "codi": "16",
+          "porcs": 8
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-02-10",
+      "tipus": "porcs_engreix",
+      "kg": 24080,
+      "kgCanal": 17877.67,
+      "unitats": 195,
+      "totalFactura": 26293.52,
+      "preuKg": 1.0032408312489247,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "9",
+          "porcs": 17
+        },
+        {
+          "codi": "10",
+          "porcs": 10
+        },
+        {
+          "codi": "15",
+          "porcs": 8
+        },
+        {
+          "codi": "16",
+          "porcs": 5
+        },
+        {
+          "codi": "19",
+          "porcs": 7
+        },
+        {
+          "codi": "21 E",
+          "porcs": 4
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-02-24",
+      "tipus": "porcs_engreix",
+      "kg": 25180,
+      "kgCanal": 19091.2,
+      "unitats": 190,
+      "totalFactura": 28659.05,
+      "preuKg": 1.0457286723269006,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "15",
+          "porcs": 22
+        },
+        {
+          "codi": "16",
+          "porcs": 26
+        },
+        {
+          "codi": "20 1-2-3-4-6-D",
+          "porcs": 36
+        },
+        {
+          "codi": "19",
+          "porcs": 24
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-03",
+      "tipus": "porcs_engreix",
+      "kg": 24590,
+      "kgCanal": 18247.5,
+      "unitats": 190,
+      "totalFactura": 29237.58,
+      "preuKg": 1.092435603857192,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "16",
+          "porcs": 41
+        },
+        {
+          "codi": "19",
+          "porcs": 32
+        },
+        {
+          "codi": "21 E",
+          "porcs": 21
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-08",
+      "tipus": "porcs_engreix",
+      "kg": 23090,
+      "kgCanal": 17181.18,
+      "unitats": 190,
+      "totalFactura": 29134.17,
+      "preuKg": 1.1592888760805165,
+      "preuReferencia": null,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "21-D",
+          "porcs": 37
+        },
+        {
+          "codi": "22",
+          "porcs": 52
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-17",
+      "tipus": "porcs_engreix",
+      "kg": 24950,
+      "kgCanal": 18696.76,
+      "unitats": 192,
+      "totalFactura": 32597.36,
+      "preuKg": 1.2003968036257266,
+      "preuReferencia": null,
+      "decomisos": [
+        {
+          "codi": "D5",
+          "numPorcs": 1
+        }
+      ],
+      "linies": [
+        {
+          "codi": "15",
+          "porcs": 35
+        },
+        {
+          "codi": "16",
+          "porcs": 20
+        },
+        {
+          "codi": "17",
+          "porcs": 34
+        },
+        {
+          "codi": "18",
+          "porcs": 37
+        },
+        {
+          "codi": "24",
+          "porcs": 26
+        },
+        {
+          "codi": "25",
+          "porcs": 30
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-24",
+      "tipus": "porcs_engreix",
+      "kg": 24030,
+      "kgCanal": 17938.15,
+      "unitats": 190,
+      "totalFactura": 33076.3,
+      "preuKg": 1.264666757429632,
+      "preuReferencia": 1.245,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "20 1-2-3-4-6-D",
+          "porcs": 39
+        },
+        {
+          "codi": "19",
+          "porcs": 48
+        },
+        {
+          "codi": "18",
+          "porcs": 13
+        },
+        {
+          "codi": "21-D",
+          "porcs": 51
+        },
+        {
+          "codi": "22",
+          "porcs": 30
+        },
+        {
+          "codi": "23",
+          "porcs": 9
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-28",
+      "tipus": "porcs_engreix",
+      "kg": 23290,
+      "kgCanal": 17406.33,
+      "unitats": 190,
+      "totalFactura": 32702.51,
+      "preuKg": 1.2901034900400647,
+      "preuReferencia": 1.27,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "17",
+          "porcs": 41
+        },
+        {
+          "codi": "18",
+          "porcs": 23
+        },
+        {
+          "codi": "24",
+          "porcs": 33
+        },
+        {
+          "codi": "25",
+          "porcs": 58
+        },
+        {
+          "codi": "23",
+          "porcs": 25
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-04-07",
+      "tipus": "porcs_engreix",
+      "kg": 23710,
+      "kgCanal": 17690.21,
+      "unitats": 195,
+      "totalFactura": 33345.14,
+      "preuKg": 1.292153007299199,
+      "preuReferencia": 1.27,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "17",
+          "porcs": 29
+        },
+        {
+          "codi": "18",
+          "porcs": 20
+        },
+        {
+          "codi": "22",
+          "porcs": 42
+        },
+        {
+          "codi": "24",
+          "porcs": 23
+        },
+        {
+          "codi": "25",
+          "porcs": 27
+        },
+        {
+          "codi": "23",
+          "porcs": 46
+        },
+        {
+          "codi": "26",
+          "porcs": 1
+        },
+        {
+          "codi": "27",
+          "porcs": 7
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-04-14",
+      "tipus": "porcs_engreix",
+      "kg": 23950,
+      "kgCanal": 17875.98,
+      "unitats": 200,
+      "totalFactura": 33642.14,
+      "preuKg": 1.2905981776370112,
+      "preuReferencia": 1.27,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "17",
+          "porcs": 15
+        },
+        {
+          "codi": "18",
+          "porcs": 5
+        },
+        {
+          "codi": "22",
+          "porcs": 25
+        },
+        {
+          "codi": "24",
+          "porcs": 23
+        },
+        {
+          "codi": "25",
+          "porcs": 29
+        },
+        {
+          "codi": "23",
+          "porcs": 21
+        },
+        {
+          "codi": "26",
+          "porcs": 44
+        },
+        {
+          "codi": "27",
+          "porcs": 32
+        },
+        {
+          "codi": "1",
+          "porcs": 6
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-04-28",
+      "tipus": "porcs_engreix",
+      "kg": 23420,
+      "kgCanal": 17439.73,
+      "unitats": 200,
+      "totalFactura": 32990.44,
+      "preuKg": 1.2942380645839056,
+      "preuReferencia": 1.27,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "24",
+          "porcs": 26
+        },
+        {
+          "codi": "25",
+          "porcs": 36
+        },
+        {
+          "codi": "26",
+          "porcs": 59
+        },
+        {
+          "codi": "27",
+          "porcs": 46
+        },
+        {
+          "codi": "1",
+          "porcs": 33
+        },
+        {
+          "codi": "2",
+          "porcs": 6
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-05-12",
+      "tipus": "porcs_engreix",
+      "kg": 24480,
+      "kgCanal": 18372.65,
+      "unitats": 200,
+      "totalFactura": 34580.25,
+      "preuKg": 1.2978654360955055,
+      "preuReferencia": 1.27,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "26",
+          "porcs": 22
+        },
+        {
+          "codi": "27",
+          "porcs": 25
+        },
+        {
+          "codi": "1",
+          "porcs": 53
+        },
+        {
+          "codi": "2",
+          "porcs": 48
+        },
+        {
+          "codi": "1/1-2E",
+          "porcs": 5
+        },
+        {
+          "codi": "4",
+          "porcs": 9
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-05-26",
+      "tipus": "porcs_engreix",
+      "kg": 24350,
+      "kgCanal": 18061.38,
+      "unitats": 200,
+      "totalFactura": 34322.86,
+      "preuKg": 1.2950825592998452,
+      "preuReferencia": 1.275,
+      "decomisos": [],
+      "linies": [
+        {
+          "codi": "2",
+          "porcs": 38
+        },
+        {
+          "codi": "1/1-2E",
+          "porcs": 17
+        },
+        {
+          "codi": "4",
+          "porcs": 37
+        },
+        {
+          "codi": "6",
+          "porcs": 49
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-06-02",
+      "tipus": "porcs_engreix",
+      "kg": 23110,
+      "kgCanal": 17110.52,
+      "unitats": 200,
+      "totalFactura": 32772.95,
+      "preuKg": 1.3029523737617619,
+      "preuReferencia": 1.29,
+      "decomisos": [
+        {
+          "codi": "D4",
+          "numPorcs": 1
+        },
+        {
+          "codi": "D5",
+          "numPorcs": 1
+        }
+      ],
+      "linies": [
+        {
+          "codi": "1",
+          "porcs": 34
+        },
+        {
+          "codi": "2",
+          "porcs": 25
+        },
+        {
+          "codi": "4",
+          "porcs": 32
+        },
+        {
+          "codi": "6",
+          "porcs": 37
+        },
+        {
+          "codi": "9",
+          "porcs": 7
+        },
+        {
+          "codi": "11",
+          "porcs": 5
+        }
+      ]
+    },
+    {
+      "any": 2026,
+      "data": "2026-06-14",
+      "tipus": "porcs_engreix",
+      "kg": 23330,
+      "kgCanal": 17384.47,
+      "unitats": 200,
+      "totalFactura": 33781.59,
+      "preuKg": 1.3303879401593308,
+      "preuReferencia": null,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-06-27",
+      "tipus": "porcs_engreix",
+      "kg": 23370,
+      "kgCanal": 17274.6,
+      "unitats": 200,
+      "totalFactura": 33645.41,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-07-12",
+      "tipus": "porcs_engreix",
+      "kg": 23640,
+      "kgCanal": 17701.05,
+      "unitats": 200,
+      "totalFactura": 34183.01,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": []
+    },
+    {
+      "any": 2026,
+      "data": "2026-07-26",
+      "tipus": "porcs_engreix",
+      "kg": 22550,
+      "kgCanal": 16777.07,
+      "unitats": 200,
+      "totalFactura": 32076.76,
+      "preuKg": null,
+      "preuReferencia": null,
+      "decomisos": []
+    }
+  ],
+  "llavores": [
+    {
+      "any": 2026,
+      "data": "2026-01-19",
+      "kg": 1970,
+      "unitats": 18,
+      "totalFactura": 4261.05,
+      "preuKg": null
+    },
+    {
+      "any": 2026,
+      "data": "2026-03-30",
+      "kg": 1940,
+      "unitats": 18,
+      "totalFactura": 4803.83,
+      "preuKg": null
+    },
+    {
+      "any": 2026,
+      "data": "2026-05-04",
+      "kg": 2900,
+      "unitats": 25,
+      "totalFactura": 7100.28,
+      "preuKg": null
+    },
+    {
+      "any": 2026,
+      "data": "2026-06-29",
+      "kg": 2470,
+      "unitats": 22,
+      "totalFactura": 6120.36,
+      "preuKg": null
+    },
+    {
+      "any": 2026,
+      "data": "2026-08-03",
+      "kg": 2470,
+      "unitats": 22,
+      "totalFactura": null,
+      "preuKg": null
+    }
+  ],
+  "avisos": [
+    "Pinso 24: entrega amb data 2027-08-15 (27110 kg) en un full del 2024. Corregida a 2024-08-15.",
+    "Pinso 24: entrega amb data 2020-08-19 (1000 kg) en un full del 2024. Corregida a 2024-08-19.",
+    "Pinso 26: entrega amb data 2025-05-14 (26995 kg) en un full del 2026. Corregida a 2026-05-14.",
+    "Full \"12\", sala 13-E+5-6D: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 14: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 14: hi consten 132 porcs d'entrada però en van sortir 137. S'hi posen 137.",
+    "Full \"12\", sala 15: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 16: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 20: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 20: hi consten 132 porcs d'entrada però en van sortir 145. S'hi posen 145.",
+    "Full \"12\", sala 21: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"12\", sala 21: hi consten 132 porcs d'entrada però en van sortir 167. S'hi posen 167.",
+    "Full \"13\", sala 17: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"13\", sala 18: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"13\", sala 19: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"14\", sala 24: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"14\", sala 25: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"14\", sala 23: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"14\", sala 22e: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"14\", sala 22e: hi consten 132 porcs d'entrada però en van sortir 141. S'hi posen 141.",
+    "Full \"19\", sala 20 1-2-3-4-6-D: hi consten 55 porcs d'entrada però en van sortir 75. S'hi posen 75.",
+    "Full \"20\", sala 17: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"20\", sala 18: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"20\", sala 21-D: hi consten 63 porcs d'entrada però en van sortir 88. S'hi posen 88.",
+    "Full \"20\", sala 22: hi consten 115 porcs d'entrada però en van sortir 149. S'hi posen 149.",
+    "Full \"21\", sala 24: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"21\", sala 25: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"21\", sala 25: hi consten 132 porcs d'entrada però en van sortir 180. S'hi posen 180.",
+    "Full \"21\", sala 23: falta el \"Nº porc sala\". S'hi posen 132 porcs (sala plena).",
+    "Full \"22\", sala 1: hi consten 109 porcs d'entrada però en van sortir 126. S'hi posen 126.",
+    "Full \"18\" (entrada 2024-09-16): no s'ha trobat la banda a Cens24. El cicle no s'importa.",
+    "Full \"19\": lligat a la banda 7 amb 30 dies de diferència a la data d'entrada.",
+    "Full \"25\": lligat a la banda 6 amb 1 dies de diferència a la data d'entrada.",
+    "Full \"27\": lligat a la banda 1 amb 12 dies de diferència a la data d'entrada."
+  ]
+}

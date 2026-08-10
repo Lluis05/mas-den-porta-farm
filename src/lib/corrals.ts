@@ -114,3 +114,89 @@ export function codiSala(sala: number, corrals: CorralRef[]): string {
 
   return `${sala} ${trossos.join('+')}`;
 }
+
+/**
+ * L'invers de `codiSala`: llegeix un codi escrit a mà a l'Excel i en treu la
+ * sala i els corrals. Serveix per importar les hojas numerades.
+ *
+ * Accepta les formes que fan servir els pares, amb separadors i espais
+ * irregulars:
+ *   "22"              -> sala 22, els 12 corrals
+ *   "21D" / "27-D"    -> sala 21, els 6 de la dreta
+ *   "11 1-2-3-4E"     -> sala 11, corrals 1E-4E
+ *   "20 1-2-3-4-6-D"  -> sala 20, corrals 1D,2D,3D,4D,6D
+ *   "26 E+5-6-D"      -> sala 26, tota l'esquerra + 5D i 6D
+ *   "1/1-2E"          -> sala 1, corrals 1E i 2E
+ *
+ * Torna null si no ho entén: el que importa és no inventar-se dades.
+ */
+export function analitzaCodiSala(
+  entrada: string | number
+): { sala: number; corrals: CorralRef[] } | null {
+  const text = String(entrada).trim().toUpperCase();
+  if (text === '') return null;
+
+  // Sala sencera: només un número.
+  const nomesNumero = /^(\d{1,2})$/.exec(text);
+  if (nomesNumero) {
+    const sala = Number(nomesNumero[1]);
+    return { sala, corrals: totsElsCorrals(sala) };
+  }
+
+  // La sala és el primer número; la resta descriu els corrals.
+  const capdavant = /^(\d{1,2})\s*[-/\s]?\s*(.*)$/.exec(text);
+  if (!capdavant) return null;
+  const sala = Number(capdavant[1]);
+  const resta = capdavant[2].trim();
+  if (resta === '') return { sala, corrals: totsElsCorrals(sala) };
+
+  const corrals: CorralRef[] = [];
+  // Els trossos separats per "+" són meitats diferents de la mateixa sala.
+  for (const tros of resta.split('+')) {
+    const net = tros.trim();
+    if (net === '') continue;
+
+    const meitat: Meitat | null = net.includes('E')
+      ? 'E'
+      : net.includes('D')
+        ? 'D'
+        : null;
+    if (!meitat) return null;
+
+    const numeros = net
+      .replace(/[ED]/g, '')
+      .split(/[-\s/]+/)
+      .map((n) => n.trim())
+      .filter((n) => n !== '')
+      .map(Number);
+
+    if (numeros.some((n) => !Number.isInteger(n) || n < 1 || n > 6)) return null;
+
+    // Sense números: la meitat sencera ("26 E+5-6-D" -> "E").
+    if (numeros.length === 0) {
+      for (let n = 1; n <= 6; n++) corrals.push({ meitat, numero: n });
+    } else {
+      for (const n of numeros) corrals.push({ meitat, numero: n });
+    }
+  }
+
+  if (corrals.length === 0) return null;
+
+  // Fora duplicats, per si el codi repeteix un corral.
+  const vistos = new Set<string>();
+  const unics = corrals.filter((c) => {
+    const clau = `${c.meitat}${c.numero}`;
+    if (vistos.has(clau)) return false;
+    vistos.add(clau);
+    return true;
+  });
+
+  return { sala, corrals: unics };
+}
+
+function totsElsCorrals(_sala: number): CorralRef[] {
+  const corrals: CorralRef[] = [];
+  for (const meitat of ['E', 'D'] as const)
+    for (let n = 1; n <= CORRALS_PER_MEITAT; n++) corrals.push({ meitat, numero: n });
+  return corrals;
+}

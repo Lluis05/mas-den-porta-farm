@@ -214,14 +214,9 @@ export function FormulariCicle({ inicial, textBoto, onDesa }: Props) {
   const avisos: string[] = [];
   for (const t of triades) {
     const porcs = parseInt(t.porcs, 10) || 0;
-    const places = (corralsPerSala.get(t.salaId) ?? [])
-      .filter((c) => t.seleccionats.has(c.id))
-      .reduce((s, c) => s + c.capacitat, 0);
-    if (porcs > places && places > 0) {
-      avisos.push(
-        `Sala ${t.numero}: ${porcs} porcs en ${t.seleccionats.size} corralines (${places} places).`
-      );
-    }
+    // No s'avisa per passar de les 11 places per corralina: quan els porcs són
+    // petits n'hi caben més, i a l'entrada sempre en van més de 11 (resposta H1).
+    // La densitat es mostra com a informació, no com a error.
     // En mode edició, els corrals del mateix cicle ja consten com ocupats.
     if (!inicial) {
       const jaOcupades = [...t.seleccionats].filter((id) => ocupats.has(id)).length;
@@ -340,6 +335,7 @@ export function FormulariCicle({ inicial, textBoto, onDesa }: Props) {
           const seus = corralsPerSala.get(t.salaId) ?? [];
           const marcats = seus.filter((c) => t.seleccionats.has(c.id));
           const places = marcats.reduce((s, c) => s + c.capacitat, 0);
+          const porcsSala = parseInt(t.porcs, 10) || 0;
           const codi = codiSala(
             t.numero,
             marcats.map((c) => ({ meitat: c.meitat, numero: c.numero }))
@@ -373,7 +369,10 @@ export function FormulariCicle({ inicial, textBoto, onDesa }: Props) {
                 />
               </View>
               <Text style={styles.ajuda}>
-                {marcats.length} corralines · {places} places
+                {marcats.length} corralines
+                {porcsSala > 0 && marcats.length > 0
+                  ? ` · ${Math.round(porcsSala / marcats.length)} porcs per corralina`
+                  : ` · ${places} places quan siguin grans`}
               </Text>
 
               <GraellaCorrals

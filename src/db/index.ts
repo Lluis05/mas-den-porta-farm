@@ -1,6 +1,11 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import { SCHEMA_SQL, VISTA_CICLE_RESUM, VISTES_SQL } from './schema';
+import {
+  SCHEMA_SQL,
+  TAULES_DE_DADES,
+  VISTA_CICLE_RESUM,
+  VISTES_SQL,
+} from './schema';
 import { seedDatabase } from './seed';
 
 async function taulaExisteix(db: SQLiteDatabase, nom: string): Promise<boolean> {
@@ -24,7 +29,7 @@ export const DATABASE_NAME = 'granja.db';
  * Per canviar l'esquema més endavant: puja aquest número i afegeix el pas nou
  * a `migracions`. No toquis mai un pas ja publicat.
  */
-const VERSIO_ESQUEMA = 3;
+const VERSIO_ESQUEMA = 5;
 
 type Migracio = (db: SQLiteDatabase) => Promise<void>;
 
@@ -112,6 +117,36 @@ const migracions: Record<number, Migracio> = {
 
     // I ara les vistes, ja amb la taula al seu lloc.
     await db.execAsync(VISTES_SQL);
+  },
+
+  /** v4: registre de les importacions de l'Excel, per no repetir-ne cap. */
+  4: async (db) => {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS importacio (
+        id         TEXT PRIMARY KEY,
+        generat    TEXT NOT NULL UNIQUE,
+        origen     TEXT,
+        fet_el     TEXT NOT NULL,
+        problemes  INTEGER NOT NULL DEFAULT 0
+      );
+    `);
+  },
+
+  /**
+   * v5: cada fila pot dir de quina importació ve, per poder desfer-la sencera.
+   * `ADD COLUMN` no reescriu la taula ni toca les vistes, així que aquí no cal
+   * la dansa de la migració 3.
+   */
+  5: async (db) => {
+    for (const taula of TAULES_DE_DADES) {
+      await db.execAsync(`ALTER TABLE ${taula} ADD COLUMN importacio_id TEXT`);
+    }
+    await db.execAsync(
+      `CREATE INDEX IF NOT EXISTS idx_cicle_importacio
+         ON cicle_engreix(importacio_id);
+       CREATE INDEX IF NOT EXISTS idx_entrega_importacio
+         ON entrega_pinso(importacio_id);`
+    );
   },
 };
 

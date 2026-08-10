@@ -91,6 +91,9 @@ export default function DetallCicle() {
               etiqueta="Primera venda"
               valor={resum.data_primera_venda ?? '—'}
             />
+            {/* Les baixes es dedueixen (entrada − sortides − sobrants), i això
+                només vol dir res quan el cicle s'ha buidat. Mentre hi quedin
+                porcs, la resta encara són porcs vius, no baixes. */}
             <Fila
               etiqueta="Edat primera venda"
               valor={
@@ -99,21 +102,31 @@ export default function DetallCicle() {
                   : '—'
               }
             />
-            <Fila
-              etiqueta="Baixes (per diferència)"
-              valor={String(resum.baixes)}
-            />
-            <Fila
-              etiqueta="% baixes"
-              valor={
-                resum.pct_baixes != null
-                  ? `${(resum.pct_baixes * 100).toFixed(1)} %`
-                  : '—'
-              }
-            />
-            <Text style={styles.ajuda}>
-              Les baixes es dedueixen: entrada − sortides − sobrants.
-            </Text>
+            {queden === 0 ? (
+              <>
+                <Fila
+                  etiqueta="Baixes (per diferència)"
+                  valor={String(resum.baixes)}
+                />
+                <Fila
+                  etiqueta="% baixes"
+                  valor={
+                    resum.pct_baixes != null
+                      ? `${(resum.pct_baixes * 100).toFixed(1)} %`
+                      : '—'
+                  }
+                />
+                <Text style={styles.ajuda}>
+                  Les baixes es dedueixen: entrada − sortides − sobrants.
+                </Text>
+              </>
+            ) : (
+              <Text style={styles.ajuda}>
+                Les baixes es podran calcular quan el cicle s&apos;hagi buidat:
+                surten d&apos;entrada − sortides − sobrants, i ara mateix encara hi
+                queden {queden} porcs vius.
+              </Text>
+            )}
           </View>
         )}
 

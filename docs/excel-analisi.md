@@ -309,6 +309,22 @@ assumíem:
 - **Baixes d'engreix** = entrada − sortides − sobrants (C5)
 - **Previsió d'esgotament de pinso** a partir de l'històric de consum (F4)
 
+### 8.5 El que ha aparegut en importar de debò → respostes (2026-08-10)
+
+- ✅ H1. **Sales amb més de 132 porcs** (146, 200, 204 el 2026).
+  → **Quan els porcs són petits n'hi caben més per corralina**, i per tant n'hi
+  ha més a la sala. ⭐ Les 11 places per corralina són la mesura amb els porcs
+  ja grans, **no un màxim**. L'app no ha d'avisar per passar-ne a l'entrada.
+- ✅ H2. Entregues de pinso amb dates impossibles (2020-08-19, 2027-08-15, i una
+  del 2025 al full del 2026).
+  → **Són errades de tecleig.** L'importador hi posa **l'any del full** i deixa
+  el dia i el mes, i ho avisa.
+- ✅ H3. Fulls numerats amb el `Nº porc sala` buit.
+  → **Quan no hi ha res, se suposa que la sala anava plena: 132 porcs.**
+  A més, si d'una sala en van sortir més porcs dels que hi consten d'entrada,
+  l'entrada es puja fins al que va sortir: els porcs venuts hi eren per força
+  (i encaixa amb H1).
+
 ### 8.4 Preguntes noves → respostes (2026-08-10)
 - ✅ G1. La transició es fa en una altra granja. Què registrem?
   → **Les dues xifres**: els porcs desmamats que marxen a transició i els que **surten de
