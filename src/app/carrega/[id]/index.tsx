@@ -1,8 +1,13 @@
-import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import {
+  Link,
+  Stack,
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+} from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -16,6 +21,7 @@ import {
 import {
   actualitzaFactura,
   decomisosDeCarrega,
+  esborraCarrega,
   detallCarrega,
   liniesDeCarrega,
   type CarregaDetall,
@@ -43,6 +49,8 @@ export default function DetallCarrega() {
   const [decomisos, setDecomisos] = useState<Decomis[]>([]);
   const [editant, setEditant] = useState(false);
   const [desant, setDesant] = useState(false);
+  const [confirmant, setConfirmant] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [unitats, setUnitats] = useState('');
   const [kg, setKg] = useState('');
@@ -102,9 +110,19 @@ export default function DetallCarrega() {
       await carregaDades();
       setEditant(false);
     } catch (e) {
-      Alert.alert('No s’ha pogut desar', e instanceof Error ? e.message : String(e));
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setDesant(false);
+    }
+  }
+
+  async function esborra() {
+    try {
+      await esborraCarrega(db, id);
+      router.replace('/');
+    } catch (e) {
+      setConfirmant(false);
+      setError(e instanceof Error ? e.message : String(e));
     }
   }
 
@@ -276,6 +294,56 @@ export default function DetallCarrega() {
             </Text>
           )}
         </View>
+
+        {error && (
+          <View style={[styles.targeta, styles.targetaError]}>
+            <Text style={styles.textError}>{error}</Text>
+          </View>
+        )}
+
+        {confirmant ? (
+          <View style={[styles.targeta, styles.targetaError]}>
+            <Text style={styles.titolError}>Esborrar aquesta càrrega?</Text>
+            <Text style={styles.ajuda}>
+              Els porcs de les línies tornaran a comptar a les seves corralines.
+              Es podrà recuperar, perquè res s&apos;esborra del tot.
+            </Text>
+            <View style={styles.botons}>
+              <Pressable
+                onPress={() => setConfirmant(false)}
+                style={[styles.boto, styles.botoSecundari]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoSecundariText}>No</Text>
+              </Pressable>
+              <Pressable
+                onPress={esborra}
+                style={[styles.boto, styles.botoPerill]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoTextBlanc}>Sí, esborrar</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.botons}>
+            <Link href={`/carrega/${id}/editar`} asChild>
+              <Pressable
+                style={[styles.boto, styles.botoSecundari]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoSecundariText}>Editar</Text>
+              </Pressable>
+            </Link>
+            <Pressable
+              onPress={() => setConfirmant(true)}
+              style={[styles.boto, styles.botoSecundari]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.botoPerillText}>Esborrar</Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -402,4 +470,24 @@ const styles = StyleSheet.create({
   },
   botoApagat: { backgroundColor: colors.discret },
   botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
+  titolError: { fontSize: 16, fontWeight: '700', color: colors.perill },
+  textError: { color: colors.perill },
+  botons: { flexDirection: 'row', gap: mides.espai, marginTop: 4 },
+  boto: {
+    flex: 1,
+    height: 48,
+    borderRadius: mides.radi,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botoSecundari: {
+    backgroundColor: colors.targeta,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.vora,
+  },
+  botoSecundariText: { fontSize: 16, fontWeight: '600', color: colors.primari },
+  botoPerill: { backgroundColor: colors.perill },
+  botoPerillText: { fontSize: 16, fontWeight: '600', color: colors.perill },
+  botoTextBlanc: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });

@@ -3,7 +3,6 @@ import { Stack, router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -72,6 +71,7 @@ export default function NovaCarrega() {
   const [d5, setD5] = useState('');
 
   const [desant, setDesant] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let viu = true;
@@ -151,6 +151,7 @@ export default function NovaCarrega() {
 
   async function desa() {
     setDesant(true);
+    setError(null);
     try {
       const carregaId = await creaCarrega(db, {
         dataCarrega: aIso(data),
@@ -177,7 +178,7 @@ export default function NovaCarrega() {
       router.replace(`/carrega/${carregaId}`);
     } catch (e) {
       setDesant(false);
-      Alert.alert('No s’ha pogut desar', e instanceof Error ? e.message : String(e));
+      setError(e instanceof Error ? e.message : String(e));
     }
   }
 
@@ -394,6 +395,13 @@ export default function NovaCarrega() {
           </View>
         )}
 
+        {error && (
+          <View style={[styles.targeta, styles.targetaError]}>
+            <Text style={styles.titolError}>No s&apos;ha pogut desar</Text>
+            <Text style={styles.textError}>{error}</Text>
+          </View>
+        )}
+
         {problemes.length > 0 && <Text style={styles.ajuda}>{problemes[0]}</Text>}
 
         <Pressable
@@ -448,6 +456,9 @@ const styles = StyleSheet.create({
     borderColor: colors.vora,
   },
   targetaAvis: { backgroundColor: colors.avisFluix, borderColor: colors.avis },
+  targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
+  titolError: { fontSize: 15, fontWeight: '600', color: colors.perill },
+  textError: { color: colors.perill },
   titolSeccio: { fontSize: 13, fontWeight: '600', color: colors.discret },
   titolAvis: { fontSize: 15, fontWeight: '600', color: colors.avis },
   textAvis: { color: colors.avis },

@@ -1,9 +1,10 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import {
+  esborraCicle,
   ocupacioDelCicle,
   resumCicle,
   type CicleResum,
@@ -17,22 +18,36 @@ export default function DetallCicle() {
   const db = useSQLiteContext();
   const [resum, setResum] = useState<CicleResum | null>(null);
   const [ocupacio, setOcupacio] = useState<OcupacioFila[]>([]);
+  const [confirmant, setConfirmant] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let viu = true;
-    (async () => {
-      const [r, o] = await Promise.all([
-        resumCicle(db, id),
-        ocupacioDelCicle(db, id),
-      ]);
-      if (!viu) return;
-      setResum(r);
-      setOcupacio(o);
-    })();
-    return () => {
-      viu = false;
-    };
-  }, [db, id]);
+  useFocusEffect(
+    useCallback(() => {
+      let viu = true;
+      (async () => {
+        const [r, o] = await Promise.all([
+          resumCicle(db, id),
+          ocupacioDelCicle(db, id),
+        ]);
+        if (!viu) return;
+        setResum(r);
+        setOcupacio(o);
+      })();
+      return () => {
+        viu = false;
+      };
+    }, [db, id])
+  );
+
+  async function esborra() {
+    try {
+      await esborraCicle(db, id);
+      router.replace('/');
+    } catch (e) {
+      setConfirmant(false);
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }
 
   /** Agrupem els corrals per sala per poder escriure el codi de cada sala. */
   const perSala = useMemo(() => {
@@ -135,6 +150,56 @@ export default function DetallCicle() {
             );
           })}
         </View>
+
+        {error && (
+          <View style={[styles.targeta, styles.targetaError]}>
+            <Text style={styles.textError}>{error}</Text>
+          </View>
+        )}
+
+        {confirmant ? (
+          <View style={[styles.targeta, styles.targetaError]}>
+            <Text style={styles.titolError}>Esborrar aquest cicle?</Text>
+            <Text style={styles.ajuda}>
+              Deixarà de comptar i els seus porcs desapareixeran del recompte de
+              la granja. Es podrà recuperar, perquè res s&apos;esborra del tot.
+            </Text>
+            <View style={styles.botons}>
+              <Pressable
+                onPress={() => setConfirmant(false)}
+                style={[styles.boto, styles.botoSecundari]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoSecundariText}>No</Text>
+              </Pressable>
+              <Pressable
+                onPress={esborra}
+                style={[styles.boto, styles.botoPerill]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoText}>Sí, esborrar</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.botons}>
+            <Link href={`/cicle/${id}/editar`} asChild>
+              <Pressable
+                style={[styles.boto, styles.botoSecundari]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoSecundariText}>Editar</Text>
+              </Pressable>
+            </Link>
+            <Pressable
+              onPress={() => setConfirmant(true)}
+              style={[styles.boto, styles.botoSecundari]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.botoPerillText}>Esborrar</Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
     </>
   );
@@ -205,4 +270,24 @@ const styles = StyleSheet.create({
   },
   corralNom: { fontSize: 12, color: colors.discret, fontWeight: '600' },
   corralPorcs: { fontSize: 16, fontWeight: '700', color: colors.text },
+  targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
+  titolError: { fontSize: 16, fontWeight: '700', color: colors.perill },
+  textError: { color: colors.perill },
+  botons: { flexDirection: 'row', gap: mides.espai, marginTop: 4 },
+  boto: {
+    flex: 1,
+    height: 48,
+    borderRadius: mides.radi,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botoSecundari: {
+    backgroundColor: colors.targeta,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.vora,
+  },
+  botoSecundariText: { fontSize: 16, fontWeight: '600', color: colors.primari },
+  botoPerill: { backgroundColor: colors.perill },
+  botoPerillText: { fontSize: 16, fontWeight: '600', color: colors.perill },
+  botoText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });

@@ -110,6 +110,130 @@ export async function creaCicle(
 // Consultar cicles
 // ---------------------------------------------------------------------------
 
+/**
+ * Un cicle amb porcs ja sortits no es pot tocar: si es canviés l'ocupació,
+ * les càrregues ja desades apuntarien a corrals que ja no quadren.
+ * Primer s'han d'esborrar les càrregues.
+ */
+export async function cicleTeSortides(
+  db: SQLiteDatabase,
+  cicleId: string
+): Promise<boolean> {
+  const fila = await db.getFirstAsync<{ porcs_sortida: number }>(
+    'SELECT porcs_sortida FROM v_cicle_resum WHERE id = ?',
+    cicleId
+  );
+  return (fila?.porcs_sortida ?? 0) > 0;
+}
+
+/** Els valors d'un cicle per tornar a omplir el formulari. */
+export type CicleEditable = {
+  banda_id: string;
+  data_entrada: string;
+  observacions: string | null;
+  corrals: { corral_id: string; sala_id: string; porcs_entrada: number }[];
+};
+
+export async function ciclePerEditar(
+  db: SQLiteDatabase,
+  cicleId: string
+): Promise<CicleEditable | null> {
+  const cap = await db.getFirstAsync<{
+    banda_id: string;
+    data_entrada: string;
+    observacions: string | null;
+  }>(
+    `SELECT banda_id, data_entrada, observacions FROM cicle_engreix
+     WHERE id = ? AND esborrat_el IS NULL`,
+    cicleId
+  );
+  if (!cap) return null;
+
+  const corrals = await db.getAllAsync<{
+    corral_id: string;
+    sala_id: string;
+    porcs_entrada: number;
+  }>(
+    `SELECT oc.corral_id, c.sala_id, oc.porcs_entrada
+     FROM ocupacio_corral oc
+     JOIN corral c ON c.id = oc.corral_id
+     WHERE oc.cicle_id = ? AND oc.esborrat_el IS NULL`,
+    cicleId
+  );
+
+  return { ...cap, corrals };
+}
+
+/**
+ * Desa els canvis d'un cicle. L'ocupació es refà sencera: s'esborren les
+ * files antigues (marcant-les, no es perden) i s'escriuen les noves.
+ */
+export async function actualitzaCicle(
+  db: SQLiteDatabase,
+  cicleId: string,
+  dades: NouCicle
+): Promise<void> {
+  const totalPorcs = dades.sales.reduce((suma, s) => suma + s.porcs, 0);
+
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE cicle_engreix SET
+         banda_id = ?, data_entrada = ?, porcs_entrada = ?, observacions = ?,
+         modificat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      dades.bandaId,
+      dades.dataEntrada,
+      totalPorcs,
+      dades.observacions ?? null,
+      cicleId
+    );
+
+    await db.runAsync(
+      `UPDATE ocupacio_corral
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE cicle_id = ? AND esborrat_el IS NULL`,
+      cicleId
+    );
+
+    for (const sala of dades.sales) {
+      const repartiment = reparteix(sala.porcs, sala.corralIds.length);
+      for (let i = 0; i < sala.corralIds.length; i++) {
+        await db.runAsync(
+          `INSERT INTO ocupacio_corral
+             (id, cicle_id, corral_id, data_entrada, porcs_entrada)
+           VALUES (?, ?, ?, ?, ?)`,
+          Crypto.randomUUID(),
+          cicleId,
+          sala.corralIds[i],
+          dades.dataEntrada,
+          repartiment[i]
+        );
+      }
+    }
+  });
+}
+
+/** Esborrat tou: la fila es marca, mai es perd (regla del model de dades). */
+export async function esborraCicle(
+  db: SQLiteDatabase,
+  cicleId: string
+): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE ocupacio_corral
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE cicle_id = ? AND esborrat_el IS NULL`,
+      cicleId
+    );
+    await db.runAsync(
+      `UPDATE cicle_engreix
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      cicleId
+    );
+  });
+}
+
 export type CicleLlista = {
   id: string;
   banda: number;
@@ -398,6 +522,182 @@ export async function decomisosDeCarrega(
      WHERE carrega_id = ? AND esborrat_el IS NULL ORDER BY codi`,
     carregaId
   );
+}
+
+export type CorralEditableCarrega = {
+  corral_id: string;
+  sala: number;
+  meitat: Meitat;
+  corral: number;
+  /** Porcs que aquesta càrrega es va endur d'aquest corral. */
+  num_porcs: number;
+  /** Porcs que hi hauria si aquesta càrrega no existís: és el màxim editable. */
+  disponible: number;
+};
+
+/**
+ * Els corrals que va tocar una càrrega, amb quants porcs hi hauria si la
+ * càrrega no existís. Sense sumar-hi el que ja es va endur, editar-la sempre
+ * semblaria que no queden porcs.
+ */
+export async function corralsPerEditarCarrega(
+  db: SQLiteDatabase,
+  carregaId: string
+): Promise<CorralEditableCarrega[]> {
+  return db.getAllAsync<CorralEditableCarrega>(
+    `SELECT
+       l.corral_id,
+       s.numero AS sala, c.meitat, c.numero AS corral,
+       l.num_porcs,
+       COALESCE(v.porcs, 0) + l.num_porcs AS disponible
+     FROM linia_carrega l
+     JOIN corral c ON c.id = l.corral_id
+     JOIN sala s ON s.id = c.sala_id
+     LEFT JOIN v_ocupacio_actual v ON v.corral_id = l.corral_id
+     WHERE l.carrega_id = ? AND l.esborrat_el IS NULL
+     ORDER BY s.numero, c.meitat DESC, c.numero`,
+    carregaId
+  );
+}
+
+/** Els valors d'una càrrega per tornar a omplir el formulari. */
+export type CarregaEditable = {
+  data_carrega: string;
+  tipus: TipusCarrega;
+  factura: DadesFactura;
+  linies: { corral_id: string; sala: number; num_porcs: number }[];
+  decomisos: Decomis[];
+};
+
+export async function carregaPerEditar(
+  db: SQLiteDatabase,
+  carregaId: string
+): Promise<CarregaEditable | null> {
+  const cap = await db.getFirstAsync<CarregaDetall>(
+    'SELECT * FROM carrega_escorxador WHERE id = ? AND esborrat_el IS NULL',
+    carregaId
+  );
+  if (!cap) return null;
+
+  const linies = await db.getAllAsync<{
+    corral_id: string;
+    sala: number;
+    num_porcs: number;
+  }>(
+    `SELECT l.corral_id, s.numero AS sala, l.num_porcs
+     FROM linia_carrega l
+     JOIN corral c ON c.id = l.corral_id
+     JOIN sala s ON s.id = c.sala_id
+     WHERE l.carrega_id = ? AND l.esborrat_el IS NULL`,
+    carregaId
+  );
+
+  return {
+    data_carrega: cap.data_carrega,
+    tipus: cap.tipus,
+    factura: {
+      unitats: cap.unitats,
+      kg: cap.kg,
+      kgCanal: cap.kg_canal,
+      totalFactura: cap.total_factura,
+      preuKg: cap.preu_kg,
+      preuReferencia: cap.preu_referencia,
+    },
+    linies,
+    decomisos: await decomisosDeCarrega(db, carregaId),
+  };
+}
+
+/**
+ * Desa els canvis d'una càrrega. Les línies i els decomisos es refan sencers,
+ * marcant els antics com esborrats.
+ */
+export async function actualitzaCarrega(
+  db: SQLiteDatabase,
+  carregaId: string,
+  dades: NovaCarrega
+): Promise<void> {
+  const linies = dades.linies.filter((l) => l.numPorcs > 0);
+  const sumaLinies = linies.reduce((s, l) => s + l.numPorcs, 0);
+  const f = dades.factura ?? {};
+
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE carrega_escorxador SET
+         data_carrega = ?, tipus = ?, unitats = ?, kg = ?, kg_canal = ?,
+         total_factura = ?, preu_kg = ?, preu_referencia = ?,
+         modificat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      dades.dataCarrega,
+      dades.tipus,
+      f.unitats ?? sumaLinies,
+      f.kg ?? null,
+      f.kgCanal ?? null,
+      f.totalFactura ?? null,
+      f.preuKg ?? null,
+      f.preuReferencia ?? null,
+      carregaId
+    );
+
+    await db.runAsync(
+      `UPDATE linia_carrega SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE carrega_id = ? AND esborrat_el IS NULL`,
+      carregaId
+    );
+    await db.runAsync(
+      `UPDATE decomis SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE carrega_id = ? AND esborrat_el IS NULL`,
+      carregaId
+    );
+
+    for (const linia of linies) {
+      await db.runAsync(
+        `INSERT INTO linia_carrega (id, carrega_id, corral_id, num_porcs)
+         VALUES (?, ?, ?, ?)`,
+        Crypto.randomUUID(),
+        carregaId,
+        linia.corralId,
+        linia.numPorcs
+      );
+    }
+    for (const d of dades.decomisos ?? []) {
+      if (d.numPorcs <= 0) continue;
+      await db.runAsync(
+        `INSERT INTO decomis (id, carrega_id, codi, num_porcs) VALUES (?, ?, ?, ?)`,
+        Crypto.randomUUID(),
+        carregaId,
+        d.codi,
+        d.numPorcs
+      );
+    }
+  });
+}
+
+/**
+ * Esborrat tou d'una càrrega. En marcar-la, els porcs de les seves línies
+ * tornen a comptar als corrals: v_ocupacio_actual només mira les files vives.
+ */
+export async function esborraCarrega(
+  db: SQLiteDatabase,
+  carregaId: string
+): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE linia_carrega SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE carrega_id = ? AND esborrat_el IS NULL`,
+      carregaId
+    );
+    await db.runAsync(
+      `UPDATE decomis SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE carrega_id = ? AND esborrat_el IS NULL`,
+      carregaId
+    );
+    await db.runAsync(
+      `UPDATE carrega_escorxador SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      carregaId
+    );
+  });
 }
 
 /** Porcs que hi ha ara mateix a tota la granja. */

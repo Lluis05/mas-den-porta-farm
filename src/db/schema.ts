@@ -21,6 +21,141 @@ const COMUNES = `
   sincronitzat_el  TEXT
 `;
 
+/**
+ * Aquesta vista va a part perquè una migració la pugui tornar a crear
+ * sense refer tot l'esquema.
+ */
+export const VISTA_CICLE_RESUM = `
+-- Resum d'un cicle d'engreix. Aquí és on es dedueixen les baixes,
+-- que segueix sent la font de veritat (resposta C5).
+DROP VIEW IF EXISTS v_cicle_resum;
+CREATE VIEW v_cicle_resum AS
+SELECT
+  ce.id,
+  ce.banda_id,
+  b.numero                AS banda,
+  ce.data_entrada,
+  ce.porcs_entrada,
+  ce.porcs_sobrants,
+  COALESCE(s.porcs_sortida, 0)  AS porcs_sortida,
+  ce.porcs_entrada - COALESCE(s.porcs_sortida, 0) - ce.porcs_sobrants AS baixes,
+  CASE WHEN (ce.porcs_entrada - ce.porcs_sobrants) > 0
+    THEN (ce.porcs_entrada - COALESCE(s.porcs_sortida, 0) - ce.porcs_sobrants) * 1.0
+         / (ce.porcs_entrada - ce.porcs_sobrants)
+  END                     AS pct_baixes,
+  s.data_primera_venda,
+  s.data_ultima_sortida,
+  CASE WHEN s.data_primera_venda IS NOT NULL
+    THEN 9 + (julianday(s.data_primera_venda) - julianday(ce.data_entrada)) / 7.0
+  END                     AS edat_primera_venda,
+  CASE WHEN s.data_ultima_sortida IS NOT NULL
+    THEN 9 + (julianday(s.data_ultima_sortida) - julianday(ce.data_entrada)) / 7.0
+  END                     AS edat_ultima_venda
+FROM cicle_engreix ce
+JOIN banda b ON b.id = ce.banda_id
+LEFT JOIN (
+  SELECT
+    oc.cicle_id,
+    SUM(lc.num_porcs)          AS porcs_sortida,
+    MIN(ca.data_carrega)       AS data_primera_venda,
+    MAX(ca.data_carrega)       AS data_ultima_sortida
+  FROM linia_carrega lc
+  JOIN carrega_escorxador ca ON ca.id = lc.carrega_id
+  -- Un corral s'omple cicle rere cicle. Una sortida s'ha d'atribuir al cicle
+  -- que hi havia en aquell moment: l'últim que hi va entrar abans de la
+  -- càrrega. Sense això, una sortida del cicle nou també comptaria al vell.
+  JOIN ocupacio_corral oc
+    ON oc.corral_id = lc.corral_id
+   AND oc.esborrat_el IS NULL
+   AND oc.data_entrada <= ca.data_carrega
+   AND oc.data_entrada = (
+     SELECT MAX(oc2.data_entrada) FROM ocupacio_corral oc2
+     WHERE oc2.corral_id = lc.corral_id
+       AND oc2.esborrat_el IS NULL
+       AND oc2.data_entrada <= ca.data_carrega
+   )
+  WHERE lc.esborrat_el IS NULL AND ca.esborrat_el IS NULL
+  GROUP BY oc.cicle_id
+) s ON s.cicle_id = ce.id
+WHERE ce.esborrat_el IS NULL;
+`;
+
+/**
+ * Les vistes van a part de les taules perquè una migració que hagi de
+ * refer una taula les pugui esborrar abans i tornar-les a crear després.
+ * Sense això, un ALTER TABLE ... RENAME peta: SQLite torna a llegir tot
+ * l'esquema i troba les vistes apuntant a una taula que ja no hi és.
+ */
+export const VISTES_SQL = `
+-- ---------------------------------------------------------------------------
+-- 6. Vistes: tot això es calcula, mai s'escriu
+-- ---------------------------------------------------------------------------
+
+-- Porcs que hi ha ara mateix a cada corral:
+-- els que van entrar, menys els que han sortit a escorxador, menys les baixes
+-- apuntades a mà, més/menys els trasllats.
+DROP VIEW IF EXISTS v_ocupacio_actual;
+CREATE VIEW v_ocupacio_actual AS
+SELECT
+  c.id                AS corral_id,
+  s.numero            AS sala,
+  c.meitat            AS meitat,
+  c.numero            AS corral,
+  c.capacitat         AS capacitat,
+  COALESCE(oc.entrats, 0)
+    - COALESCE(lc.sortits, 0)
+    - COALESCE(b.baixes, 0)
+    - COALESCE(mo.sortits, 0)
+    + COALESCE(mi.entrats, 0)  AS porcs
+FROM corral c
+JOIN sala s ON s.id = c.sala_id
+LEFT JOIN (
+  SELECT corral_id, SUM(porcs_entrada) AS entrats
+  FROM ocupacio_corral WHERE esborrat_el IS NULL AND data_sortida IS NULL
+  GROUP BY corral_id
+) oc ON oc.corral_id = c.id
+LEFT JOIN (
+  SELECT corral_id, SUM(num_porcs) AS sortits
+  FROM linia_carrega WHERE esborrat_el IS NULL GROUP BY corral_id
+) lc ON lc.corral_id = c.id
+LEFT JOIN (
+  SELECT corral_id, SUM(num_porcs) AS baixes
+  FROM baixa WHERE esborrat_el IS NULL GROUP BY corral_id
+) b ON b.corral_id = c.id
+LEFT JOIN (
+  SELECT corral_origen_id AS corral_id, SUM(num_porcs) AS sortits
+  FROM moviment WHERE esborrat_el IS NULL GROUP BY corral_origen_id
+) mo ON mo.corral_id = c.id
+LEFT JOIN (
+  SELECT corral_desti_id AS corral_id, SUM(num_porcs) AS entrats
+  FROM moviment WHERE esborrat_el IS NULL GROUP BY corral_desti_id
+) mi ON mi.corral_id = c.id
+WHERE c.esborrat_el IS NULL;
+
+${VISTA_CICLE_RESUM}
+
+-- Ritme de consum per tipus de pinso, per a la previsió d'esgotament.
+-- El consum real no es mesura: s'estima a partir del ritme d'entregues.
+DROP VIEW IF EXISTS v_consum_pinso;
+CREATE VIEW v_consum_pinso AS
+SELECT
+  tp.id                                   AS tipus_pinso_id,
+  tp.codi,
+  tp.capacitat_sitja_kg,
+  COUNT(ep.id)                            AS num_entregues,
+  SUM(ep.kg)                              AS kg_total,
+  MIN(ep.data)                            AS primera_entrega,
+  MAX(ep.data)                            AS ultima_entrega,
+  CASE WHEN julianday(MAX(ep.data)) > julianday(MIN(ep.data))
+    THEN SUM(ep.kg) / (julianday(MAX(ep.data)) - julianday(MIN(ep.data)))
+  END                                     AS kg_per_dia
+FROM tipus_pinso tp
+LEFT JOIN entrega_pinso ep
+  ON ep.tipus_pinso_id = tp.id AND ep.esborrat_el IS NULL
+WHERE tp.esborrat_el IS NULL
+GROUP BY tp.id;
+`;
+
 export const SCHEMA_SQL = `
 -- ---------------------------------------------------------------------------
 -- 1. Estructura física
@@ -167,12 +302,17 @@ CREATE TABLE IF NOT EXISTS ocupacio_corral (
   data_entrada   TEXT NOT NULL,
   porcs_entrada  INTEGER NOT NULL,
   data_sortida   TEXT,
-  ${COMUNES},
-  UNIQUE (cicle_id, corral_id)
+  ${COMUNES}
 );
 
 CREATE INDEX IF NOT EXISTS idx_ocupacio_corral ON ocupacio_corral(corral_id);
 CREATE INDEX IF NOT EXISTS idx_ocupacio_cicle ON ocupacio_corral(cicle_id);
+
+-- Un corral només pot constar un cop per cicle, però NOMÉS entre les files
+-- vives: editar un cicle deixa enrere files marcades com esborrades i el
+-- mateix corral hi ha de poder tornar a entrar.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_ocupacio_unica
+  ON ocupacio_corral(cicle_id, corral_id) WHERE esborrat_el IS NULL;
 
 -- Trasllat de porcs entre corrals (els "sobrants"). NO és una baixa.
 CREATE TABLE IF NOT EXISTS moviment (
@@ -292,110 +432,5 @@ CREATE TABLE IF NOT EXISTS tractament (
   ${COMUNES}
 );
 
--- ---------------------------------------------------------------------------
--- 6. Vistes: tot això es calcula, mai s'escriu
--- ---------------------------------------------------------------------------
-
--- Porcs que hi ha ara mateix a cada corral:
--- els que van entrar, menys els que han sortit a escorxador, menys les baixes
--- apuntades a mà, més/menys els trasllats.
-DROP VIEW IF EXISTS v_ocupacio_actual;
-CREATE VIEW v_ocupacio_actual AS
-SELECT
-  c.id                AS corral_id,
-  s.numero            AS sala,
-  c.meitat            AS meitat,
-  c.numero            AS corral,
-  c.capacitat         AS capacitat,
-  COALESCE(oc.entrats, 0)
-    - COALESCE(lc.sortits, 0)
-    - COALESCE(b.baixes, 0)
-    - COALESCE(mo.sortits, 0)
-    + COALESCE(mi.entrats, 0)  AS porcs
-FROM corral c
-JOIN sala s ON s.id = c.sala_id
-LEFT JOIN (
-  SELECT corral_id, SUM(porcs_entrada) AS entrats
-  FROM ocupacio_corral WHERE esborrat_el IS NULL AND data_sortida IS NULL
-  GROUP BY corral_id
-) oc ON oc.corral_id = c.id
-LEFT JOIN (
-  SELECT corral_id, SUM(num_porcs) AS sortits
-  FROM linia_carrega WHERE esborrat_el IS NULL GROUP BY corral_id
-) lc ON lc.corral_id = c.id
-LEFT JOIN (
-  SELECT corral_id, SUM(num_porcs) AS baixes
-  FROM baixa WHERE esborrat_el IS NULL GROUP BY corral_id
-) b ON b.corral_id = c.id
-LEFT JOIN (
-  SELECT corral_origen_id AS corral_id, SUM(num_porcs) AS sortits
-  FROM moviment WHERE esborrat_el IS NULL GROUP BY corral_origen_id
-) mo ON mo.corral_id = c.id
-LEFT JOIN (
-  SELECT corral_desti_id AS corral_id, SUM(num_porcs) AS entrats
-  FROM moviment WHERE esborrat_el IS NULL GROUP BY corral_desti_id
-) mi ON mi.corral_id = c.id
-WHERE c.esborrat_el IS NULL;
-
--- Resum d'un cicle d'engreix. Aquí és on es dedueixen les baixes,
--- que segueix sent la font de veritat (resposta C5).
-DROP VIEW IF EXISTS v_cicle_resum;
-CREATE VIEW v_cicle_resum AS
-SELECT
-  ce.id,
-  ce.banda_id,
-  b.numero                AS banda,
-  ce.data_entrada,
-  ce.porcs_entrada,
-  ce.porcs_sobrants,
-  COALESCE(s.porcs_sortida, 0)  AS porcs_sortida,
-  ce.porcs_entrada - COALESCE(s.porcs_sortida, 0) - ce.porcs_sobrants AS baixes,
-  CASE WHEN (ce.porcs_entrada - ce.porcs_sobrants) > 0
-    THEN (ce.porcs_entrada - COALESCE(s.porcs_sortida, 0) - ce.porcs_sobrants) * 1.0
-         / (ce.porcs_entrada - ce.porcs_sobrants)
-  END                     AS pct_baixes,
-  s.data_primera_venda,
-  s.data_ultima_sortida,
-  CASE WHEN s.data_primera_venda IS NOT NULL
-    THEN 9 + (julianday(s.data_primera_venda) - julianday(ce.data_entrada)) / 7.0
-  END                     AS edat_primera_venda,
-  CASE WHEN s.data_ultima_sortida IS NOT NULL
-    THEN 9 + (julianday(s.data_ultima_sortida) - julianday(ce.data_entrada)) / 7.0
-  END                     AS edat_ultima_venda
-FROM cicle_engreix ce
-JOIN banda b ON b.id = ce.banda_id
-LEFT JOIN (
-  SELECT
-    oc.cicle_id,
-    SUM(lc.num_porcs)          AS porcs_sortida,
-    MIN(ca.data_carrega)       AS data_primera_venda,
-    MAX(ca.data_carrega)       AS data_ultima_sortida
-  FROM linia_carrega lc
-  JOIN carrega_escorxador ca ON ca.id = lc.carrega_id
-  JOIN ocupacio_corral oc ON oc.corral_id = lc.corral_id
-  WHERE lc.esborrat_el IS NULL AND ca.esborrat_el IS NULL
-  GROUP BY oc.cicle_id
-) s ON s.cicle_id = ce.id
-WHERE ce.esborrat_el IS NULL;
-
--- Ritme de consum per tipus de pinso, per a la previsió d'esgotament.
--- El consum real no es mesura: s'estima a partir del ritme d'entregues.
-DROP VIEW IF EXISTS v_consum_pinso;
-CREATE VIEW v_consum_pinso AS
-SELECT
-  tp.id                                   AS tipus_pinso_id,
-  tp.codi,
-  tp.capacitat_sitja_kg,
-  COUNT(ep.id)                            AS num_entregues,
-  SUM(ep.kg)                              AS kg_total,
-  MIN(ep.data)                            AS primera_entrega,
-  MAX(ep.data)                            AS ultima_entrega,
-  CASE WHEN julianday(MAX(ep.data)) > julianday(MIN(ep.data))
-    THEN SUM(ep.kg) / (julianday(MAX(ep.data)) - julianday(MIN(ep.data)))
-  END                                     AS kg_per_dia
-FROM tipus_pinso tp
-LEFT JOIN entrega_pinso ep
-  ON ep.tipus_pinso_id = tp.id AND ep.esborrat_el IS NULL
-WHERE tp.esborrat_el IS NULL
-GROUP BY tp.id;
+${VISTES_SQL}
 `;
