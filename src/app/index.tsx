@@ -12,6 +12,7 @@ import {
   type CicleLlista,
 } from '@/db/queries';
 import { calculaPrevisio, dadesEndarrerides, urgencia } from '@/lib/pinso';
+import { reprogramaAvisosPinso } from '@/lib/notificacions';
 import { colors, mides } from '@/theme';
 
 type AvisPinso = { codi: string; dies: number; urgent: boolean };
@@ -53,9 +54,13 @@ export default function Index() {
             dia
           );
           setPinsoEndarrerit(estatPinso?.endarrerit ?? false);
+          const previsions = pinso.map((t) => ({
+            ...t,
+            previsio: calculaPrevisio(t.entregues, dia),
+          }));
           setAvisosPinso(
-            pinso
-              .map((t) => ({ codi: t.codi, p: calculaPrevisio(t.entregues, dia) }))
+            previsions
+              .map((t) => ({ codi: t.codi, p: t.previsio }))
               .filter((x) => ['esgotat', 'aviat'].includes(urgencia(x.p)))
               .map((x) => ({
                 codi: x.codi,
@@ -65,6 +70,12 @@ export default function Index() {
               .sort((a, b) => a.dies - b.dies)
           );
           setError(null);
+
+          // Si falten entregues per apuntar, la previsió no és de fiar:
+          // no en volem disparar avisos falsos.
+          if (!estatPinso?.endarrerit) {
+            reprogramaAvisosPinso(previsions);
+          }
         } catch (e) {
           if (viu) setError(e instanceof Error ? e.message : String(e));
         }
