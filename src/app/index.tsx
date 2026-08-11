@@ -177,6 +177,11 @@ export default function Index() {
               <Text style={styles.botoSecundariText}>Llavores</Text>
             </Pressable>
           </Link>
+          <Link href="/resum" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Resum trimestral</Text>
+            </Pressable>
+          </Link>
         </View>
 
         <View style={styles.targeta}>

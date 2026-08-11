@@ -889,3 +889,115 @@ export async function esborraEntradaLlavores(
     entradaId
   );
 }
+
+// ---------------------------------------------------------------------------
+// Resum trimestral (equivalent als totals per trimestre del full
+// "Porcs escorxador" de l'Excel, docs/excel-analisi.md §... totals per 1T-4T)
+// ---------------------------------------------------------------------------
+
+export type ResumTipus = {
+  kg: number | null;
+  kgCanal: number | null;
+  unitats: number | null;
+  totalFactura: number | null;
+  /** kg / unitats. */
+  promigKg: number | null;
+  /** kg_canal / kg. Només té sentit per porcs d'engreix. */
+  rendiment: number | null;
+  /** total_factura / kg: preu mitjà ponderat, no la mitjana simple de preu_kg. */
+  preuKg: number | null;
+};
+
+export type ResumTrimestre = {
+  any: number;
+  trimestre: number;
+  porcs: ResumTipus | null;
+  truges: ResumTipus | null;
+  llavores: ResumTipus | null;
+};
+
+function calculaResumTipus(fila: {
+  kg: number | null;
+  kg_canal: number | null;
+  unitats: number | null;
+  total_factura: number | null;
+}): ResumTipus {
+  const { kg, kg_canal, unitats, total_factura } = fila;
+  return {
+    kg,
+    kgCanal: kg_canal,
+    unitats,
+    totalFactura: total_factura,
+    promigKg: kg != null && unitats ? kg / unitats : null,
+    rendiment: kg_canal != null && kg ? kg_canal / kg : null,
+    preuKg: total_factura != null && kg ? total_factura / kg : null,
+  };
+}
+
+export async function resumTrimestral(db: SQLiteDatabase): Promise<ResumTrimestre[]> {
+  const carregues = await db.getAllAsync<{
+    any: number;
+    trimestre: number;
+    tipus: TipusCarrega;
+    kg: number | null;
+    kg_canal: number | null;
+    unitats: number | null;
+    total_factura: number | null;
+  }>(
+    `SELECT
+       CAST(strftime('%Y', data_carrega) AS INTEGER) AS any,
+       (CAST(strftime('%m', data_carrega) AS INTEGER) - 1) / 3 + 1 AS trimestre,
+       tipus,
+       SUM(kg) AS kg,
+       SUM(kg_canal) AS kg_canal,
+       SUM(unitats) AS unitats,
+       SUM(total_factura) AS total_factura
+     FROM carrega_escorxador
+     WHERE esborrat_el IS NULL
+     GROUP BY any, trimestre, tipus`
+  );
+
+  const llavores = await db.getAllAsync<{
+    any: number;
+    trimestre: number;
+    kg: number | null;
+    unitats: number | null;
+    total_factura: number | null;
+  }>(
+    `SELECT
+       CAST(strftime('%Y', data) AS INTEGER) AS any,
+       (CAST(strftime('%m', data) AS INTEGER) - 1) / 3 + 1 AS trimestre,
+       SUM(kg) AS kg,
+       SUM(unitats) AS unitats,
+       SUM(total_factura) AS total_factura
+     FROM entrada_llavores
+     WHERE esborrat_el IS NULL
+     GROUP BY any, trimestre`
+  );
+
+  const periodes = new Map<string, ResumTrimestre>();
+  const periode = (any: number, trimestre: number) => {
+    const clau = `${any}-${trimestre}`;
+    let p = periodes.get(clau);
+    if (!p) {
+      p = { any, trimestre, porcs: null, truges: null, llavores: null };
+      periodes.set(clau, p);
+    }
+    return p;
+  };
+
+  for (const c of carregues) {
+    const p = periode(c.any, c.trimestre);
+    const resum = calculaResumTipus(c);
+    if (c.tipus === 'porcs_engreix') p.porcs = resum;
+    else p.truges = resum;
+  }
+  for (const l of llavores) {
+    const p = periode(l.any, l.trimestre);
+    p.llavores = calculaResumTipus({ ...l, kg_canal: null });
+  }
+
+  return [...periodes.values()].sort(
+    (a, b) => b.any - a.any || b.trimestre - a.trimestre
+  );
+}
