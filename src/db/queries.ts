@@ -244,7 +244,10 @@ export type CicleLlista = {
   num_corrals: number;
 };
 
-export async function llistaCicles(db: SQLiteDatabase): Promise<CicleLlista[]> {
+export async function llistaCicles(
+  db: SQLiteDatabase,
+  limit?: number
+): Promise<CicleLlista[]> {
   return db.getAllAsync<CicleLlista>(
     `SELECT
        r.id, r.banda, r.data_entrada, r.porcs_entrada,
@@ -253,7 +256,9 @@ export async function llistaCicles(db: SQLiteDatabase): Promise<CicleLlista[]> {
        (SELECT COUNT(*) FROM ocupacio_corral oc
          WHERE oc.cicle_id = r.id AND oc.esborrat_el IS NULL) AS num_corrals
      FROM v_cicle_resum r
-     ORDER BY r.data_entrada DESC, r.banda`
+     ORDER BY r.data_entrada DESC, r.banda
+     LIMIT ?`,
+    limit ?? -1
   );
 }
 
@@ -451,7 +456,8 @@ export type CarregaLlista = {
 };
 
 export async function llistaCarregues(
-  db: SQLiteDatabase
+  db: SQLiteDatabase,
+  limit?: number
 ): Promise<CarregaLlista[]> {
   return db.getAllAsync<CarregaLlista>(
     `SELECT
@@ -460,7 +466,9 @@ export async function llistaCarregues(
                  WHERE l.carrega_id = c.id AND l.esborrat_el IS NULL), 0) AS porcs_linies
      FROM carrega_escorxador c
      WHERE c.esborrat_el IS NULL
-     ORDER BY c.data_carrega DESC, c.creat_el DESC`
+     ORDER BY c.data_carrega DESC, c.creat_el DESC
+     LIMIT ?`,
+    limit ?? -1
   );
 }
 

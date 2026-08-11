@@ -329,7 +329,7 @@ export default function DetallCarrega() {
           <View style={styles.botons}>
             <Link href={`/carrega/${id}/editar`} asChild>
               <Pressable
-                style={[styles.boto, styles.botoSecundari]}
+                style={styles.botoSecundariLink}
                 accessibilityRole="button"
               >
                 <Text style={styles.botoSecundariText}>Editar</Text>
@@ -482,6 +482,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botoSecundari: {
+    backgroundColor: colors.targeta,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.vora,
+  },
+  // Un sol objecte, no [boto, botoSecundari]: un Pressable dins d'un Link
+  // asChild peta al web ("indexed property [0] on CSSStyleDeclaration")
+  // si el seu style és un array. Amb un objecte sol no passa.
+  botoSecundariLink: {
+    flex: 1,
+    height: 48,
+    borderRadius: mides.radi,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.targeta,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.vora,

@@ -17,11 +17,16 @@ import { colors, mides } from '@/theme';
 
 type AvisPinso = { codi: string; dies: number; urgent: boolean };
 
+/** A la portada només hi caben els més recents; la resta van a l'historial. */
+const N_PORTADA = 10;
+
 export default function Index() {
   const db = useSQLiteContext();
   const [porcs, setPorcs] = useState<number | null>(null);
   const [cicles, setCicles] = useState<CicleLlista[]>([]);
+  const [hiHaMesCicles, setHiHaMesCicles] = useState(false);
   const [carregues, setCarregues] = useState<CarregaLlista[]>([]);
+  const [hiHaMesCarregues, setHiHaMesCarregues] = useState(false);
   const [avisosPinso, setAvisosPinso] = useState<AvisPinso[]>([]);
   const [pinsoEndarrerit, setPinsoEndarrerit] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,14 +40,16 @@ export default function Index() {
         try {
           const [total, llista, carr, pinso] = await Promise.all([
             porcsALaGranja(db),
-            llistaCicles(db),
-            llistaCarregues(db),
+            llistaCicles(db, N_PORTADA + 1),
+            llistaCarregues(db, N_PORTADA + 1),
             tipusPinsoAmbEntregues(db),
           ]);
           if (!viu) return;
           setPorcs(total);
-          setCicles(llista);
-          setCarregues(carr);
+          setHiHaMesCicles(llista.length > N_PORTADA);
+          setCicles(llista.slice(0, N_PORTADA));
+          setHiHaMesCarregues(carr.length > N_PORTADA);
+          setCarregues(carr.slice(0, N_PORTADA));
 
           // Només surten a la portada els que s'acaben aviat: si sortissin
           // tots, deixaria de ser un avís.
@@ -105,7 +112,7 @@ export default function Index() {
         {pinsoEndarrerit && (
           <Link href="/pinso" asChild>
             <Pressable
-              style={[styles.targeta, styles.targetaAvis]}
+              style={styles.targetaAvisCard}
               accessibilityRole="button"
             >
               <Text style={styles.titolAvis}>Falten entregues de pinso</Text>
@@ -121,7 +128,7 @@ export default function Index() {
         {!pinsoEndarrerit && avisosPinso.length > 0 && (
           <Link href="/pinso" asChild>
             <Pressable
-              style={[styles.targeta, styles.targetaAvis]}
+              style={styles.targetaAvisCard}
               accessibilityRole="button"
             >
               <Text style={styles.titolAvis}>S&apos;acaba el pinso</Text>
@@ -190,12 +197,19 @@ export default function Index() {
               </Pressable>
             </Link>
           ))}
+          {hiHaMesCicles && (
+            <Link href="/cicle" asChild>
+              <Pressable accessibilityRole="button">
+                <Text style={styles.veureMes}>Veure&apos;n més ›</Text>
+              </Pressable>
+            </Link>
+          )}
         </View>
 
         {carregues.length > 0 && (
           <View style={styles.targeta}>
             <Text style={styles.titolSeccio}>Últimes càrregues</Text>
-            {carregues.slice(0, 8).map((c) => (
+            {carregues.map((c) => (
               <Link key={c.id} href={`/carrega/${c.id}`} asChild>
                 <Pressable style={styles.filaCicle} accessibilityRole="button">
                   <View style={styles.flex}>
@@ -213,6 +227,13 @@ export default function Index() {
                 </Pressable>
               </Link>
             ))}
+            {hiHaMesCarregues && (
+              <Link href="/carrega" asChild>
+                <Pressable accessibilityRole="button">
+                  <Text style={styles.veureMes}>Veure&apos;n més ›</Text>
+                </Pressable>
+              </Link>
+            )}
           </View>
         )}
       </ScrollView>
@@ -242,6 +263,13 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   ajuda: { fontSize: 13, color: colors.discret },
+  veureMes: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primari,
+    paddingVertical: 10,
+    textAlign: 'center',
+  },
   botons: { flexDirection: 'row', gap: mides.espai },
   botoPrincipal: {
     flex: 1,
@@ -252,7 +280,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
-  targetaAvis: { backgroundColor: colors.avisFluix, borderColor: colors.avis },
+  // Un sol objecte, no [targeta, targetaAvis]: un Pressable dins d'un
+  // Link asChild peta al web ("indexed property [0] on CSSStyleDeclaration")
+  // si el seu style és un array. Amb un objecte sol no passa.
+  targetaAvisCard: {
+    backgroundColor: colors.avisFluix,
+    borderColor: colors.avis,
+    borderRadius: mides.radi,
+    padding: mides.espai,
+    gap: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
   titolAvis: { fontSize: 16, fontWeight: '700', color: colors.avis },
   textAvis: { color: colors.avis, fontSize: 14 },
   botoSecundari: {
