@@ -16,6 +16,15 @@ async function taulaExisteix(db: SQLiteDatabase, nom: string): Promise<boolean> 
   return (fila?.n ?? 0) > 0;
 }
 
+async function columnaExisteix(
+  db: SQLiteDatabase,
+  taula: string,
+  columna: string
+): Promise<boolean> {
+  const files = await db.getAllAsync<{ name: string }>(`PRAGMA table_info(${taula})`);
+  return files.some((f) => f.name === columna);
+}
+
 export const DATABASE_NAME = 'granja.db';
 
 /**
@@ -136,9 +145,15 @@ const migracions: Record<number, Migracio> = {
    * v5: cada fila pot dir de quina importació ve, per poder desfer-la sencera.
    * `ADD COLUMN` no reescriu la taula ni toca les vistes, així que aquí no cal
    * la dansa de la migració 3.
+   *
+   * `COMUNES` (a schema.ts) ja inclou `importacio_id` per a instal·lacions
+   * noves: la migració 1 crea les taules amb la columna de bon principi.
+   * Per això comprovem abans d'afegir-la, o petaria amb "duplicate column
+   * name" en qualsevol instal·lació que comenci de zero.
    */
   5: async (db) => {
     for (const taula of TAULES_DE_DADES) {
+      if (await columnaExisteix(db, taula, 'importacio_id')) continue;
       await db.execAsync(`ALTER TABLE ${taula} ADD COLUMN importacio_id TEXT`);
     }
     await db.execAsync(

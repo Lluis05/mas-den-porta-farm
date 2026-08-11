@@ -57,55 +57,55 @@ export async function seedDatabase(db: SQLiteDatabase): Promise<void> {
   );
   if (jaHiEs && jaHiEs.n > 0) return;
 
-  await db.withTransactionAsync(async () => {
-    for (let numSala = 1; numSala <= NUM_SALES; numSala++) {
-      const salaId = Crypto.randomUUID();
-      await db.runAsync(
-        'INSERT INTO sala (id, numero, capacitat) VALUES (?, ?, ?)',
-        salaId,
-        numSala,
-        CAPACITAT_SALA
-      );
+  // Sense transacció pròpia: sempre es crida des de la migració 1, que ja
+  // n'obre una. Una transacció dins d'una altra petava a wa-sqlite (web).
+  for (let numSala = 1; numSala <= NUM_SALES; numSala++) {
+    const salaId = Crypto.randomUUID();
+    await db.runAsync(
+      'INSERT INTO sala (id, numero, capacitat) VALUES (?, ?, ?)',
+      salaId,
+      numSala,
+      CAPACITAT_SALA
+    );
 
-      for (const meitat of MEITATS) {
-        for (let numCorral = 1; numCorral <= CORRALS_PER_MEITAT; numCorral++) {
-          await db.runAsync(
-            'INSERT INTO corral (id, sala_id, meitat, numero, capacitat) VALUES (?, ?, ?, ?, ?)',
-            Crypto.randomUUID(),
-            salaId,
-            meitat,
-            numCorral,
-            CAPACITAT_CORRAL
-          );
-        }
+    for (const meitat of MEITATS) {
+      for (let numCorral = 1; numCorral <= CORRALS_PER_MEITAT; numCorral++) {
+        await db.runAsync(
+          'INSERT INTO corral (id, sala_id, meitat, numero, capacitat) VALUES (?, ?, ?, ?, ?)',
+          Crypto.randomUUID(),
+          salaId,
+          meitat,
+          numCorral,
+          CAPACITAT_CORRAL
+        );
       }
     }
+  }
 
-    for (let numBanda = 1; numBanda <= NUM_BANDES; numBanda++) {
-      await db.runAsync(
-        'INSERT INTO banda (id, numero) VALUES (?, ?)',
-        Crypto.randomUUID(),
-        numBanda
-      );
-    }
+  for (let numBanda = 1; numBanda <= NUM_BANDES; numBanda++) {
+    await db.runAsync(
+      'INSERT INTO banda (id, numero) VALUES (?, ?)',
+      Crypto.randomUUID(),
+      numBanda
+    );
+  }
 
-    for (const u of UBICACIONS) {
-      await db.runAsync(
-        'INSERT INTO ubicacio_reproduccio (id, tipus, codi) VALUES (?, ?, ?)',
-        Crypto.randomUUID(),
-        u.tipus,
-        u.codi
-      );
-    }
+  for (const u of UBICACIONS) {
+    await db.runAsync(
+      'INSERT INTO ubicacio_reproduccio (id, tipus, codi) VALUES (?, ?, ?)',
+      Crypto.randomUUID(),
+      u.tipus,
+      u.codi
+    );
+  }
 
-    for (const t of TIPUS_PINSO) {
-      await db.runAsync(
-        'INSERT INTO tipus_pinso (id, codi, descripcio, capacitat_sitja_kg) VALUES (?, ?, ?, ?)',
-        Crypto.randomUUID(),
-        t.codi,
-        t.descripcio,
-        t.capacitat_sitja_kg
-      );
-    }
-  });
+  for (const t of TIPUS_PINSO) {
+    await db.runAsync(
+      'INSERT INTO tipus_pinso (id, codi, descripcio, capacitat_sitja_kg) VALUES (?, ?, ?, ?)',
+      Crypto.randomUUID(),
+      t.codi,
+      t.descripcio,
+      t.capacitat_sitja_kg
+    );
+  }
 }
