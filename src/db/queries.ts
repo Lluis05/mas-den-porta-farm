@@ -785,3 +785,107 @@ export async function corralsOcupats(db: SQLiteDatabase): Promise<Set<string>> {
   );
   return new Set(files.map((f) => f.corral_id));
 }
+
+// ---------------------------------------------------------------------------
+// Entrades de llavores (truges de reposició que ENTREN, resposta G2)
+// ---------------------------------------------------------------------------
+
+export type EntradaLlavoresLlista = {
+  id: string;
+  data: string;
+  unitats: number | null;
+  kg: number | null;
+  promig_kg: number | null;
+};
+
+export async function llistaEntradesLlavores(
+  db: SQLiteDatabase,
+  limit?: number
+): Promise<EntradaLlavoresLlista[]> {
+  return db.getAllAsync<EntradaLlavoresLlista>(
+    `SELECT id, data, unitats, kg, promig_kg
+     FROM entrada_llavores
+     WHERE esborrat_el IS NULL
+     ORDER BY data DESC, creat_el DESC
+     LIMIT ?`,
+    limit ?? -1
+  );
+}
+
+export type EntradaLlavoresDetall = {
+  id: string;
+  data: string;
+  unitats: number | null;
+  kg: number | null;
+  total_factura: number | null;
+  preu_kg: number | null;
+  promig_kg: number | null;
+};
+
+export async function detallEntradaLlavores(
+  db: SQLiteDatabase,
+  entradaId: string
+): Promise<EntradaLlavoresDetall | null> {
+  return db.getFirstAsync<EntradaLlavoresDetall>(
+    'SELECT * FROM entrada_llavores WHERE id = ? AND esborrat_el IS NULL',
+    entradaId
+  );
+}
+
+export type DadesEntradaLlavores = {
+  data: string;
+  unitats: number | null;
+  kg: number | null;
+  totalFactura: number | null;
+  preuKg: number | null;
+};
+
+export async function creaEntradaLlavores(
+  db: SQLiteDatabase,
+  dades: DadesEntradaLlavores
+): Promise<string> {
+  const id = Crypto.randomUUID();
+  await db.runAsync(
+    `INSERT INTO entrada_llavores (id, data, unitats, kg, total_factura, preu_kg)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    id,
+    dades.data,
+    dades.unitats,
+    dades.kg,
+    dades.totalFactura,
+    dades.preuKg
+  );
+  return id;
+}
+
+export async function actualitzaEntradaLlavores(
+  db: SQLiteDatabase,
+  entradaId: string,
+  dades: DadesEntradaLlavores
+): Promise<void> {
+  await db.runAsync(
+    `UPDATE entrada_llavores SET
+       data = ?, unitats = ?, kg = ?, total_factura = ?, preu_kg = ?,
+       modificat_el = datetime('now'), sincronitzat_el = NULL
+     WHERE id = ?`,
+    dades.data,
+    dades.unitats,
+    dades.kg,
+    dades.totalFactura,
+    dades.preuKg,
+    entradaId
+  );
+}
+
+/** Esborrat tou: la fila es marca, mai es perd (regla del model de dades). */
+export async function esborraEntradaLlavores(
+  db: SQLiteDatabase,
+  entradaId: string
+): Promise<void> {
+  await db.runAsync(
+    `UPDATE entrada_llavores
+     SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+     WHERE id = ?`,
+    entradaId
+  );
+}
