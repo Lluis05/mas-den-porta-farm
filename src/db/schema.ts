@@ -45,6 +45,7 @@ export const TAULES_DE_DADES = [
   'tipus_pinso',
   'factura_pinso',
   'entrega_pinso',
+  'article_proveidor',
   'tractament',
 ];
 
@@ -450,17 +451,42 @@ CREATE TABLE IF NOT EXISTS factura_pinso (
 );
 
 -- Una fila = una entrega d'un tipus. El pinso és de granja, no de sala (D4).
+-- La columna albara és el número de l'albarà del proveïdor. Serveix per no
+-- comptar dues vegades la mateixa entrega si es fotografia el mateix paper
+-- dos cops.
 CREATE TABLE IF NOT EXISTS entrega_pinso (
   id              TEXT PRIMARY KEY,
   data            TEXT NOT NULL,
   tipus_pinso_id  TEXT NOT NULL REFERENCES tipus_pinso(id),
   kg              REAL NOT NULL,
   factura_id      TEXT REFERENCES factura_pinso(id),
+  albara          TEXT,
+  medicat         INTEGER NOT NULL DEFAULT 0,
+  prescripcio     TEXT,
   ${COMUNES}
 );
 
 CREATE INDEX IF NOT EXISTS idx_entrega_data ON entrega_pinso(data);
 CREATE INDEX IF NOT EXISTS idx_entrega_tipus ON entrega_pinso(tipus_pinso_id);
+CREATE INDEX IF NOT EXISTS idx_entrega_albara ON entrega_pinso(albara);
+
+-- Els codis d'article del proveïdor (PTCGD, PPDGD…) no tenen res a veure amb
+-- els nostres codis de tipus_pinso. Aquesta taula guarda l'equivalència, que
+-- s'aprèn: la primera vegada que surt un codi nou, l'app pregunta a quin
+-- tipus correspon i no ho torna a preguntar mai més.
+--
+-- L'índex únic és PARCIAL (només files vives). Un UNIQUE normal impediria
+-- tornar a donar d'alta un codi que abans s'hagués esborrat.
+CREATE TABLE IF NOT EXISTS article_proveidor (
+  id              TEXT PRIMARY KEY,
+  codi            TEXT NOT NULL,
+  proveidor       TEXT,
+  tipus_pinso_id  TEXT NOT NULL REFERENCES tipus_pinso(id),
+  ${COMUNES}
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_article_codi
+  ON article_proveidor(codi) WHERE esborrat_el IS NULL;
 
 -- No existeix a l'Excel. Opcional (resposta D5).
 CREATE TABLE IF NOT EXISTS tractament (

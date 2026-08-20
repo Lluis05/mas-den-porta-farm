@@ -960,15 +960,99 @@ export async function tipusPinsoAmbEntregues(
 
 export async function creaEntregaPinso(
   db: SQLiteDatabase,
-  dades: { data: string; tipusPinsoId: string; kg: number }
+  dades: {
+    data: string;
+    tipusPinsoId: string;
+    kg: number;
+    albara?: string | null;
+    medicat?: boolean;
+    prescripcio?: string | null;
+  }
 ): Promise<void> {
   await db.runAsync(
-    `INSERT INTO entrega_pinso (id, data, tipus_pinso_id, kg) VALUES (?, ?, ?, ?)`,
+    `INSERT INTO entrega_pinso (id, data, tipus_pinso_id, kg, albara, medicat, prescripcio)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
     Crypto.randomUUID(),
     dades.data,
     dades.tipusPinsoId,
-    dades.kg
+    dades.kg,
+    dades.albara ?? null,
+    dades.medicat ? 1 : 0,
+    dades.prescripcio ?? null
   );
+}
+
+// ---------------------------------------------------------------------------
+// Albarans del proveïdor
+// ---------------------------------------------------------------------------
+
+export type ArticleProveidor = {
+  codi: string;
+  tipus_pinso_id: string;
+  tipus_codi: string;
+};
+
+/**
+ * L'equivalència entre els codis d'article del proveïdor i els nostres tipus
+ * de pinso. Comença buida i s'omple sola: cada codi nou es pregunta un cop.
+ */
+export async function articlesProveidor(
+  db: SQLiteDatabase
+): Promise<ArticleProveidor[]> {
+  return db.getAllAsync<ArticleProveidor>(
+    `SELECT ap.codi, ap.tipus_pinso_id, tp.codi AS tipus_codi
+       FROM article_proveidor ap
+       JOIN tipus_pinso tp ON tp.id = ap.tipus_pinso_id
+      WHERE ap.esborrat_el IS NULL
+      ORDER BY ap.codi`
+  );
+}
+
+/** Desa (o canvia) a quin tipus de pinso correspon un codi del proveïdor. */
+export async function desaArticleProveidor(
+  db: SQLiteDatabase,
+  codi: string,
+  tipusPinsoId: string
+): Promise<void> {
+  const existent = await db.getFirstAsync<{ id: string }>(
+    `SELECT id FROM article_proveidor WHERE codi = ? AND esborrat_el IS NULL`,
+    codi
+  );
+
+  if (existent) {
+    await db.runAsync(
+      `UPDATE article_proveidor
+          SET tipus_pinso_id = ?, modificat_el = datetime('now'), sincronitzat_el = NULL
+        WHERE id = ?`,
+      tipusPinsoId,
+      existent.id
+    );
+    return;
+  }
+
+  await db.runAsync(
+    `INSERT INTO article_proveidor (id, codi, tipus_pinso_id) VALUES (?, ?, ?)`,
+    Crypto.randomUUID(),
+    codi,
+    tipusPinsoId
+  );
+}
+
+/**
+ * Si aquest albarà ja s'ha apuntat. La foto del mateix paper es pot fer dos
+ * cops sense adonar-se'n, i com que aquí no s'esborra mai res, una entrega
+ * repetida inflaria l'estoc de pinso i espatllaria la previsió.
+ */
+export async function albaraJaApuntat(
+  db: SQLiteDatabase,
+  numero: string
+): Promise<{ data: string; kg: number } | null> {
+  const fila = await db.getFirstAsync<{ data: string; kg: number }>(
+    `SELECT data, SUM(kg) AS kg FROM entrega_pinso
+      WHERE albara = ? AND esborrat_el IS NULL`,
+    numero
+  );
+  return fila && fila.kg != null ? fila : null;
 }
 
 /** Porcs que hi ha ara mateix a tota la granja. */

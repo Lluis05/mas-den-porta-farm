@@ -38,7 +38,7 @@ export const DATABASE_NAME = 'granja.db';
  * Per canviar l'esquema més endavant: puja aquest número i afegeix el pas nou
  * a `migracions`. No toquis mai un pas ja publicat.
  */
-const VERSIO_ESQUEMA = 5;
+const VERSIO_ESQUEMA = 7;
 
 type Migracio = (db: SQLiteDatabase) => Promise<void>;
 
@@ -162,6 +162,61 @@ const migracions: Record<number, Migracio> = {
        CREATE INDEX IF NOT EXISTS idx_entrega_importacio
          ON entrega_pinso(importacio_id);`
     );
+  },
+
+  /**
+   * v6: llegir albarans de pinso amb una foto.
+   *
+   * Dues coses noves: l'equivalència entre el codi d'article del proveïdor i
+   * el nostre tipus de pinso, i el número d'albarà a cada entrega per no
+   * apuntar dos cops el mateix paper.
+   *
+   * Com a la migració 5, `ADD COLUMN` va amb comprovació prèvia: l'esquema de
+   * `schema.ts` ja porta la columna, o sigui que en una instal·lació nova la
+   * migració 1 ja l'ha creada i afegir-la peta amb "duplicate column name".
+   * `ADD COLUMN` i `CREATE TABLE` no reescriuen res, així que aquí no cal
+   * tocar les vistes.
+   */
+  6: async (db) => {
+    if (!(await columnaExisteix(db, 'entrega_pinso', 'albara'))) {
+      await db.execAsync('ALTER TABLE entrega_pinso ADD COLUMN albara TEXT');
+    }
+
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS article_proveidor (
+        id               TEXT PRIMARY KEY,
+        codi             TEXT NOT NULL,
+        proveidor        TEXT,
+        tipus_pinso_id   TEXT NOT NULL REFERENCES tipus_pinso(id),
+        creat_el         TEXT NOT NULL DEFAULT (datetime('now')),
+        modificat_el     TEXT NOT NULL DEFAULT (datetime('now')),
+        esborrat_el      TEXT,
+        sincronitzat_el  TEXT,
+        importacio_id    TEXT
+      );
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_article_codi
+        ON article_proveidor(codi) WHERE esborrat_el IS NULL;
+
+      CREATE INDEX IF NOT EXISTS idx_entrega_albara ON entrega_pinso(albara);
+    `);
+  },
+
+  /**
+   * v7: alguns pinsos venen amb un complement medicamentós per recepta
+   * veterinària (imprès a l'albarà com "Prescripció: ..." just sota la línia
+   * de l'article). `albara.ts` ja ho detecta; aquí només hi ha lloc on
+   * desar-ho.
+   */
+  7: async (db) => {
+    if (!(await columnaExisteix(db, 'entrega_pinso', 'medicat'))) {
+      await db.execAsync(
+        'ALTER TABLE entrega_pinso ADD COLUMN medicat INTEGER NOT NULL DEFAULT 0'
+      );
+    }
+    if (!(await columnaExisteix(db, 'entrega_pinso', 'prescripcio'))) {
+      await db.execAsync('ALTER TABLE entrega_pinso ADD COLUMN prescripcio TEXT');
+    }
   },
 };
 

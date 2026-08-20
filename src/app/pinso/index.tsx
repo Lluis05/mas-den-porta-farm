@@ -89,9 +89,17 @@ export default function Pinso() {
           </View>
         )}
 
-        <Link href="/pinso/nova" asChild>
+        {/* Compte: un Pressable dins d'un <Link asChild> no pot portar mai un
+            style en array — al web peta la pantalla sencera. Un sol objecte. */}
+        <Link href="/pinso/foto" asChild>
           <Pressable style={styles.botoPrincipal} accessibilityRole="button">
-            <Text style={styles.botoText}>Apuntar una entrega</Text>
+            <Text style={styles.botoText}>Llegir un albarà amb la càmera</Text>
+          </Pressable>
+        </Link>
+
+        <Link href="/pinso/nova" asChild>
+          <Pressable style={styles.botoSecundari} accessibilityRole="button">
+            <Text style={styles.botoSecundariText}>Apuntar una entrega a mà</Text>
           </Pressable>
         </Link>
 
@@ -160,7 +168,7 @@ export default function Pinso() {
             ) : (
               <Text style={styles.ajuda}>
                 {f.previsio.ultimaEntrega
-                  ? `Només hi ha una entrega apuntada (${f.previsio.ultimaEntrega}). Amb dues o més ja es pot calcular el ritme.`
+                  ? `Només hi ha una entrega apuntada: ${f.previsio.kgUltimaEntrega} kg (${f.previsio.ultimaEntrega}). Amb dues o més ja es pot calcular el ritme.`
                   : 'Encara no hi ha cap entrega apuntada d’aquest tipus.'}
               </Text>
             )}
@@ -224,4 +232,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botoText: { color: '#fff', fontSize: 17, fontWeight: '600' },
+  botoSecundari: {
+    height: 52,
+    borderRadius: mides.radi,
+    borderWidth: 1,
+    borderColor: colors.primari,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  botoSecundariText: { color: colors.primari, fontSize: 17, fontWeight: '600' },
 });
