@@ -81,21 +81,43 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
     a nested route-group `_layout.tsx` that gates access must render its own
     `<Stack>`, not `<Slot>`, or per-screen `<Stack.Screen>` header options
     inside that group silently stop working.
+  - **Second bug, found by the user testing it**: the PIN panel visually
+    slid up from the bottom instead of in from the right. Cause: RN's
+    `Modal` only ever animates its whole content sliding from the bottom
+    (`animationType="slide"`) — the panel's own `position:'absolute',
+    right:0` styling doesn't change that, since the Modal itself is what's
+    being animated, not the panel inside it. Fixed by switching the Modal to
+    `animationType="fade"` (just the backdrop) and animating the panel's own
+    `translateX` by hand with `Animated.timing` (280px off-screen → 0 on
+    open, reverse on close, native driver). **New trap for this file**: RN's
+    built-in `Modal` slide animation cannot be aimed at a side panel — for
+    anything that isn't a bottom sheet, animate the content yourself.
   - Verified end-to-end on web (`npx expo export --platform web` clean,
     `tsc --noEmit` clean, then live in a browser): worker screen loads at
     `/`; typing a wrong PIN shows "PIN incorrecte" and doesn't unlock;
     `4163` unlocks and lands on `/inici` with real data (3,638 pigs, full
     cicle list); navigating into `/cicle/[id]` while unlocked works exactly
     as before (collapsible sales, "Apuntar un moviment"); "Tancar sessió"
-    returns to `/`; and — the actual point of this feature — navigating
-    straight to `/inici` by URL **without** unlocking first bounces back to
-    `/`.
+    returns to `/`; navigating straight to `/inici` by URL **without**
+    unlocking first bounces back to `/`; and the PIN panel now visibly
+    slides in from the right. **Then verified against real SQLite, not just
+    the UI**, per this file's standing rule: recorded an actual baixa (2
+    pigs, Sala 1) through the worker screen with no PIN entered, confirmed
+    both the sala count and the farm total dropped by exactly 2 and survived
+    a reload, then — since there's no delete screen for `baixa` yet — wrote
+    a throwaway temporary route to hard-delete that test row and confirmed
+    the numbers landed back at exactly 182/3,638. Pushed as `2e39b41`.
   - **Not done / open**: no logout timer, no persistence across app
     restarts (deliberate, see above), and the "how do I get back to the
     worker view from the admin side without the button" question doesn't
     arise since it's always reachable at `/`. If persistence is wanted later,
     it needs `expo-secure-store` — a new native dependency, so a fresh EAS
     dev-client build before it can be tested on the phone.
+  - **Session ended here on 2026-08-20.** All five queued requests from
+    2026-08-13 are done except cens de truges, which the user explicitly
+    deferred ("otro día hacemos todas las columnas que faltan del cens") —
+    **pick up there next**, see item 6 under "Where to pick up" below; it
+    needs a design conversation about the missing columns before any code.
 - 2026-08-13 (moviment screen: multi-select + collapsible sales): Follow-up
   on the moviment screen shipped minutes earlier. User wanted two UI changes:
   (1) pick **more than one** corralina on both the origin and destination
@@ -361,9 +383,11 @@ Open, roughly in the order that unblocks the most:
    ~~`baixa`~~ got one 2026-08-13 (`/baixa/nova`). ~~`moviment`~~ got one
    2026-08-13 (`/cicle/[id]/moviment/nou`). The rest are imported or
    importable; none can be entered or viewed in the app.
-6. **Cens de truges** (breeding sow census, request 3 from the 2026-08-13
-   queue) — last of the five queued requests, deliberately saved for last
-   since least defined. Mirrors the Excel's `cens24` sheet: initial count
+6. **Cens de truges — pick up here next session.** (breeding sow census,
+   request 3 from the 2026-08-13 queue) — last of the five queued requests,
+   deliberately saved for last since least defined; **explicitly paused on
+   2026-08-20** to design "all the missing columns" with the user rather
+   than guess at them. Mirrors the Excel's `cens24` sheet: initial count
    from Excel import **and** a manual recount the user does by hand: additions
    from inseminated primals (llavores don't count until first inseminated),
    subtractions from baixes + truges de rebuig, no per-farm split.
