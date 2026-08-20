@@ -315,6 +315,167 @@ export async function ocupacioDelCicle(
   );
 }
 
+export type BaixaDelCicle = {
+  id: string;
+  data: string;
+  num_porcs: number;
+  sala: number;
+  meitat: Meitat;
+  corral: number;
+  motiu: string | null;
+};
+
+/**
+ * Baixes atribuïdes a aquest cicle. Un corral es reutilitza cicle rere cicle,
+ * així que una baixa s'atribueix al cicle que hi havia en aquell moment: el
+ * mateix criteri que fa servir v_cicle_resum per a les sortides a escorxador
+ * (l'última ocupació del corral amb data d'entrada anterior o igual a la
+ * baixa). Sense això, una baixa d'un cicle nou també comptaria al vell.
+ */
+export async function baixesDelCicle(
+  db: SQLiteDatabase,
+  cicleId: string
+): Promise<BaixaDelCicle[]> {
+  return db.getAllAsync<BaixaDelCicle>(
+    `SELECT b.id, b.data, b.num_porcs, s.numero AS sala, c.meitat, c.numero AS corral, b.motiu
+     FROM baixa b
+     JOIN corral c ON c.id = b.corral_id
+     JOIN sala s ON s.id = c.sala_id
+     JOIN ocupacio_corral oc
+       ON oc.corral_id = b.corral_id
+      AND oc.esborrat_el IS NULL
+      AND oc.data_entrada <= b.data
+      AND oc.data_entrada = (
+        SELECT MAX(oc2.data_entrada) FROM ocupacio_corral oc2
+        WHERE oc2.corral_id = b.corral_id
+          AND oc2.esborrat_el IS NULL
+          AND oc2.data_entrada <= b.data
+      )
+     WHERE oc.cicle_id = ? AND b.esborrat_el IS NULL
+     ORDER BY b.data DESC`,
+    cicleId
+  );
+}
+
+export type MovimentDelCicle = {
+  id: string;
+  data: string;
+  num_porcs: number;
+  motiu: string | null;
+  /** 'surt' si el corral d'origen és d'aquest cicle, 'entra' si és el de destí. */
+  sentit: 'surt' | 'entra';
+  sala_origen: number;
+  meitat_origen: Meitat;
+  corral_origen: number;
+  sala_desti: number;
+  meitat_desti: Meitat;
+  corral_desti: number;
+};
+
+/**
+ * Moviments d'aquest cicle, tant els que en surten com els que hi entren
+ * (d'una altra sala que no s'havia apuntat al cicle en un principi). Mateix
+ * criteri d'atribució per data que baixesDelCicle().
+ */
+export async function movimentsDelCicle(
+  db: SQLiteDatabase,
+  cicleId: string
+): Promise<MovimentDelCicle[]> {
+  return db.getAllAsync<MovimentDelCicle>(
+    `SELECT
+       m.id, m.data, m.num_porcs, m.motiu,
+       CASE WHEN ocO.cicle_id = ? THEN 'surt' ELSE 'entra' END AS sentit,
+       so.numero AS sala_origen, co.meitat AS meitat_origen, co.numero AS corral_origen,
+       sd.numero AS sala_desti, cd.meitat AS meitat_desti, cd.numero AS corral_desti
+     FROM moviment m
+     JOIN corral co ON co.id = m.corral_origen_id
+     JOIN sala so ON so.id = co.sala_id
+     JOIN corral cd ON cd.id = m.corral_desti_id
+     JOIN sala sd ON sd.id = cd.sala_id
+     LEFT JOIN ocupacio_corral ocO
+       ON ocO.corral_id = m.corral_origen_id
+      AND ocO.esborrat_el IS NULL
+      AND ocO.data_entrada <= m.data
+      AND ocO.data_entrada = (
+        SELECT MAX(oc2.data_entrada) FROM ocupacio_corral oc2
+        WHERE oc2.corral_id = m.corral_origen_id
+          AND oc2.esborrat_el IS NULL
+          AND oc2.data_entrada <= m.data
+      )
+     LEFT JOIN ocupacio_corral ocD
+       ON ocD.corral_id = m.corral_desti_id
+      AND ocD.esborrat_el IS NULL
+      AND ocD.data_entrada <= m.data
+      AND ocD.data_entrada = (
+        SELECT MAX(oc2.data_entrada) FROM ocupacio_corral oc2
+        WHERE oc2.corral_id = m.corral_desti_id
+          AND oc2.esborrat_el IS NULL
+          AND oc2.data_entrada <= m.data
+      )
+     WHERE (ocO.cicle_id = ? OR ocD.cicle_id = ?) AND m.esborrat_el IS NULL
+     ORDER BY m.data DESC`,
+    cicleId,
+    cicleId,
+    cicleId
+  );
+}
+
+export type CorralPerMoviment = {
+  corral_id: string;
+  sala: number;
+  meitat: Meitat;
+  corral: number;
+  capacitat: number;
+  porcs: number;
+};
+
+/** Tots els corrals de la granja amb els porcs que hi ha ara, per triar el destí d'un moviment. */
+export async function corralsPerMoviment(
+  db: SQLiteDatabase
+): Promise<CorralPerMoviment[]> {
+  return db.getAllAsync<CorralPerMoviment>(
+    `SELECT c.id AS corral_id, s.numero AS sala, c.meitat, c.numero AS corral,
+            c.capacitat, COALESCE(v.porcs, 0) AS porcs
+     FROM corral c
+     JOIN sala s ON s.id = c.sala_id
+     LEFT JOIN v_ocupacio_actual v ON v.corral_id = c.id
+     WHERE c.esborrat_el IS NULL
+     ORDER BY s.numero, c.meitat DESC, c.numero`
+  );
+}
+
+/**
+ * Apunta un o més trasllats de porcs entre corrals (poden ser de sales
+ * diferents), tots amb la mateixa data i motiu. Poden ser diverses parelles
+ * perquè a la pantalla es pot triar més d'un corral d'origen i més d'un de
+ * destí — `aparellaTrasllats()` a `lib/corrals.ts` ja les ha convertit en
+ * parelles concretes abans de cridar aquí.
+ */
+export async function creaMoviments(
+  db: SQLiteDatabase,
+  dades: {
+    data: string;
+    parells: { corralOrigenId: string; corralDestiId: string; numPorcs: number }[];
+    motiu?: string | null;
+  }
+): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    for (const p of dades.parells) {
+      if (p.numPorcs <= 0) continue;
+      await db.runAsync(
+        `INSERT INTO moviment (id, data, corral_origen_id, corral_desti_id, num_porcs, motiu)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        Crypto.randomUUID(),
+        dades.data,
+        p.corralOrigenId,
+        p.corralDestiId,
+        p.numPorcs,
+        dades.motiu ?? null
+      );
+    }
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Càrregues a escorxador
 // ---------------------------------------------------------------------------

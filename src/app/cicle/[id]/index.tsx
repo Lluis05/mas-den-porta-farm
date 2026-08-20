@@ -4,12 +4,17 @@ import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import {
+  baixesDelCicle,
   esborraCicle,
+  movimentsDelCicle,
   ocupacioDelCicle,
   resumCicle,
+  type BaixaDelCicle,
   type CicleResum,
+  type MovimentDelCicle,
   type OcupacioFila,
 } from '@/db/queries';
+import { SalaColapsable } from '@/components/sala-colapsable';
 import { codiSala } from '@/lib/corrals';
 import { colors, mides } from '@/theme';
 
@@ -18,20 +23,27 @@ export default function DetallCicle() {
   const db = useSQLiteContext();
   const [resum, setResum] = useState<CicleResum | null>(null);
   const [ocupacio, setOcupacio] = useState<OcupacioFila[]>([]);
+  const [baixes, setBaixes] = useState<BaixaDelCicle[]>([]);
+  const [moviments, setMoviments] = useState<MovimentDelCicle[]>([]);
   const [confirmant, setConfirmant] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [salesObertes, setSalesObertes] = useState<Set<number>>(new Set());
 
   useFocusEffect(
     useCallback(() => {
       let viu = true;
       (async () => {
-        const [r, o] = await Promise.all([
+        const [r, o, b, m] = await Promise.all([
           resumCicle(db, id),
           ocupacioDelCicle(db, id),
+          baixesDelCicle(db, id),
+          movimentsDelCicle(db, id),
         ]);
         if (!viu) return;
         setResum(r);
         setOcupacio(o);
+        setBaixes(b);
+        setMoviments(m);
       })();
       return () => {
         viu = false;
@@ -140,14 +152,21 @@ export default function DetallCicle() {
             const entrats = files.reduce((s, f) => s + f.porcs_entrada, 0);
             const ara = files.reduce((s, f) => s + f.porcs_ara, 0);
             return (
-              <View key={sala} style={styles.blocSala}>
-                <View style={styles.capcaleraSala}>
-                  <Text style={styles.codi}>{codi}</Text>
-                  <Text style={styles.porcsSala}>{ara} porcs</Text>
-                </View>
-                <Text style={styles.ajuda}>
-                  {files.length} corralines · hi van entrar {entrats}
-                </Text>
+              <SalaColapsable
+                key={sala}
+                sala={sala}
+                codi={codi}
+                resum={`${ara} porcs · ${files.length} corralines · hi van entrar ${entrats}`}
+                oberta={salesObertes.has(sala)}
+                onToggle={() =>
+                  setSalesObertes((s) => {
+                    const nou = new Set(s);
+                    if (nou.has(sala)) nou.delete(sala);
+                    else nou.add(sala);
+                    return nou;
+                  })
+                }
+              >
                 <View style={styles.corrals}>
                   {files.map((f) => (
                     <View key={`${f.meitat}${f.corral}`} style={styles.corral}>
@@ -159,15 +178,55 @@ export default function DetallCicle() {
                     </View>
                   ))}
                 </View>
-              </View>
+              </SalaColapsable>
             );
           })}
         </View>
+
+        {moviments.length > 0 && (
+          <View style={styles.targeta}>
+            <Text style={styles.titolSeccio}>Moviments</Text>
+            {moviments.map((m) => (
+              <View key={m.id} style={styles.filaMoviment}>
+                <Text style={styles.movimentText}>
+                  {m.data} · {m.num_porcs} porcs · sala {m.sala_origen} (corral{' '}
+                  {m.corral_origen}
+                  {m.meitat_origen}) → sala {m.sala_desti} (corral {m.corral_desti}
+                  {m.meitat_desti})
+                </Text>
+                {m.motiu && <Text style={styles.ajuda}>{m.motiu}</Text>}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {baixes.length > 0 && (
+          <View style={styles.targeta}>
+            <Text style={styles.titolSeccio}>Baixes apuntades</Text>
+            {baixes.map((b) => (
+              <View key={b.id} style={styles.filaMoviment}>
+                <Text style={styles.movimentText}>
+                  {b.data} · {b.num_porcs} porcs · sala {b.sala} (corral {b.corral}
+                  {b.meitat})
+                </Text>
+                {b.motiu && <Text style={styles.ajuda}>{b.motiu}</Text>}
+              </View>
+            ))}
+          </View>
+        )}
 
         {error && (
           <View style={[styles.targeta, styles.targetaError]}>
             <Text style={styles.textError}>{error}</Text>
           </View>
+        )}
+
+        {!confirmant && (
+          <Link href={`/cicle/${id}/moviment/nou`} asChild>
+            <Pressable style={styles.botoSecundariLink} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Apuntar un moviment</Text>
+            </Pressable>
+          </Link>
         )}
 
         {confirmant ? (
@@ -283,6 +342,12 @@ const styles = StyleSheet.create({
   },
   corralNom: { fontSize: 12, color: colors.discret, fontWeight: '600' },
   corralPorcs: { fontSize: 16, fontWeight: '700', color: colors.text },
+  filaMoviment: {
+    paddingVertical: 7,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.vora,
+  },
+  movimentText: { fontSize: 14, color: colors.text },
   targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
   titolError: { fontSize: 16, fontWeight: '700', color: colors.perill },
   textError: { color: colors.perill },

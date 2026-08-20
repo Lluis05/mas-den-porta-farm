@@ -69,6 +69,55 @@ export function reparteixProporcional(total: number, disponibles: number[]): num
   return resultat;
 }
 
+export type LiniaTrasllat = { corralId: string; num: number };
+export type ParellTrasllat = {
+  corralOrigenId: string;
+  corralDestiId: string;
+  numPorcs: number;
+};
+
+/**
+ * Un moviment és sempre d'UN corral a UN altre (`moviment` a schema.ts), però
+ * a la pantalla es pot triar més d'un corral d'origen i més d'un de destí.
+ * Aquí es converteix "aquests corrals en treuen tants, aquests altres en
+ * reben tants" en la llista de parelles que cal desar.
+ *
+ * No importa quin origen concret queda aparellat amb quin destí concret: són
+ * porcs sense marcar, no se'n fa un seguiment individual. Només cal que el
+ * que surt de cada origen i el que entra a cada destí sumin bé.
+ *
+ * aparellaTrasllats([{corralId:'a', num:5}], [{corralId:'x', num:3}, {corralId:'y', num:2}])
+ *   -> [{corralOrigenId:'a', corralDestiId:'x', numPorcs:3},
+ *       {corralOrigenId:'a', corralDestiId:'y', numPorcs:2}]
+ */
+export function aparellaTrasllats(
+  origens: LiniaTrasllat[],
+  destins: LiniaTrasllat[]
+): ParellTrasllat[] {
+  const o = origens.filter((l) => l.num > 0).map((l) => ({ ...l }));
+  const d = destins.filter((l) => l.num > 0).map((l) => ({ ...l }));
+  const resultat: ParellTrasllat[] = [];
+
+  let i = 0;
+  let j = 0;
+  while (i < o.length && j < d.length) {
+    const n = Math.min(o[i].num, d[j].num);
+    if (n > 0) {
+      resultat.push({
+        corralOrigenId: o[i].corralId,
+        corralDestiId: d[j].corralId,
+        numPorcs: n,
+      });
+    }
+    o[i].num -= n;
+    d[j].num -= n;
+    if (o[i].num === 0) i++;
+    if (d[j].num === 0) j++;
+  }
+
+  return resultat;
+}
+
 const CORRALS_PER_MEITAT = 6;
 
 /**

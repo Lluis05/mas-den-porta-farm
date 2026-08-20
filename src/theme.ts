@@ -13,6 +13,7 @@ export const colors = {
   avis: '#b26a00',
   avisFluix: '#fff6e5',
   ok: '#2e7d32',
+  okFluix: '#e8f5e9',
 };
 
 export const mides = {
