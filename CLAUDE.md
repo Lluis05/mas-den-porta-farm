@@ -27,11 +27,12 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Testing on device**: the user's phone and PC are on **separate networks that can't see each other**, so plain LAN mode doesn't reach the phone. Use `npx expo start --tunnel`. `@expo/ngrok` is a **local devDependency on purpose** — Expo CLI's "install it globally" prompt installs to `~/.local` but then can't resolve it, failing with `CommandError: Install @expo/ngrok and try again`. Do not remove it. If the tunnel itself errors (`failed to start tunnel / remote gone away`), the fallback that avoids ngrok entirely is: turn on the **iPhone's personal hotspot, connect the PC to it**, then plain `npx expo start` — both devices are then on one network.
 - **Local storage**: **Expo SQLite** (decided 2026-08-10). Chosen over WatermelonDB deliberately: it's plain SQL the user can read and learn from, and we write the Supabase sync ourselves rather than adopting a framework's sync model. **On web, the SQLite file uses an exclusive OPFS lock: only one browser tab may have the app open at a time.** A second tab (or an orphaned one left open from earlier testing) makes the first fail with `NoModificationAllowedError` / `createSyncAccessHandle`, which then cascades into unrelated-looking SQLite errors. Before debugging a web SQLite error, first check for — and close — any other tab on the dev server.
 - **Data model**: designed in `docs/model-dades.md` — **read it before writing any DB or screen code.**
-- **Four traps already hit once, do not re-introduce:**
+- **Five traps already hit once, do not re-introduce:**
   1. A corral is reused cycle after cycle, so anything joining `linia_carrega` to `ocupacio_corral` by `corral_id` alone attributes a load to *every* cycle that ever used that corral. `v_cicle_resum` picks the occupancy with the latest `data_entrada` on or before the load date. Any new per-cycle query must do the same.
   2. **Rebuilding a table requires dropping the views first.** `ALTER TABLE ... RENAME` makes SQLite re-parse the whole schema; any view still pointing at the table you just dropped aborts it with `error in view …: no such table`. Migrations must `DROP VIEW` → rebuild → `db.execAsync(VISTES_SQL)`. That's why the views live in their own exported constant.
   3. Soft delete and plain `UNIQUE` constraints don't mix: a `UNIQUE` that ignores `esborrat_el` blocks re-inserting a row that was soft-deleted. Use **partial unique indexes** (`WHERE esborrat_el IS NULL`), as `idx_ocupacio_unica` does.
   4. **A `Pressable` rendered via `<Link asChild>` must never get an array `style={[a, b]}` — merge into one object instead.** On web, `Link asChild` clones its child onto the `<a>` it renders; if that child's `style` is an array, first mount throws `Failed to set an indexed property [0] on 'CSSStyleDeclaration'` and the whole screen crashes with a wrapped `<a>` in the component stack. Single-object styles on the same `Pressable` are fine, and array styles on non-`Link` elements (plain `View`/`Pressable` with `onPress`) are also fine — it's specifically `asChild` + array + `<a>`. Discovered 2026-08-11 building the history page: it silently broke the home screen (and the cicle/carrega edit buttons) the moment real data existed, on a code path that had simply never been exercised on web before. **Verify new `Link asChild` screens on web with real, non-empty data, not just an empty database.**
+  5. **No backticks inside the SQL in `schema.ts`.** `SCHEMA_SQL` and `VISTES_SQL` are each one big JS template literal, so a backtick used to quote an identifier inside a `--` SQL comment silently terminates the string and produces a pile of confusing syntax errors pointing at unrelated lines. Write *the column albara*, not the backticked form. Hit 2026-08-12 while adding migration 6.
 - **Project layout**: `src/app` = screens + layouts only (expo-router file-based routing); all other code elsewhere in `src/`.
 - **`metro.config.js` is load-bearing — do not delete.** `expo-sqlite` on web runs as WebAssembly; without `assetExts.push('wasm')` the web build fails to resolve `wa-sqlite.wasm`, and without the COOP/COEP headers the browser refuses SharedArrayBuffer. The dev server gets those headers from `enhanceMiddleware`; **whoever hosts the production web build must send them too**, or the web app won't open its database.
 - **Remote/sync backend**: Supabase (hosted Postgres + API) proposed as the shared backend the local data syncs to when online. Not yet set up.
@@ -39,7 +40,211 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
-- 2026-08-11 (photo-scan feed notes, not started): The father's wishlist also included scanning a photo of a pinso delivery note (albarà) to auto-fill date/type/kg instead of typing them — see `docs/pinso-example.jpeg` for a real example. That photo shows the real complexity: **one albarà has several line items**, each with a supplier article code (`PTCGD`, `PTGGD`, `PPDGD`, …) that has no relation to this app's `tipus_pinso.codi` — any extraction path needs a code→tipus_pinso mapping step, not just OCR text. Asked the user to choose an approach: cloud vision API (simplest, needs internet+API key+cost), on-device OCR (offline, no cost, but needs leaving Expo Go for an EAS development build), or manual entry with an attached photo (no OCR at all). **User chose on-device OCR.** That means item 4 below (the EAS dev build) has to happen *first*, and it needs the user present for the Expo account/login step — deliberately deferred to a separate session. Nothing implemented yet: no library chosen, no EAS project created.
+- 2026-08-13 (moviment screen: multi-select + collapsible sales): Follow-up
+  on the moviment screen shipped minutes earlier. User wanted two UI changes:
+  (1) pick **more than one** corralina on both the origin and destination
+  side of a moviment, not just one-to-one; (2) don't show all corralines at
+  first glance anywhere — sales collapsed by default, tap to expand — and
+  applied that to the cicle detail page's "On són" section too, not just the
+  moviment screen.
+  - **New pure function** `aparellaTrasllats()` in `lib/corrals.ts`: the
+    `moviment` table is still always one corral → one corral
+    (`CHECK (corral_origen_id <> corral_desti_id)` assumes 1:1), so
+    multi-select on both sides needs turning "these origins give this many,
+    these destins take this many" into concrete pairs. Greedy two-pointer
+    matching — which literal origin lands in which literal destination
+    doesn't matter (pigs aren't tracked individually), only that per-corral
+    sums are right on both sides. Tested in new `scripts/prova-corrals.mjs`
+    (11 checks — first dedicated tests for `corrals.ts`, folded into
+    `npm run provar`).
+  - Distribution: the one "how many porcs" the user types is split across
+    selected **origins** with `reparteixProporcional()` (weighted by what's
+    there, capped, same as baixa/carrega already do) and across selected
+    **destinations** with `reparteix()` (even split — same helper the
+    cicle-creation entry flow already uses for tap-to-select corrals).
+  - `creaMoviment()` → `creaMoviments()` (plural): now takes a list of
+    pairs and writes them inside one transaction.
+  - **New shared component** `src/components/sala-colapsable.tsx`: a
+    collapsed-by-default sala row, tap to expand. Purely presentational —
+    the moviment screen puts a multi-select corral grid inside it, the cicle
+    page puts a read-only one. Reused in both places rather than building
+    the collapse logic twice.
+  - Verified against real SQLite (throwaway script, not committed): two
+    moviments written in the same `creaMoviments()` transaction both apply
+    correctly to `v_ocupacio_actual`.
+  - **Still open, deliberately deferred**: how the PIN/login itself works —
+    user wants the moviment UI settled first. Two questions still
+    outstanding from before: where the PIN is stored/checked (on-device
+    only vs configurable remotely), and how to get back to the full app
+    from the worker-restricted view.
+- 2026-08-13 (moviments + baixa history on the cicle page): Second of the
+  five queued requests (see entry below). User wants baixes (already
+  shippable) and moviments both visible on a cicle's own detail page, and
+  moviment recording reached from **its own screen**
+  (`/cicle/[id]/moviment/nou`), linked via a button next to "Editar" — not
+  embedded in the edit form itself. Built:
+  - `baixesDelCicle()` / `movimentsDelCicle()` in `queries.ts` — same
+    cycle-attribution pattern `v_cicle_resum` already uses for escorxador
+    loads (latest `ocupacio_corral.data_entrada` on or before the event's
+    date decides which cicle a corral belonged to at that moment — trap #1
+    in this file). `movimentsDelCicle` checks **both** origin and
+    destination corral against the cicle, so a moviment shows on both sides
+    (`sentit: 'surt' | 'entra'`) — needed because a moviment can cross into a
+    sala that was never part of this cicle to begin with.
+  - **Explicit decision on cross-cicle moviments**: if a moviment's
+    destination corral is currently occupied by a *different* cicle,
+    `v_ocupacio_actual` still stays correct (it only cares about totals per
+    corral), but `v_cicle_resum`'s later escorxador-sale attribution for
+    that corral would go entirely to whichever cicle occupied it most
+    recently — mixed-cicle stats for that corral could be slightly off.
+    **User confirmed this is an accepted edge case, not worth solving now.**
+    If it ever needs fixing, the fix point is `v_cicle_resum` in
+    `schema.ts`, not `moviment`.
+  - `/cicle/[id]/moviment/nou`: one corral → one corral per moviment (matches
+    the table's own shape — `CHECK (corral_origen_id <> corral_desti_id)`
+    already assumed 1:1). Origin is restricted to this cicle's own corrals
+    (`corralsAmbPorcsDelCicle`, already existed); destination is **any**
+    corral farm-wide (new `corralsPerMoviment()`), so cross-sala moves work.
+    Moving from several origin corrals at once means recording several
+    moviments — no batch UI, kept simple on purpose.
+  - Verified against real SQLite (throwaway script, not committed): a baixa
+    attributes to the right cicle only; a moviment between two of the same
+    cicle's own corrals shows once; a moviment crossing into another cicle's
+    already-occupied corral shows correctly on **both** cicles with the
+    right `sentit`.
+- 2026-08-13 (five requests queued, first one — baixes screen — shipped):
+  User listed five things after testing photo-scan: (1) a real bug — a
+  freshly-recorded delivery for a type with zero prior history didn't show
+  its kg anywhere on `/pinso` (fixed below); (2) wants a cicle's room-entry
+  history ("veure més" showing which sales a band entered, plus a second
+  "veure més" for later room changes) — **done 2026-08-13, see entry above**;
+  (3) a farm-wide
+  truges (breeding sow) census feature mirroring the Excel's `cens24` sheet,
+  with an initial count (from Excel import **and** a manual recount the user
+  will do by hand and start counting from a chosen day — both), additions
+  from inseminated primals (llavores don't count until first inseminated),
+  subtractions from baixes + truges de rebuig, no per-farm split — **not done
+  yet, explicitly saved for last since least defined**; (4) recording baixes
+  (deaths) that actually subtract pig counts — **done, see below**; (5) a
+  worker login limited to room/pig-count viewing + recording baixes, nothing
+  else, simple shared PIN not individual accounts — **not done yet**. Agreed
+  order: baixes screen → sala/moviment history (moviment recording gets its
+  **own screen**, not embedded in the cicle screen, per explicit instruction)
+  → worker login → cens de truges last.
+  - **Bug fix**: `/pinso/index.tsx`'s single-delivery branch showed the date
+    but never the kg (`calculaPrevisio` correctly needs 2+ deliveries for a
+    rate, but the UI dropped the one number it did have). Now shows
+    "Només hi ha una entrega apuntada: X kg (date)".
+  - **Baixes screen shipped** (`/baixa/nova`, linked from home): turned out
+    `moviment` and `baixa` tables, and their accounting in
+    `v_ocupacio_actual` (subtracts baixes, applies moviments — including
+    cross-sala, since `moviment.corral_desti_id` isn't restricted to the
+    same room), **already existed in the schema**, just with no screens —
+    this was on the "tables with no screens yet" list below. No schema
+    change needed. New: `corralsAmbPorcsAra()` (all currently-occupied
+    corrals, not scoped to one cicle) and `creaBaixa()` in `queries.ts`. The
+    screen deliberately asks for a **sala-level** count only (not per
+    corral) per the user's explicit answer — `reparteixProporcional()`
+    (already used for escorxador loads) spreads it across that sala's
+    corrals behind the scenes, same mechanism, no new distribution logic.
+    Verified against real SQLite (throwaway script, not committed): the
+    view's totals drop by exactly the recorded count and no corral goes
+    negative.
+- 2026-08-13 (medicated feed, schema v7): Real photos surfaced a case the
+  parser didn't handle: some deliveries come with a veterinary prescription
+  printed as "Prescripció: ..." and "Complement medicamentós" directly under
+  the article line (`photos-OCR/medicated.jpg`), not as their own line with a
+  code. `analitzaAlbara()` now detects those two keywords (`MEDICAMENT`,
+  `PRESCRIPCI`, case-insensitive) on any row and attaches them to the nearest
+  article line above — handles both cases seen in real photos: the annotation
+  as its own OCR row (loose framing) and merged into the article's own row
+  (full-page framing, since the lines print close together). New fields
+  `medicat`/`prescripcio` flow through `LiniaAlbara` → the review screen
+  (`/pinso/foto`, a tap-to-toggle badge since OCR can miss it, plus the
+  prescription code shown read-only) → `creaEntregaPinso()` →
+  `entrega_pinso.medicat`/`.prescripcio` (schema v7, `scripts/prova-migracio-7.mjs`).
+  Deliberately **not stored**: the sitja number (silo, `82`/`1` in
+  `PPDGD 82 660988`) and the 6-digit lot number — user confirmed these are
+  display-only during review, not meaningful to keep. The user also confirmed
+  that the same article code appearing twice in one albarà with different
+  sitja (`photos-OCR/diff_code.jpeg`) already works correctly as-is: each row
+  is processed independently, so it becomes two separate deliveries of the
+  same tipus_pinso — no code change was needed for that part. Verified with a
+  new synthetic fixture in `scripts/prova-albara.mjs` (37 checks now, was 27
+  this morning) and the new `prova-migracio-7.mjs` (8 checks, both the
+  upgrade-from-v6 and fresh-install paths, per this project's hard rule of
+  testing migrations against real SQLite).
+- 2026-08-13 (photo-scan: first real-device test, two column-detection bugs
+  found and fixed): The Android dev build (item 0 below) is built, installed,
+  and tested on the phone with real albarà photos — the first time this
+  feature has run outside a unit test. Two real bugs found, both in
+  `triaColumna()` in `src/lib/albara.ts`, both only reachable with a
+  **full-page** photo (the original test photo `docs/pinso-example.jpeg` is
+  already fairly wide but happens not to trigger either one): (1) the
+  fallback "rightmost plausible column" heuristic could be won by a column
+  with a single lucky value — e.g. `CODI CLIENT 5192` where `5192` looks like
+  a plausible weight and sits further right than the real kg column — instead
+  of the column actually backed by all the article rows; fixed by preferring
+  the column with the most matching rows, rightmost only as a tie-break.
+  (2) All-caps header words (`MAS`, `CODI`, `EMAS`, `VIC`, from the address
+  block, client-code box, and certification logos) coincidentally match the
+  article-code pattern and aren't excluded unless they're the article-code
+  regex match *and* the first word of their OCR row — codes are always the
+  table's leftmost column, headers/logos never are. Both fixes are covered by
+  a new fixture (`scripts/fixtures/albara-ocr-pagina-sencera.json`, real OCR
+  output from a real full-page photo of this same delivery note) in
+  `scripts/prova-albara.mjs` — suite is now 31 checks, was 27. **Total-row
+  detection is still broken on full-page photos** (a coincidence of layout:
+  "Totals 27.004,00" sits at almost the same photo height as the unrelated
+  "Núm. expedició: 223003/1" line, so they merge into one OCR row and the
+  larger, wrong number wins) — not fixed, because the column-detection bug
+  above no longer depends on it working. Left as a known gap; the app still
+  reads the three line-items and the date/number correctly without it, it
+  just loses the "does it add up to the printed total" cross-check on
+  full-page photos. Also fixed separately: the dev-client's own QR-scan
+  connect screen can fail with "Waiting for the Barcode UI module" if the
+  phone has no internet for Play Services to fetch it on first use — use
+  "enter URL manually" with the Metro/tunnel URL instead, no code change
+  needed for that one.
+- 2026-08-12 (photo-scan of albarans — code done, waiting on the dev build):
+  The whole feature is written and tested except the one step that needs a
+  real device. **Target platform switched to Android**: an EAS *iOS* dev build
+  needs a paid Apple Developer membership (~$99/yr, no free path from Linux —
+  the free Xcode personal-team route needs a Mac), whereas Android dev builds
+  are free APKs. The user confirmed **the parents are on Android**, so that is
+  now the primary target and the Apple cost is avoided entirely for the
+  foreseeable future.
+  - **OCR library: `expo-mlkit-ocr`, NOT `@react-native-ml-kit/text-recognition`**
+    (which this file previously suggested). The latter is unmaintained and
+    untested on the New Architecture, which SDK 54 defaults to. `expo-mlkit-ocr`
+    is an Expo Modules API wrapper over ML Kit v2 with a config plugin, and
+    crucially returns **element-level bounding boxes**.
+  - **Why bounding boxes matter**: the albarà is a table. A bare number is
+    meaningless — whether it's kg, preu or import depends on which column it
+    sits in. `src/lib/albara.ts` reconstructs rows and columns from geometry.
+  - **`src/lib/albara.ts` is pure and tested** (`npm run provar`, 27 checks).
+    The main fixture is *real* OCR output from `docs/pinso-example.jpeg`
+    (`scripts/fixtures/albara-ocr.json`). It reads that photo correctly:
+    albarà 347570, 2026-08-07, 9000/8995/9009 kg — which sum to the 27.004
+    printed on the paper, so the result is independently verifiable.
+  - **Three things the real photo taught us that guesswork would have missed**,
+    all now covered by tests: (1) OCR splits `9.000,00` into two words
+    (`9.000,` + `00`) with *different* y and overlapping boxes; (2) the column
+    headers and the `Totals` row are often illegible, so column detection
+    **cannot** rely on finding "Quantitat" and the total is a bonus check, not
+    an input; (3) a permissive number parser turns `07-08-2026` into 7082026
+    and the lorry plate `R4952BDM` into 4952, making address rows look like
+    line items. `llegeixNumero` is deliberately strict.
+  - **Schema v6** (`article_proveidor` + `entrega_pinso.albara`), verified on
+    real SQLite (`scripts/prova-migracio-6.mjs`, 17 checks) on both the
+    upgrade-from-v5 path and the fresh-install path. The supplier→tipus_pinso
+    mapping is **learned, never guessed**: the first albarà asks once per new
+    code and remembers it. `albara` exists so the same paper can't be counted
+    twice — it's append-only data feeding a forecast, so a duplicate silently
+    inflates stock.
+  - **Left to do**: run the EAS build, install the APK, and test on the phone
+    with a real albarà. Nothing else is blocking.
+- 2026-08-11 (photo-scan feed notes, decision only): The father's wishlist also included scanning a photo of a pinso delivery note (albarà) to auto-fill date/type/kg instead of typing them — see `docs/pinso-example.jpeg` for a real example. That photo shows the real complexity: **one albarà has several line items**, each with a supplier article code (`PTCGD`, `PTGGD`, `PPDGD`, …) that has no relation to this app's `tipus_pinso.codi` — any extraction path needs a code→tipus_pinso mapping step, not just OCR text. Asked the user to choose an approach: cloud vision API (simplest, needs internet+API key+cost), on-device OCR (offline, no cost, but needs leaving Expo Go for an EAS development build), or manual entry with an attached photo (no OCR at all). **User chose on-device OCR.** That means item 4 below (the EAS dev build) has to happen *first*, and it needs the user present for the Expo account/login step — deliberately deferred to a separate session. Nothing implemented yet: no library chosen, no EAS project created.
 - 2026-08-11 (quarterly summary): New `/resum` screen rebuilds the Excel's per-trimestre totals sheet (`docs/excel-analisi.md:140`) from data already in the database — no schema changes. `resumTrimestral()` in `queries.ts` groups `carrega_escorxador` by year+quarter+`tipus` and `entrada_llavores` by year+quarter, then derives `promigKg` (kg/unitats), `rendiment` (kg_canal/kg, porcs only), and `preuKg` — **deliberately `total_factura / kg`, a weighted average, not `AVG(preu_kg)`** across rows, since a simple average would let a small delivery skew the quarter's price as much as a big one. Verified against real imported data: 74.6% rendiment, ~115-119 kg average slaughter weight, ~1.4 €/kg all landed in plausible ranges; a quarter with unfilled invoice fields correctly shows "—" instead of crashing or showing NaN.
 - 2026-08-11 (llavores screen): `entrada_llavores` (truges de reposició que entren, resposta G2) now has screens: `/llavors` (list + "Apuntar una entrada" button), `/llavors/nova` (create), `/llavors/[id]` (view, inline edit, soft delete) — no schema changes needed, the table already had every field. Follows the same "invoice fields can be filled in later" pattern as `carrega_escorxador`: `total_factura`/`preu_kg` are optional at creation. Linked from the home screen's button grid. Verified end-to-end against real imported data on web: list, create, edit, and soft-delete all round-trip correctly.
 - 2026-08-11 (history page + a real web-only rendering bug): Home screen now caps "Cicles" and "Últimes càrregues" to the 10 most recent, each with a "Veure'n més ›" link to a new full-history screen (`/cicle`, `/carrega` — new `index.tsx` in each folder; `llistaCicles`/`llistaCarregues` in `queries.ts` grew an optional `limit` param, `LIMIT ?` with `-1` meaning unlimited). Building this surfaced trap #4 above (`Link asChild` + array style crashes on web with real data) — it was **already present** on the two cycle/load edit-button screens, just never triggered because nobody had tested those screens on web with a non-empty database. Fixed all four occurrences. **Lesson applied going forward: test new web screens against imported/real data, not an empty DB** — this class of bug is invisible on native and invisible on an empty database.
@@ -71,17 +276,25 @@ current screens.
 
 Open, roughly in the order that unblocks the most:
 
-0. **Photo-scan of pinso delivery notes — pick up here next.** The user wants
-   on-device OCR (chosen over a cloud API or plain manual entry — see Project
-   status above for why). That requires an **EAS development build** (item 4
-   below) *before* any OCR library work can start, since on-device text
-   recognition needs a native module Expo Go can't load. This needs the user
-   present to log into/create an Expo account and run the build — don't
-   attempt it solo. Once a dev build exists: pick an on-device OCR library
-   (e.g. `@react-native-ml-kit/text-recognition`), and remember the real
-   document (`docs/pinso-example.jpeg`) has multiple line items per photo,
-   each needing its supplier article code mapped to a `tipus_pinso` — OCR
-   text alone doesn't solve that part.
+0. **Photo-scan of pinso delivery notes — code is done, needs the dev build
+   run.** Everything is written and tested (see Project status above): parser,
+   schema v6, `/pinso/foto` screen. The only remaining step needs the user
+   present:
+
+   ```
+   npx eas-cli register     # only if there's no Expo account yet
+   npx eas-cli login
+   npx eas-cli init
+   npx eas-cli build --platform android --profile development
+   ```
+
+   Then install the APK on the phone and run `npx expo start --dev-client
+   --tunnel`. After that, test with a real albarà and check whether the
+   article codes get mapped correctly the first time.
+
+   `eas.json` and the `app.json` plugin config are already committed.
+   `android.package` is `com.lluis05.granja` — **change it before any Play
+   Store release if you want a different name; it's permanent after that.**
 1. **A corrected spreadsheet is coming.** Don't chase data inconsistencies in
    the current one (see the note under Project status). Re-import path:
    `npm run importar` → undo on `/importar` → import.
@@ -92,11 +305,15 @@ Open, roughly in the order that unblocks the most:
    build each have their own separate database. Every table already carries
    `sincronitzat_el` for this.
 4. **Development build (EAS)** before the parents use it for real. Expo Go is
-   a testing tool and pins us to SDK 54.
-5. **Tables with no screens yet**: `moviment` (the "sobrants" transfers),
-   `baixa` (optional manual deaths), `tractament`, `cens_truges`,
+   a testing tool and pins us to SDK 54. Scaffolding is in place (`eas.json`,
+   `android.package`); see item 0 for the commands. **Android only** — the
+   parents are on Android and iOS dev builds cost $99/yr.
+5. **Tables with no screens yet**: `moviment` (the "sobrants" transfers —
+   recording one is next up, see the queued-requests entry above; its own
+   screen, not on the cicle page), `tractament`, `cens_truges`,
    `factura_pinso`. ~~`entrada_llavores`~~ got one 2026-08-11 (`/llavors`).
-   The rest are imported or importable; none can be entered or viewed in the app.
+   ~~`baixa`~~ got one 2026-08-13 (`/baixa/nova`). The rest are imported or
+   importable; none can be entered or viewed in the app.
 6. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
    estimate good enough, or do they want to record the actual silo level now
    and then to correct it?

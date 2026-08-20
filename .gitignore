@@ -46,3 +46,6 @@ example
 *.log
 .env
 .env.local
+
+# Real delivery-note photos used only as local OCR test fixtures — not for the remote repo
+/photos-OCR/
