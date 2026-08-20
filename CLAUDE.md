@@ -394,6 +394,16 @@ Open, roughly in the order that unblocks the most:
 7. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
    estimate good enough, or do they want to record the actual silo level now
    and then to correct it?
+8. **UI polish, mentioned 2026-08-20, not scoped yet.** The user flagged
+   that the app currently looks "vibecodeada" (screens work but look like a
+   quick prototype: plain system fonts, the "☰" text character standing in
+   for a real icon, ad-hoc spacing) and wants a pass to make it look more
+   like a real app. No direction chosen yet — icon library
+   (`@expo/vector-icons` isn't installed; adding it is pure JS, no EAS
+   rebuild needed), typography, spacing scale, etc. are all open. Lower
+   priority than cens de truges; **ask the user for direction before
+   picking a visual style**, per this file's usual rule of not assuming
+   scope.
 
 ## Notes for future sessions
 - Always re-read this file at the start of a session in this project.
