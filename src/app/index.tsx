@@ -184,6 +184,14 @@ export default function Index() {
           </Link>
         </View>
 
+        <View style={styles.botons}>
+          <Link href="/baixa/nova" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Apuntar una baixa</Text>
+            </Pressable>
+          </Link>
+        </View>
+
         <View style={styles.targeta}>
           <Text style={styles.titolSeccio}>Cicles</Text>
           {cicles.length === 0 && (

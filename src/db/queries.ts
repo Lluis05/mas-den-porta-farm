@@ -344,6 +344,46 @@ export async function corralsAmbPorcsDelCicle(
   );
 }
 
+/** Tots els corrals que ARA tenen porcs, siguin del cicle que siguin. */
+export async function corralsAmbPorcsAra(
+  db: SQLiteDatabase
+): Promise<CorralAmbPorcs[]> {
+  return db.getAllAsync<CorralAmbPorcs>(
+    `SELECT corral_id, sala, meitat, corral, porcs
+     FROM v_ocupacio_actual
+     WHERE porcs > 0
+     ORDER BY sala, meitat DESC, corral`
+  );
+}
+
+/**
+ * Apunta una baixa: tants porcs menys en un o més corrals. Es diu "baixa" a
+ * l'app (com al full del pare), tot i que la taula es diu igual.
+ *
+ * És OPCIONAL i no és la font de veritat: v_cicle_resum ja calcula els morts
+ * per diferència. Això només ho fa explícit i treu porcs de
+ * v_ocupacio_actual de seguida, sense esperar la següent càrrega.
+ */
+export async function creaBaixa(
+  db: SQLiteDatabase,
+  dades: { data: string; linies: { corralId: string; numPorcs: number }[]; motiu?: string | null }
+): Promise<void> {
+  const linies = dades.linies.filter((l) => l.numPorcs > 0);
+  await db.withTransactionAsync(async () => {
+    for (const linia of linies) {
+      await db.runAsync(
+        `INSERT INTO baixa (id, data, corral_id, num_porcs, motiu)
+         VALUES (?, ?, ?, ?, ?)`,
+        Crypto.randomUUID(),
+        dades.data,
+        linia.corralId,
+        linia.numPorcs,
+        dades.motiu ?? null
+      );
+    }
+  });
+}
+
 export type DadesFactura = {
   unitats?: number | null;
   kg?: number | null;
