@@ -54,7 +54,7 @@ export default function DetallCicle() {
   async function esborra() {
     try {
       await esborraCicle(db, id);
-      router.replace('/');
+      router.replace('/inici');
     } catch (e) {
       setConfirmant(false);
       setError(e instanceof Error ? e.message : String(e));

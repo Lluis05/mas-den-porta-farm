@@ -123,7 +123,7 @@ export default function Importar() {
               </>
             )}
             <Pressable
-              onPress={() => router.replace('/')}
+              onPress={() => router.replace('/inici')}
               style={styles.botoPrincipal}
               accessibilityRole="button"
             >

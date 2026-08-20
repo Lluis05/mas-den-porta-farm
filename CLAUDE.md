@@ -40,6 +40,62 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
+- 2026-08-20 (worker login / PIN gate): Fifth and last of the queued requests
+  (see the 2026-08-13 entry below), implemented **differently from how it was
+  first described** — the user reframed it mid-session: instead of a worker
+  view reached *from* the existing dashboard, the **default screen (`/`) is
+  now the worker view**, and the dashboard moves *behind* a PIN.
+  - `src/lib/admin.tsx`: `AdminProvider`/`useAdmin()`, a small React context
+    holding `isAdmin` in memory only — **no persistence** (no SecureStore/
+    AsyncStorage dependency added on purpose, to avoid forcing another EAS
+    dev-client rebuild for this). It resets to the worker view every time the
+    app restarts, same as a screen lock. Shared PIN, hardcoded `4163`, not
+    per-user accounts — matches what was already decided for this feature.
+  - New `src/app/index.tsx` ("/") **is** the worker screen: one button,
+    "Apuntar una baixa" (already existed, still ungated), plus a hamburger
+    icon that opens a right-side PIN panel (`Modal`, not a real drawer lib —
+    no new dependency). Correct PIN → `router.replace('/inici')`.
+  - The **entire previous dashboard** (cicles, pinso, càrregues, llavors,
+    resum, importar — everything) moved into a route group,
+    `src/app/(admin)/`, whose own `_layout.tsx` is the gate: if `!isAdmin` it
+    `<Redirect href="/" />`s, otherwise renders a `<Stack>`. **Group folders
+    don't change the URL** (`(admin)/cicle` is still served at `/cicle`), so
+    every existing link/route in the app kept working unchanged except the
+    old home, which needed a new name — chosen `/inici` — and the three
+    `router.replace('/')` calls after delete/undo actions in
+    `cicle/[id]/index.tsx`, `carrega/[id]/index.tsx`, and `importar.tsx`,
+    updated to `router.replace('/inici')` so they land back on the dashboard,
+    not the worker screen. The old dashboard's own header now also carries a
+    "Tancar sessió" button (`bloqueja()` + `replace('/')`).
+  - **One real bug hit and fixed while building this**: the `(admin)`
+    layout's guard first returned `<Slot />` on success. That's wrong — a
+    `<Slot>` has no header of its own, so every `<Stack.Screen options={{title:
+    …}}>` call inside the moved screens stopped taking effect, and the header
+    silently fell back to showing the raw route-group segment name,
+    `(admin)`, with no title and no headerRight button at all (found via
+    screenshot, not types — `tsc` and the export both stayed clean through
+    this). Fixed by having the guard return its own `<Stack>` (with the same
+    `screenOptions` as the root) instead of `<Slot>`, and marking the
+    `(admin)` segment `headerShown: false` in the *root* Stack.Screen so the
+    two navigators don't stack two header bars. **New trap for this file**:
+    a nested route-group `_layout.tsx` that gates access must render its own
+    `<Stack>`, not `<Slot>`, or per-screen `<Stack.Screen>` header options
+    inside that group silently stop working.
+  - Verified end-to-end on web (`npx expo export --platform web` clean,
+    `tsc --noEmit` clean, then live in a browser): worker screen loads at
+    `/`; typing a wrong PIN shows "PIN incorrecte" and doesn't unlock;
+    `4163` unlocks and lands on `/inici` with real data (3,638 pigs, full
+    cicle list); navigating into `/cicle/[id]` while unlocked works exactly
+    as before (collapsible sales, "Apuntar un moviment"); "Tancar sessió"
+    returns to `/`; and — the actual point of this feature — navigating
+    straight to `/inici` by URL **without** unlocking first bounces back to
+    `/`.
+  - **Not done / open**: no logout timer, no persistence across app
+    restarts (deliberate, see above), and the "how do I get back to the
+    worker view from the admin side without the button" question doesn't
+    arise since it's always reachable at `/`. If persistence is wanted later,
+    it needs `expo-secure-store` — a new native dependency, so a fresh EAS
+    dev-client build before it can be tested on the phone.
 - 2026-08-13 (moviment screen: multi-select + collapsible sales): Follow-up
   on the moviment screen shipped minutes earlier. User wanted two UI changes:
   (1) pick **more than one** corralina on both the origin and destination
@@ -276,23 +332,10 @@ current screens.
 
 Open, roughly in the order that unblocks the most:
 
-0. **Photo-scan of pinso delivery notes — code is done, needs the dev build
-   run.** Everything is written and tested (see Project status above): parser,
-   schema v6, `/pinso/foto` screen. The only remaining step needs the user
-   present:
-
-   ```
-   npx eas-cli register     # only if there's no Expo account yet
-   npx eas-cli login
-   npx eas-cli init
-   npx eas-cli build --platform android --profile development
-   ```
-
-   Then install the APK on the phone and run `npx expo start --dev-client
-   --tunnel`. After that, test with a real albarà and check whether the
-   article codes get mapped correctly the first time.
-
-   `eas.json` and the `app.json` plugin config are already committed.
+0. ~~Photo-scan of pinso delivery notes~~ — done. Built, EAS dev build run,
+   APK installed on the parents' Android phone, and **tested on-device with
+   real albarans** (two real bugs found and fixed, see the 2026-08-13 entry
+   above). `eas.json` and the `app.json` plugin config are committed.
    `android.package` is `com.lluis05.granja` — **change it before any Play
    Store release if you want a different name; it's permanent after that.**
 1. **A corrected spreadsheet is coming.** Don't chase data inconsistencies in
@@ -304,17 +347,27 @@ Open, roughly in the order that unblocks the most:
    "two surfaces, one dataset" constraint is unmet — the phone and the web
    build each have their own separate database. Every table already carries
    `sincronitzat_el` for this.
-4. **Development build (EAS)** before the parents use it for real. Expo Go is
-   a testing tool and pins us to SDK 54. Scaffolding is in place (`eas.json`,
-   `android.package`); see item 0 for the commands. **Android only** — the
-   parents are on Android and iOS dev builds cost $99/yr.
-5. **Tables with no screens yet**: `moviment` (the "sobrants" transfers —
-   recording one is next up, see the queued-requests entry above; its own
-   screen, not on the cicle page), `tractament`, `cens_truges`,
+4. **Development build (EAS)** exists and is installed on the parents' phone
+   (see item 0). Still worth doing eventually: a **new build is needed**
+   whenever a native dependency changes (e.g. if worker-login persistence
+   gets added via `expo-secure-store`, see the 2026-08-20 entry above) —
+   pure-JS changes (screens, queries, most of this session's work) don't
+   need a rebuild, `expo start --dev-client --tunnel` picks them up live.
+5. ~~Worker login (PIN gate)~~ — done 2026-08-20, see Project status above.
+   Was the fourth of the five queued requests; **cens de truges (below) is
+   the last one remaining.**
+   **Tables still with no screen**: `tractament`, `cens_truges`,
    `factura_pinso`. ~~`entrada_llavores`~~ got one 2026-08-11 (`/llavors`).
-   ~~`baixa`~~ got one 2026-08-13 (`/baixa/nova`). The rest are imported or
+   ~~`baixa`~~ got one 2026-08-13 (`/baixa/nova`). ~~`moviment`~~ got one
+   2026-08-13 (`/cicle/[id]/moviment/nou`). The rest are imported or
    importable; none can be entered or viewed in the app.
-6. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
+6. **Cens de truges** (breeding sow census, request 3 from the 2026-08-13
+   queue) — last of the five queued requests, deliberately saved for last
+   since least defined. Mirrors the Excel's `cens24` sheet: initial count
+   from Excel import **and** a manual recount the user does by hand: additions
+   from inseminated primals (llavores don't count until first inseminated),
+   subtractions from baixes + truges de rebuig, no per-farm split.
+7. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
    estimate good enough, or do they want to record the actual silo level now
    and then to correct it?
 
