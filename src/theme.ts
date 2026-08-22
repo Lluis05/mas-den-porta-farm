@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 /** Colors i mides compartits. Un sol lloc per canviar l'aspecte de tot. */
 
 export const colors = {
@@ -21,4 +23,15 @@ export const mides = {
   toc: 46,
   radi: 12,
   espai: 12,
+  /**
+   * Marge inferior extra als formularis dins d'un ScrollView. Sense això,
+   * un camp a prop del final de la pàgina no té on pujar quan surt el
+   * teclat: l'scroll només pot desplaçar el que hi ha per sota, i si no hi
+   * ha prou espai en blanc, el camp es queda tapat pel teclat encara que
+   * l'app "intenti" pujar la pantalla. El valor cobreix un teclat típic
+   * d'Android o iOS amb marge. A la web (s'usa a l'escriptori, sense teclat
+   * virtual que tapi res) es queda com abans, per no deixar un buit enorme
+   * sota el botó de desar.
+   */
+  espaiTeclat: Platform.OS === 'web' ? 40 : 320,
 };

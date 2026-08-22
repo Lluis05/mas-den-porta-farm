@@ -1286,3 +1286,450 @@ export async function resumTrimestral(db: SQLiteDatabase): Promise<ResumTrimestr
     (a, b) => b.any - a.any || b.trimestre - a.trimestre
   );
 }
+
+// ---------------------------------------------------------------------------
+// Deslletament (full "Cens24" de l'Excel, fase 1: fins a la inseminació)
+// ---------------------------------------------------------------------------
+
+export type UbicacioReproduccio = {
+  id: string;
+  tipus: 'inseminacio' | 'gestacio';
+  codi: string;
+};
+
+export async function llistaUbicacionsReproduccio(
+  db: SQLiteDatabase
+): Promise<UbicacioReproduccio[]> {
+  return db.getAllAsync<UbicacioReproduccio>(
+    `SELECT id, tipus, codi FROM ubicacio_reproduccio
+     WHERE esborrat_el IS NULL ORDER BY tipus, codi`
+  );
+}
+
+export type DeslletamentLlista = {
+  id: string;
+  banda: number;
+  data_desmamat: string;
+  truges_desmamades: number | null;
+  porcs_desmamats: number | null;
+  data_inseminacio: string | null;
+  primales: number | null;
+};
+
+export async function llistaDeslletaments(
+  db: SQLiteDatabase,
+  limit?: number
+): Promise<DeslletamentLlista[]> {
+  return db.getAllAsync<DeslletamentLlista>(
+    `SELECT d.id, b.numero AS banda, d.data_desmamat, d.truges_desmamades,
+            d.porcs_desmamats, d.data_inseminacio, d.primales
+     FROM deslletament d
+     JOIN banda b ON b.id = d.banda_id
+     WHERE d.esborrat_el IS NULL
+     ORDER BY d.data_desmamat DESC, d.creat_el DESC
+     LIMIT ?`,
+    limit ?? -1
+  );
+}
+
+export type DeslletamentDetall = {
+  id: string;
+  banda_id: string;
+  banda: number;
+  data_desmamat: string;
+  truges_criades: number | null;
+  truges_desmamades: number | null;
+  porcs_vius_1a_setmana: number | null;
+  porcs_desmamats: number | null;
+  observacions: string | null;
+  data_inseminacio: string | null;
+  insem_total: number | null;
+  repetidores: number | null;
+  primales: number | null;
+  plenes: number | null;
+  pct_baixes_parideres: number | null;
+  mitjana_porcs_truja: number | null;
+  pct_plenes: number | null;
+  posicions_inseminar_ids: string[];
+  posicions_gestacio_ids: string[];
+};
+
+export async function detallDeslletament(
+  db: SQLiteDatabase,
+  deslletamentId: string
+): Promise<DeslletamentDetall | null> {
+  const base = await db.getFirstAsync<Omit<
+    DeslletamentDetall,
+    'posicions_inseminar_ids' | 'posicions_gestacio_ids'
+  >>(
+    `SELECT d.*, b.numero AS banda
+     FROM deslletament d
+     JOIN banda b ON b.id = d.banda_id
+     WHERE d.id = ? AND d.esborrat_el IS NULL`,
+    deslletamentId
+  );
+  if (!base) return null;
+
+  const posicions = await db.getAllAsync<{
+    ubicacio_id: string;
+    tipus: 'inseminacio' | 'gestacio';
+  }>(
+    `SELECT dp.ubicacio_id, u.tipus
+     FROM deslletament_posicio dp
+     JOIN ubicacio_reproduccio u ON u.id = dp.ubicacio_id
+     WHERE dp.deslletament_id = ? AND dp.esborrat_el IS NULL`,
+    deslletamentId
+  );
+
+  return {
+    ...base,
+    posicions_inseminar_ids: posicions
+      .filter((p) => p.tipus === 'inseminacio')
+      .map((p) => p.ubicacio_id),
+    posicions_gestacio_ids: posicions
+      .filter((p) => p.tipus === 'gestacio')
+      .map((p) => p.ubicacio_id),
+  };
+}
+
+export type DadesDeslletament = {
+  bandaId: string;
+  dataDesmamat: string;
+  truges_criades: number | null;
+  truges_desmamades: number | null;
+  porcs_vius_1a_setmana: number | null;
+  porcs_desmamats: number | null;
+  posicionsInseminarIds: string[];
+  posicionsGestacioIds: string[];
+  observacions: string | null;
+};
+
+async function desaPosicionsDeslletament(
+  db: SQLiteDatabase,
+  deslletamentId: string,
+  dades: DadesDeslletament
+): Promise<void> {
+  for (const ubicacioId of [
+    ...dades.posicionsInseminarIds,
+    ...dades.posicionsGestacioIds,
+  ]) {
+    await db.runAsync(
+      `INSERT INTO deslletament_posicio (id, deslletament_id, ubicacio_id)
+       VALUES (?, ?, ?)`,
+      Crypto.randomUUID(),
+      deslletamentId,
+      ubicacioId
+    );
+  }
+}
+
+export async function creaDeslletament(
+  db: SQLiteDatabase,
+  dades: DadesDeslletament
+): Promise<string> {
+  const id = Crypto.randomUUID();
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `INSERT INTO deslletament
+         (id, banda_id, data_desmamat, truges_criades, truges_desmamades,
+          porcs_vius_1a_setmana, porcs_desmamats, observacions)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      id,
+      dades.bandaId,
+      dades.dataDesmamat,
+      dades.truges_criades,
+      dades.truges_desmamades,
+      dades.porcs_vius_1a_setmana,
+      dades.porcs_desmamats,
+      dades.observacions
+    );
+    await desaPosicionsDeslletament(db, id, dades);
+  });
+  return id;
+}
+
+export async function actualitzaDeslletament(
+  db: SQLiteDatabase,
+  deslletamentId: string,
+  dades: DadesDeslletament
+): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE deslletament SET
+         banda_id = ?, data_desmamat = ?, truges_criades = ?, truges_desmamades = ?,
+         porcs_vius_1a_setmana = ?, porcs_desmamats = ?, observacions = ?,
+         modificat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      dades.bandaId,
+      dades.dataDesmamat,
+      dades.truges_criades,
+      dades.truges_desmamades,
+      dades.porcs_vius_1a_setmana,
+      dades.porcs_desmamats,
+      dades.observacions,
+      deslletamentId
+    );
+    // Es refà la selecció sencera: més senzill que calcular la diferència, i
+    // les posicions no tenen cap valor propi que calgui conservar en editar.
+    await db.runAsync(
+      `UPDATE deslletament_posicio
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE deslletament_id = ? AND esborrat_el IS NULL`,
+      deslletamentId
+    );
+    await desaPosicionsDeslletament(db, deslletamentId, dades);
+  });
+}
+
+export type DadesInseminacio = {
+  dataInseminacio: string;
+  insem_total: number | null;
+  repetidores: number | null;
+  primales: number | null;
+};
+
+/** Fase 2 (resposta B3): s'omple uns dies després del deslletament. */
+export async function apuntaInseminacio(
+  db: SQLiteDatabase,
+  deslletamentId: string,
+  dades: DadesInseminacio
+): Promise<void> {
+  await db.runAsync(
+    `UPDATE deslletament SET
+       data_inseminacio = ?, insem_total = ?, repetidores = ?, primales = ?,
+       modificat_el = datetime('now'), sincronitzat_el = NULL
+     WHERE id = ?`,
+    dades.dataInseminacio,
+    dades.insem_total,
+    dades.repetidores,
+    dades.primales,
+    deslletamentId
+  );
+}
+
+/** Esborrat tou: la fila es marca, mai es perd (regla del model de dades). */
+export async function esborraDeslletament(
+  db: SQLiteDatabase,
+  deslletamentId: string
+): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      `UPDATE deslletament_posicio
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE deslletament_id = ? AND esborrat_el IS NULL`,
+      deslletamentId
+    );
+    await db.runAsync(
+      `UPDATE deslletament
+       SET esborrat_el = datetime('now'), sincronitzat_el = NULL
+       WHERE id = ?`,
+      deslletamentId
+    );
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Cens de truges
+// ---------------------------------------------------------------------------
+
+export type CensTrugesActual = {
+  data_recompte: string;
+  recompte: number;
+  altes: number;
+  baixes_mort: number;
+  baixes_rebuig: number;
+  total: number;
+};
+
+/** null si encara no s'ha fet cap recompte. */
+export async function censTrugesActual(
+  db: SQLiteDatabase
+): Promise<CensTrugesActual | null> {
+  return db.getFirstAsync<CensTrugesActual>('SELECT * FROM v_cens_truges_actual');
+}
+
+export type RecompteTruges = { id: string; data: string; num_truges: number };
+
+export async function llistaRecomptesTruges(
+  db: SQLiteDatabase,
+  limit?: number
+): Promise<RecompteTruges[]> {
+  return db.getAllAsync<RecompteTruges>(
+    `SELECT id, data, num_truges FROM cens_truges
+     WHERE esborrat_el IS NULL
+     ORDER BY data DESC, creat_el DESC
+     LIMIT ?`,
+    limit ?? -1
+  );
+}
+
+export async function creaRecompteTruges(
+  db: SQLiteDatabase,
+  data: string,
+  numTruges: number
+): Promise<string> {
+  const id = Crypto.randomUUID();
+  await db.runAsync(
+    'INSERT INTO cens_truges (id, data, num_truges) VALUES (?, ?, ?)',
+    id,
+    data,
+    numTruges
+  );
+  return id;
+}
+
+export type BaixaTruja = { id: string; data: string; num_truges: number; motiu: string | null };
+
+export async function llistaBaixesTruja(
+  db: SQLiteDatabase,
+  limit?: number
+): Promise<BaixaTruja[]> {
+  return db.getAllAsync<BaixaTruja>(
+    `SELECT id, data, num_truges, motiu FROM baixa_truja
+     WHERE esborrat_el IS NULL
+     ORDER BY data DESC, creat_el DESC
+     LIMIT ?`,
+    limit ?? -1
+  );
+}
+
+export async function creaBaixaTruja(
+  db: SQLiteDatabase,
+  data: string,
+  numTruges: number,
+  motiu: string | null
+): Promise<string> {
+  const id = Crypto.randomUUID();
+  await db.runAsync(
+    'INSERT INTO baixa_truja (id, data, num_truges, motiu) VALUES (?, ?, ?, ?)',
+    id,
+    data,
+    numTruges,
+    motiu
+  );
+  return id;
+}
+
+// ---------------------------------------------------------------------------
+// Taules completes: una fila per registre, totes les columnes, sense
+// paginar — la vista "com un full d'Excel" (/taules). Cap d'aquestes
+// consultes talla amb LIMIT: aquesta pantalla és precisament la que vol
+// veure-ho tot d'una tacada.
+// ---------------------------------------------------------------------------
+
+export type FilaDeslletamentTaula = {
+  id: string;
+  banda: number;
+  data_desmamat: string;
+  truges_criades: number | null;
+  truges_desmamades: number | null;
+  porcs_vius_1a_setmana: number | null;
+  porcs_desmamats: number | null;
+  pct_baixes_parideres: number | null;
+  mitjana_porcs_truja: number | null;
+  data_inseminacio: string | null;
+  insem_total: number | null;
+  repetidores: number | null;
+  primales: number | null;
+  plenes: number | null;
+  pct_plenes: number | null;
+  posicions_inseminar: string | null;
+  posicions_gestacio: string | null;
+  observacions: string | null;
+};
+
+export async function taulaDeslletaments(
+  db: SQLiteDatabase
+): Promise<FilaDeslletamentTaula[]> {
+  return db.getAllAsync<FilaDeslletamentTaula>(
+    `SELECT
+       d.id, b.numero AS banda, d.data_desmamat, d.truges_criades, d.truges_desmamades,
+       d.porcs_vius_1a_setmana, d.porcs_desmamats, d.pct_baixes_parideres,
+       d.mitjana_porcs_truja, d.data_inseminacio, d.insem_total, d.repetidores,
+       d.primales, d.plenes, d.pct_plenes,
+       (SELECT GROUP_CONCAT(u.codi, ', ') FROM deslletament_posicio dp
+          JOIN ubicacio_reproduccio u ON u.id = dp.ubicacio_id
+          WHERE dp.deslletament_id = d.id AND dp.esborrat_el IS NULL
+            AND u.tipus = 'inseminacio') AS posicions_inseminar,
+       (SELECT GROUP_CONCAT(u.codi, ', ') FROM deslletament_posicio dp
+          JOIN ubicacio_reproduccio u ON u.id = dp.ubicacio_id
+          WHERE dp.deslletament_id = d.id AND dp.esborrat_el IS NULL
+            AND u.tipus = 'gestacio') AS posicions_gestacio,
+       d.observacions
+     FROM deslletament d
+     JOIN banda b ON b.id = d.banda_id
+     WHERE d.esborrat_el IS NULL
+     ORDER BY d.data_desmamat DESC`
+  );
+}
+
+export async function taulaCicles(db: SQLiteDatabase): Promise<CicleResum[]> {
+  return db.getAllAsync<CicleResum>(
+    'SELECT * FROM v_cicle_resum ORDER BY data_entrada DESC, banda'
+  );
+}
+
+export type FilaCarregaTaula = {
+  id: string;
+  data_carrega: string;
+  tipus: TipusCarrega;
+  unitats: number | null;
+  kg: number | null;
+  kg_canal: number | null;
+  promig_kg: number | null;
+  rendiment: number | null;
+  total_factura: number | null;
+  preu_kg: number | null;
+  preu_referencia: number | null;
+  diferencia: number | null;
+};
+
+export async function taulaCarregues(db: SQLiteDatabase): Promise<FilaCarregaTaula[]> {
+  return db.getAllAsync<FilaCarregaTaula>(
+    `SELECT id, data_carrega, tipus, unitats, kg, kg_canal, promig_kg, rendiment,
+            total_factura, preu_kg, preu_referencia, diferencia
+     FROM carrega_escorxador
+     WHERE esborrat_el IS NULL
+     ORDER BY data_carrega DESC`
+  );
+}
+
+export type FilaPinsoTaula = {
+  id: string;
+  data: string;
+  tipus_pinso: string;
+  kg: number;
+  albara: string | null;
+  medicat: number;
+  prescripcio: string | null;
+};
+
+export async function taulaPinso(db: SQLiteDatabase): Promise<FilaPinsoTaula[]> {
+  return db.getAllAsync<FilaPinsoTaula>(
+    `SELECT ep.id, ep.data, tp.codi AS tipus_pinso, ep.kg, ep.albara,
+            ep.medicat, ep.prescripcio
+     FROM entrega_pinso ep
+     JOIN tipus_pinso tp ON tp.id = ep.tipus_pinso_id
+     WHERE ep.esborrat_el IS NULL
+     ORDER BY ep.data DESC`
+  );
+}
+
+export type FilaLlavorsTaula = {
+  id: string;
+  data: string;
+  unitats: number | null;
+  kg: number | null;
+  promig_kg: number | null;
+  total_factura: number | null;
+  preu_kg: number | null;
+};
+
+export async function taulaLlavors(db: SQLiteDatabase): Promise<FilaLlavorsTaula[]> {
+  return db.getAllAsync<FilaLlavorsTaula>(
+    `SELECT id, data, unitats, kg, promig_kg, total_factura, preu_kg
+     FROM entrada_llavores
+     WHERE esborrat_el IS NULL
+     ORDER BY data DESC`
+  );
+}

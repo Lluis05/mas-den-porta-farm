@@ -32,7 +32,9 @@ export const TAULES_DE_DADES = [
   'ubicacio_reproduccio',
   'banda',
   'deslletament',
+  'deslletament_posicio',
   'cens_truges',
+  'baixa_truja',
   'entrada_llavores',
   'transicio',
   'cicle_engreix',
@@ -182,6 +184,42 @@ LEFT JOIN entrega_pinso ep
   ON ep.tipus_pinso_id = tp.id AND ep.esborrat_el IS NULL
 WHERE tp.esborrat_el IS NULL
 GROUP BY tp.id;
+
+-- Total de truges ara mateix: el recompte manual més recent, més les altes
+-- (primales que s'han inseminat per primer cop després d'aquell recompte)
+-- i menys les baixes (morts + truges de rebuig venudes) des d'aleshores.
+-- Sense cap recompte fet encara, la vista no dona cap fila.
+DROP VIEW IF EXISTS v_cens_truges_actual;
+CREATE VIEW v_cens_truges_actual AS
+WITH darrer AS (
+  SELECT data, num_truges FROM cens_truges
+  WHERE esborrat_el IS NULL
+  ORDER BY data DESC, creat_el DESC
+  LIMIT 1
+)
+SELECT
+  d.data                                                          AS data_recompte,
+  d.num_truges                                                    AS recompte,
+  COALESCE(a.altes, 0)                                            AS altes,
+  COALESCE(bm.baixes, 0)                                          AS baixes_mort,
+  COALESCE(br.baixes, 0)                                          AS baixes_rebuig,
+  d.num_truges + COALESCE(a.altes, 0)
+    - COALESCE(bm.baixes, 0) - COALESCE(br.baixes, 0)              AS total
+FROM darrer d
+LEFT JOIN (
+  SELECT SUM(primales) AS altes FROM deslletament
+  WHERE esborrat_el IS NULL AND primales IS NOT NULL AND data_inseminacio IS NOT NULL
+    AND data_inseminacio > (SELECT data FROM darrer)
+) a ON 1 = 1
+LEFT JOIN (
+  SELECT SUM(num_truges) AS baixes FROM baixa_truja
+  WHERE esborrat_el IS NULL AND data > (SELECT data FROM darrer)
+) bm ON 1 = 1
+LEFT JOIN (
+  SELECT SUM(unitats) AS baixes FROM carrega_escorxador
+  WHERE esborrat_el IS NULL AND tipus = 'truges_rebuig'
+    AND data_carrega > (SELECT data FROM darrer)
+) br ON 1 = 1;
 `;
 
 export const SCHEMA_SQL = `
@@ -252,8 +290,6 @@ CREATE TABLE IF NOT EXISTS deslletament (
   truges_desmamades      INTEGER,
   porcs_vius_1a_setmana  INTEGER,
   porcs_desmamats        INTEGER,
-  posicio_inseminar_id   TEXT REFERENCES ubicacio_reproduccio(id),
-  posicio_gestacio_id    TEXT REFERENCES ubicacio_reproduccio(id),
   observacions           TEXT,
 
   -- S'omplen més tard, en inseminar (resposta B3)
@@ -284,10 +320,40 @@ CREATE TABLE IF NOT EXISTS deslletament (
 CREATE INDEX IF NOT EXISTS idx_deslletament_data ON deslletament(data_desmamat);
 CREATE INDEX IF NOT EXISTS idx_deslletament_banda ON deslletament(banda_id);
 
+-- Posicions d'inseminar/gestació d'un deslletament: poden ser més d'una a la
+-- vegada (p.ex. "L2 + L4" a l'Excel), així que és una taula pont, no una
+-- columna. Quin tipus és cada posició (inseminacio/gestacio) ja el diu
+-- ubicacio_reproduccio.tipus, no cal repetir-ho aquí.
+CREATE TABLE IF NOT EXISTS deslletament_posicio (
+  id               TEXT PRIMARY KEY,
+  deslletament_id  TEXT NOT NULL REFERENCES deslletament(id),
+  ubicacio_id      TEXT NOT NULL REFERENCES ubicacio_reproduccio(id),
+  ${COMUNES}
+);
+
+CREATE INDEX IF NOT EXISTS idx_deslpos_deslletament
+  ON deslletament_posicio(deslletament_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_deslpos_unica
+  ON deslletament_posicio(deslletament_id, ubicacio_id) WHERE esborrat_el IS NULL;
+
+-- Recompte manual fet a mà en una data (resposta B6). El total actual es
+-- calcula (v_cens_truges_actual) a partir del recompte més recent més les
+-- altes i baixes posteriors: aquesta taula és la base, no l'únic valor vàlid.
 CREATE TABLE IF NOT EXISTS cens_truges (
   id          TEXT PRIMARY KEY,
   data        TEXT NOT NULL,
   num_truges  INTEGER NOT NULL,
+  ${COMUNES}
+);
+
+-- Baixes de truges (mort). A diferència de la taula baixa (corrals d'engreix,
+-- on el número bo és el calculat per diferència a v_cicle_resum), aquí NO hi
+-- ha cap manera de deduir-ho: aquesta taula és l'única font de veritat.
+CREATE TABLE IF NOT EXISTS baixa_truja (
+  id          TEXT PRIMARY KEY,
+  data        TEXT NOT NULL,
+  num_truges  INTEGER NOT NULL,
+  motiu       TEXT,
   ${COMUNES}
 );
 

@@ -394,7 +394,7 @@ function Camp({
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.fons },
   centrat: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: 40 },
+  pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: mides.espaiTeclat },
   targeta: {
     backgroundColor: colors.targeta,
     borderRadius: mides.radi,

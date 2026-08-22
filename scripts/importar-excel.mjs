@@ -42,13 +42,23 @@ const full = (nom) =>
       })
     : null;
 
-/** Data d'Excel -> "2026-08-10". Torna null si no és una data raonable. */
+/**
+ * Data d'Excel -> "2026-08-10". Torna null si no és una data raonable.
+ *
+ * SheetJS (amb cellDates: true) construeix el Date fent servir els
+ * mètodes LOCALS de la màquina que llegeix el fitxer (equivalent a
+ * `new Date(any, mes, dia, ...)`, no `Date.UTC(...)`). Per tant s'ha de
+ * llegir amb els getters locals (getFullYear/getMonth/getDate), no els
+ * UTC: usar els UTC va fer que, en una màquina per davant de UTC (com
+ * Espanya), tota data quedés un dia enrere (p.ex. Cens24 fila 8, banda 1,
+ * és "9/24/21" a l'Excel i es guardava "2021-09-23"). Descobert 2026-08-22.
+ */
 function data(v) {
   if (!(v instanceof Date) || Number.isNaN(v.getTime())) return null;
-  const any = v.getUTCFullYear();
+  const any = v.getFullYear();
   if (any < 2015 || any > 2100) return null;
-  const m = String(v.getUTCMonth() + 1).padStart(2, '0');
-  const d = String(v.getUTCDate()).padStart(2, '0');
+  const m = String(v.getMonth() + 1).padStart(2, '0');
+  const d = String(v.getDate()).padStart(2, '0');
   return `${any}-${m}-${d}`;
 }
 

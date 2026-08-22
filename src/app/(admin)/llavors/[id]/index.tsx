@@ -277,7 +277,7 @@ function CampEditable({
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.fons },
-  pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: 40 },
+  pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: mides.espaiTeclat },
   ajuda: { fontSize: 13, color: colors.discret },
   targeta: {
     backgroundColor: colors.targeta,

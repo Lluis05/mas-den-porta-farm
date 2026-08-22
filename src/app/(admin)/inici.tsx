@@ -127,6 +127,19 @@ export default function Index() {
           <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
         </View>
 
+        <View style={styles.botons}>
+          <Link href="/panell" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Panell</Text>
+            </Pressable>
+          </Link>
+          <Link href="/taules" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Totes les dades</Text>
+            </Pressable>
+          </Link>
+        </View>
+
         {pinsoEndarrerit && (
           <Link href="/pinso" asChild>
             <Pressable
@@ -206,6 +219,19 @@ export default function Index() {
           <Link href="/baixa/nova" asChild>
             <Pressable style={styles.botoSecundari} accessibilityRole="button">
               <Text style={styles.botoSecundariText}>Apuntar una baixa</Text>
+            </Pressable>
+          </Link>
+        </View>
+
+        <View style={styles.botons}>
+          <Link href="/cens" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Cens de truges</Text>
+            </Pressable>
+          </Link>
+          <Link href="/deslletament" asChild>
+            <Pressable style={styles.botoSecundari} accessibilityRole="button">
+              <Text style={styles.botoSecundariText}>Deslletaments</Text>
             </Pressable>
           </Link>
         </View>

@@ -122,6 +122,26 @@ export async function jaImportat(
   );
 }
 
+export type ImportacioAnterior = { id: string; generat: string; fet_el: string };
+
+/**
+ * Una importació que ja hi és però NO és d'aquest fitxer (típicament perquè
+ * ha arribat un Excel corregit i s'ha tornat a executar `npm run importar`,
+ * que sempre genera un `generat` nou). `jaImportat()` no la troba, perquè
+ * compara pel `generat` d'ara — sense això, la pantalla no sabria que hi ha
+ * una importació antiga pendent de desfer, i tornar a importar duplicaria
+ * les dades en lloc de substituir-les. Cal desfer-la abans d'importar la
+ * nova. Descobert 2026-08-22 arreglant el bug de la data errònia.
+ */
+export async function importacioAnterior(
+  db: SQLiteDatabase
+): Promise<ImportacioAnterior | null> {
+  return db.getFirstAsync<ImportacioAnterior>(
+    'SELECT id, generat, fet_el FROM importacio WHERE generat != ? ORDER BY fet_el DESC LIMIT 1',
+    dades.generat
+  );
+}
+
 /**
  * Desfà una importació sencera: marca com esborrades totes les files que va
  * crear, a totes les taules. Les dades que hagis introduït tu a mà no es
@@ -191,6 +211,22 @@ export async function importaDades(
     'SELECT id, codi FROM ubicacio_reproduccio'
   )) {
     ubicacions.set(u.codi.toUpperCase(), u.id);
+  }
+
+  /**
+   * Una posició pot ser més d'una a la vegada, escrit a l'Excel com
+   * "L2 + L4" (resposta B3 / docs/excel-analisi.md). Els codis que no
+   * coincideixen amb cap ubicacio_reproduccio coneguda es descarten en
+   * silenci, igual que ja feia abans amb un sol codi.
+   */
+  function ubicacionsDelText(text: string | null): string[] {
+    if (!text) return [];
+    return text
+      .split('+')
+      .map((part) => part.trim().toUpperCase())
+      .filter((part) => part.length > 0)
+      .map((part) => ubicacions.get(part))
+      .filter((id): id is string => id != null);
   }
 
   /** Els ids dels corrals d'un codi tipus "11 1-2-3-4E". */
@@ -271,9 +307,8 @@ export async function importaDades(
         `INSERT INTO deslletament
            (id, banda_id, data_desmamat, truges_criades, truges_desmamades,
             porcs_vius_1a_setmana, porcs_desmamats, insem_total, repetidores,
-            primales, plenes, observacions, posicio_inseminar_id, posicio_gestacio_id,
-            importacio_id)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            primales, plenes, observacions, importacio_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         deslletamentId,
         bandaId,
         d.dataDesmamat,
@@ -286,14 +321,22 @@ export async function importaDades(
         d.primales,
         d.plenes,
         d.observacions,
-        d.posicioInseminar
-          ? (ubicacions.get(d.posicioInseminar.toUpperCase()) ?? null)
-          : null,
-        d.posicioGestacio
-          ? (ubicacions.get(d.posicioGestacio.toUpperCase()) ?? null)
-          : null,
         importacioId
       );
+
+      for (const ubicacioId of [
+        ...ubicacionsDelText(d.posicioInseminar),
+        ...ubicacionsDelText(d.posicioGestacio),
+      ]) {
+        await db.runAsync(
+          `INSERT INTO deslletament_posicio (id, deslletament_id, ubicacio_id, importacio_id)
+           VALUES (?, ?, ?, ?)`,
+          Crypto.randomUUID(),
+          deslletamentId,
+          ubicacioId,
+          importacioId
+        );
+      }
 
       // La transició es fa fora: només en guardem les dues xifres (resposta G1).
       if (d.porcsDesmamats != null || d.porcsEngreix != null) {

@@ -6,8 +6,10 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   desfesImportacio,
   importaDades,
+  importacioAnterior,
   jaImportat,
   resumDelFitxer,
+  type ImportacioAnterior,
   type ImportacioFeta,
   type ResumImportacio,
 } from '@/db/importacio';
@@ -17,15 +19,23 @@ export default function Importar() {
   const db = useSQLiteContext();
   const [resum] = useState<ResumImportacio>(() => resumDelFitxer());
   const [fet, setFet] = useState<ImportacioFeta | null | undefined>(undefined);
+  // Importació d'un fitxer VELL (Excel corregit rebut, npm run importar
+  // reexecutat): jaImportat() no la troba perquè compara pel `generat`
+  // d'ara. Sense detectar-la a part, tornar a importar la duplicaria.
+  const [anterior, setAnterior] = useState<ImportacioAnterior | null | undefined>(
+    undefined
+  );
   const [important, setImportant] = useState(false);
   const [problemes, setProblemes] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmant, setConfirmant] = useState(false);
+  const [confirmantAnterior, setConfirmantAnterior] = useState(false);
   const [desfetes, setDesfetes] = useState<number | null>(null);
 
   useEffect(() => {
     let viu = true;
     jaImportat(db).then((v) => viu && setFet(v));
+    importacioAnterior(db).then((v) => viu && setAnterior(v));
     return () => {
       viu = false;
     };
@@ -41,6 +51,22 @@ export default function Importar() {
       setFet(null);
       setProblemes(null);
       setConfirmant(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setImportant(false);
+    }
+  }
+
+  async function desfesAnterior() {
+    if (!anterior) return;
+    setImportant(true);
+    setError(null);
+    try {
+      const files = await desfesImportacio(db, anterior.id);
+      setDesfetes(files);
+      setAnterior(null);
+      setConfirmantAnterior(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -142,9 +168,51 @@ export default function Importar() {
           </View>
         )}
 
-        {fet === undefined && <Text style={styles.ajuda}>Comprovant…</Text>}
+        {(fet === undefined || anterior === undefined) && (
+          <Text style={styles.ajuda}>Comprovant…</Text>
+        )}
 
-        {fet === null && !problemes && (
+        {anterior && (
+          <View style={[styles.targeta, styles.targetaAvis]}>
+            <Text style={styles.titolAvis}>Hi ha una importació d&apos;un fitxer diferent</Text>
+            <Text style={styles.ajuda}>
+              Es va importar un altre fitxer el {anterior.fet_el.slice(0, 10)} i encara
+              hi és. Cal desfer-la abans de tornar a importar, si no les dades es
+              duplicarien.
+            </Text>
+            {confirmantAnterior ? (
+              <View style={styles.botons}>
+                <Pressable
+                  onPress={() => setConfirmantAnterior(false)}
+                  style={[styles.boto, styles.botoSecundari]}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.botoSecundariText}>No</Text>
+                </Pressable>
+                <Pressable
+                  onPress={desfesAnterior}
+                  disabled={important}
+                  style={[styles.boto, styles.botoPerill]}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.botoText}>
+                    {important ? 'Desfent…' : 'Sí, desfer'}
+                  </Text>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable
+                onPress={() => setConfirmantAnterior(true)}
+                style={[styles.boto, styles.botoSecundari, styles.botoSol]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.botoPerillText}>Desfer aquesta importació</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
+
+        {fet === null && !anterior && !problemes && (
           <Pressable
             onPress={importa}
             disabled={important}

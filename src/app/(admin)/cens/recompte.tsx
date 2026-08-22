@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 
-import { creaEntradaLlavores } from '@/db/queries';
+import { creaRecompteTruges } from '@/db/queries';
 import { colors, mides } from '@/theme';
 
 function aIso(d: Date): string {
@@ -30,42 +30,26 @@ function mostraData(d: Date): string {
   });
 }
 
-function aNumero(text: string): number | null {
-  const net = text.replace(',', '.').trim();
-  if (net === '') return null;
-  const n = Number(net);
-  return Number.isFinite(n) ? n : null;
-}
-
 /**
- * Truges de reposició que ENTREN a la granja (resposta G2). A l'Excel
- * estaven al full d'escorxador, però són compres, no vendes.
+ * Recompte manual de truges (resposta B6). Es pot fer més d'un cop: el
+ * cens actual sempre parteix del recompte més recent (v_cens_truges_actual).
  */
-export default function NovaEntradaLlavors() {
+export default function NouRecompteTruges() {
   const db = useSQLiteContext();
   const [data, setData] = useState(new Date());
   const [mostrarCalendari, setMostrarCalendari] = useState(false);
-  const [unitats, setUnitats] = useState('');
-  const [kg, setKg] = useState('');
-  const [totalFactura, setTotalFactura] = useState('');
-  const [preuKg, setPreuKg] = useState('');
+  const [numTruges, setNumTruges] = useState('');
   const [desant, setDesant] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const potDesar = (unitats !== '' || kg !== '') && !desant;
+  const potDesar = numTruges !== '' && !desant;
 
   async function desa() {
     setDesant(true);
     setError(null);
     try {
-      await creaEntradaLlavores(db, {
-        data: aIso(data),
-        unitats: aNumero(unitats),
-        kg: aNumero(kg),
-        totalFactura: aNumero(totalFactura),
-        preuKg: aNumero(preuKg),
-      });
-      router.replace('/llavors');
+      await creaRecompteTruges(db, aIso(data), parseInt(numTruges, 10));
+      router.replace('/cens');
     } catch (e) {
       setDesant(false);
       setError(e instanceof Error ? e.message : String(e));
@@ -77,10 +61,10 @@ export default function NovaEntradaLlavors() {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Stack.Screen options={{ title: 'Entrada de llavores' }} />
+      <Stack.Screen options={{ title: 'Recompte de truges' }} />
       <ScrollView contentContainerStyle={styles.pagina} keyboardShouldPersistTaps="handled">
         <View style={styles.targeta}>
-          <Text style={styles.titolSeccio}>Data d&apos;entrada</Text>
+          <Text style={styles.titolSeccio}>Data del recompte</Text>
           <Pressable onPress={() => setMostrarCalendari(true)} style={styles.camp}>
             <Text style={styles.campText}>{mostraData(data)}</Text>
           </Pressable>
@@ -103,59 +87,16 @@ export default function NovaEntradaLlavors() {
         </View>
 
         <View style={styles.targeta}>
-          <Text style={styles.titolSeccio}>Truges</Text>
-          <View style={styles.fila}>
-            <Text style={styles.etiqueta}>Unitats</Text>
-            <TextInput
-              value={unitats}
-              onChangeText={(t) => setUnitats(t.replace(/[^0-9]/g, ''))}
-              keyboardType="number-pad"
-              placeholder="0"
-              placeholderTextColor={colors.discret}
-              style={styles.input}
-              accessibilityLabel="Unitats"
-            />
-          </View>
-          <View style={styles.fila}>
-            <Text style={styles.etiqueta}>Kg</Text>
-            <TextInput
-              value={kg}
-              onChangeText={(t) => setKg(t.replace(/[^0-9.,]/g, ''))}
-              keyboardType="decimal-pad"
-              placeholder="0"
-              placeholderTextColor={colors.discret}
-              style={styles.input}
-              accessibilityLabel="Kg"
-            />
-          </View>
-        </View>
-
-        <View style={styles.targeta}>
-          <Text style={styles.titolSeccio}>Factura (es pot omplir més tard)</Text>
-          <View style={styles.fila}>
-            <Text style={styles.etiqueta}>Total factura</Text>
-            <TextInput
-              value={totalFactura}
-              onChangeText={(t) => setTotalFactura(t.replace(/[^0-9.,]/g, ''))}
-              keyboardType="decimal-pad"
-              placeholder="0"
-              placeholderTextColor={colors.discret}
-              style={styles.input}
-              accessibilityLabel="Total factura"
-            />
-          </View>
-          <View style={styles.fila}>
-            <Text style={styles.etiqueta}>Preu/kg</Text>
-            <TextInput
-              value={preuKg}
-              onChangeText={(t) => setPreuKg(t.replace(/[^0-9.,]/g, ''))}
-              keyboardType="decimal-pad"
-              placeholder="0"
-              placeholderTextColor={colors.discret}
-              style={styles.input}
-              accessibilityLabel="Preu per kg"
-            />
-          </View>
+          <Text style={styles.titolSeccio}>Truges comptades a mà</Text>
+          <TextInput
+            value={numTruges}
+            onChangeText={(t) => setNumTruges(t.replace(/[^0-9]/g, ''))}
+            keyboardType="number-pad"
+            placeholder="0"
+            placeholderTextColor={colors.discret}
+            style={styles.input}
+            accessibilityLabel="Truges comptades a mà"
+          />
         </View>
 
         {error && (
@@ -207,26 +148,14 @@ const styles = StyleSheet.create({
   },
   campText: { fontSize: 16, color: colors.text },
   enllac: { color: colors.primari, fontWeight: '600', paddingTop: 8 },
-  fila: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-    paddingVertical: 6,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.vora,
-  },
-  etiqueta: { fontSize: 15, color: colors.text },
   input: {
-    minWidth: 110,
     height: mides.toc,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.vora,
     paddingHorizontal: 12,
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
-    textAlign: 'right',
     color: colors.text,
   },
   botoPrincipal: {

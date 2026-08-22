@@ -1,3 +1,4 @@
+import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import {
@@ -38,7 +39,7 @@ export const DATABASE_NAME = 'granja.db';
  * Per canviar l'esquema més endavant: puja aquest número i afegeix el pas nou
  * a `migracions`. No toquis mai un pas ja publicat.
  */
-const VERSIO_ESQUEMA = 7;
+const VERSIO_ESQUEMA = 9;
 
 type Migracio = (db: SQLiteDatabase) => Promise<void>;
 
@@ -216,6 +217,84 @@ const migracions: Record<number, Migracio> = {
     }
     if (!(await columnaExisteix(db, 'entrega_pinso', 'prescripcio'))) {
       await db.execAsync('ALTER TABLE entrega_pinso ADD COLUMN prescripcio TEXT');
+    }
+  },
+
+  /**
+   * v8: cens de truges. Taula nova `baixa_truja` (les morts de truges no es
+   * poden deduir per diferència com a engreix, així que calen apuntar-les
+   * totes) i la vista `v_cens_truges_actual` que en fa el total viu.
+   * `CREATE TABLE` no toca les vistes existents, però la vista nova sí que
+   * cal crear-la explícitament.
+   */
+  8: async (db) => {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS baixa_truja (
+        id               TEXT PRIMARY KEY,
+        data             TEXT NOT NULL,
+        num_truges       INTEGER NOT NULL,
+        motiu            TEXT,
+        creat_el         TEXT NOT NULL DEFAULT (datetime('now')),
+        modificat_el     TEXT NOT NULL DEFAULT (datetime('now')),
+        esborrat_el      TEXT,
+        sincronitzat_el  TEXT,
+        importacio_id    TEXT
+      );
+    `);
+    await db.execAsync(VISTES_SQL);
+  },
+
+  /**
+   * v9: un deslletament pot tenir més d'una posició d'inseminar i més d'una
+   * de gestació a la vegada (p.ex. "L2 + L4" a l'Excel), així que les dues
+   * columnes soles (`posicio_inseminar_id`, `posicio_gestacio_id`) es
+   * substitueixen per una taula pont, `deslletament_posicio`. Es migren les
+   * dades que ja hi hagués abans d'esborrar les columnes velles.
+   */
+  9: async (db) => {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS deslletament_posicio (
+        id               TEXT PRIMARY KEY,
+        deslletament_id  TEXT NOT NULL REFERENCES deslletament(id),
+        ubicacio_id      TEXT NOT NULL REFERENCES ubicacio_reproduccio(id),
+        creat_el         TEXT NOT NULL DEFAULT (datetime('now')),
+        modificat_el     TEXT NOT NULL DEFAULT (datetime('now')),
+        esborrat_el      TEXT,
+        sincronitzat_el  TEXT,
+        importacio_id    TEXT
+      );
+      CREATE INDEX IF NOT EXISTS idx_deslpos_deslletament
+        ON deslletament_posicio(deslletament_id);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_deslpos_unica
+        ON deslletament_posicio(deslletament_id, ubicacio_id) WHERE esborrat_el IS NULL;
+    `);
+
+    if (await columnaExisteix(db, 'deslletament', 'posicio_inseminar_id')) {
+      const files = await db.getAllAsync<{
+        id: string;
+        posicio_inseminar_id: string | null;
+        posicio_gestacio_id: string | null;
+        importacio_id: string | null;
+      }>(
+        'SELECT id, posicio_inseminar_id, posicio_gestacio_id, importacio_id FROM deslletament'
+      );
+
+      for (const f of files) {
+        for (const ubicacioId of [f.posicio_inseminar_id, f.posicio_gestacio_id]) {
+          if (!ubicacioId) continue;
+          await db.runAsync(
+            `INSERT INTO deslletament_posicio (id, deslletament_id, ubicacio_id, importacio_id)
+             VALUES (?, ?, ?, ?)`,
+            Crypto.randomUUID(),
+            f.id,
+            ubicacioId,
+            f.importacio_id
+          );
+        }
+      }
+
+      await db.execAsync('ALTER TABLE deslletament DROP COLUMN posicio_inseminar_id');
+      await db.execAsync('ALTER TABLE deslletament DROP COLUMN posicio_gestacio_id');
     }
   },
 };

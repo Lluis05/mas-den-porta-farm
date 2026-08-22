@@ -40,6 +40,265 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
+- 2026-08-22 (totes les dates importades anaven un dia enrere — bug real
+  arreglat i reimportat): The user noticed a date on `/taules` was one day
+  behind the same date in the Excel. **Root cause, found and confirmed with
+  the real file**: `scripts/importar-excel.mjs`'s `data()` helper read
+  Excel dates with `getUTCFullYear/getUTCMonth/getUTCDate()`. SheetJS (with
+  `cellDates: true`) builds the JS `Date` for a serial number using the
+  *local* timezone components of the machine running the import (i.e.
+  `new Date(y, m-1, d, ...)`, not `Date.UTC(...)`) — this is intentional on
+  SheetJS's side, meant to be read back with the *local* getters. Reading
+  it with the UTC getters instead round-trips correctly only when local
+  time is behind UTC; Spain is ahead (CEST/CET), so every date came out one
+  calendar day early. Confirmed directly against the real
+  `~/Documents/estat granja.xlsm`: `Cens24!C8` (banda 1's first weaning) has
+  raw serial `44463`, `XLSX.SSF.parse_date_code` and the cell's own
+  formatted string agree it's **9/24/21**, but `cellDates: true` produces
+  the JS Date `2021-09-23T22:00:44.000Z` — local getters on that value
+  return `2021-9-24` (right), UTC getters return `2021-9-23` (what the app
+  had been storing). **Fixed** by switching `data()` to
+  `getFullYear/getMonth/getDate`. This is the single choke point every
+  imported date goes through (deslletaments, cicles, càrregues, pinso,
+  llavores) — one grep (`getUTC`) confirmed no other spot in `src/` or
+  `scripts/` had the same bug.
+  - **A second, independent bug surfaced while fixing the first one**: the
+    documented reimport workflow ("Excel corregit arriba → `npm run
+    importar` → desfer des de `/importar` → tornar a importar") turned out
+    to be broken. `jaImportat(db)` matches the currently-bundled file's
+    `generat` timestamp against the `importacio` table; once
+    `npm run importar` regenerates `assets/import/granja.json` with a new
+    `generat`, the OLD import (with the old `generat`) becomes invisible to
+    that check — `/importar` would just show "Importar ara" straight away,
+    which would have **duplicated every row** instead of replacing it. Hit
+    this for real: regenerating the file to fix the date bug immediately
+    triggered exactly this. Fixed properly, not worked around: new
+    `importacioAnterior(db)` in `importacio.ts` (`SELECT ... WHERE generat
+    != ? ORDER BY fet_el DESC LIMIT 1`) finds a stale import from a
+    different file, and `/importar` now shows a distinct "Hi ha una
+    importació d'un fitxer diferent" card with its own desfer-and-confirm
+    flow, gating "Importar ara" until it's cleared. This is the exact
+    workflow the app's own "corrected spreadsheet is coming" plan depends
+    on (see "Where to pick up" below), so it needed to actually work, not
+    just get patched around for this one fix.
+  - Verified end-to-end on web against the real data, the real bug, and the
+    real fix together (not synthetic): reran `npm run importar`, confirmed
+    the regenerated JSON's first few 2026 deslletament dates are each
+    exactly one day later than before the fix; loaded the app with the
+    **old, wrong-date import still in place** and confirmed `/importar`
+    correctly detected and surfaced it as a foreign import rather than
+    silently offering a duplicating "Importar ara"; undid it (2,456 rows
+    cleared), reimported, confirmed "Tot s'ha importat sense problemes",
+    and confirmed `/taules` now shows the corrected dates throughout.
+  - **This only fixes it going forward from a reimport** — it doesn't
+    retroactively correct dates already sitting in anyone's *deployed*
+    database. **The parents' phone has the old, one-day-early dates from
+    the 2026-08-10 real import and needs this same undo-then-reimport done
+    on their device** (or web instance) once they're on a build that
+    carries the corrected `assets/import/granja.json` — this doesn't happen
+    automatically. Flagged here so it isn't missed at the next real device
+    session; matches the "corrected spreadsheet" reimport plan already
+    called out below, except no spreadsheet correction is needed this time
+    — just the code fix already made.
+- 2026-08-22 (camps tapats pel teclat): The user reported that a field near
+  the bottom of a form gets covered by the keyboard while typing, and asked
+  for the screen to scroll up. **Root cause wasn't the scroll-to-focused-
+  input behavior itself** (RN's `ScrollView` already does that) — it's that
+  every form's `contentContainerStyle` only had `paddingBottom: 40`, so
+  there simply wasn't enough blank scrollable space below the last field
+  for it to scroll clear of the keyboard (Android/iOS keyboards run
+  ~250-300pt tall). Fixed by adding `mides.espaiTeclat` to `theme.ts`
+  (320 on native, kept at the old 40 on web via `Platform.OS === 'web'`
+  since a desktop browser has no virtual keyboard covering anything — an
+  unconditional 320 would've left a permanent empty gap under every "Desar"
+  button on the web app) and swapping it into `paddingBottom` on all 14
+  files that pair `KeyboardAvoidingView` + a form `ScrollView` (every
+  `nova.tsx`/`[id]/index.tsx` screen plus `formulari-cicle.tsx`) — found via
+  `grep -rl KeyboardAvoidingView src`, all 14 shared the exact same
+  `pagina: { padding: mides.espai, gap: mides.espai, paddingBottom: 40 }`
+  style, so one `sed` pass covered them all identically. **Deliberately
+  didn't touch** the existing `behavior={Platform.OS === 'ios' ? 'padding'
+  : undefined}` split: adding `'height'` behavior for Android on top of the
+  OS's own default `adjustResize` window mode is a well-known way to get
+  the content to shrink *twice* and look worse, not better — the padding
+  fix alone addresses the actual cause without touching that riskier knob.
+  Verified `tsc`/export clean and the web form screens render identically
+  (still 40, no new gap) since this can only really be felt with a real
+  on-screen keyboard, which the web dev browser doesn't have — **worth the
+  user confirming firsthand on their phone** that this actually closes the
+  gap; if a specific field is still covered after this, the next thing to
+  try is that Android `'height'` behavior, but only for that one screen, not
+  as a blanket change.
+- 2026-08-22 (vista "com un full d'Excel": /panell + /taules): New request,
+  no schema change. The user wants to see everything at a glance instead of
+  drilling into each screen — asked for two things at once: a detailed
+  per-domain table view (like Excel's own tabs) and a more visual summary.
+  Both are **read-only by explicit choice** (user confirmed: only viewing,
+  edits still happen through the existing per-record screens) and work on
+  both web and mobile (mobile readability relies on horizontal scroll, not
+  on a forced landscape rotation — see the trap below for why).
+  - **`/taules`**: one screen, a tab strip (Deslletaments, Cicles,
+    Càrregues, Pinso, Llavores, Cens de truges) switching which table
+    renders below, no per-tab navigation. New generic component
+    `src/components/taula-dades.tsx` (`TaulaDades<T>`) takes a column list
+    (`key`, `etiqueta`, `formata: (fila) => string`, optional `amplada`) and
+    an array of rows; header and body share one horizontal `ScrollView` so
+    columns stay aligned while scrolling sideways — the page's own vertical
+    `ScrollView` handles the other axis, no nested-scroll fighting. All six
+    datasets load once on focus (`Promise.all`), not per tab switch. Six new
+    **unpaged** query functions in `queries.ts` (`taulaDeslletaments`,
+    `taulaCicles`, `taulaCarregues`, `taulaPinso`, `taulaLlavors`, plus reuse
+    of the already-unpaged `llistaRecomptesTruges`/`llistaBaixesTruja`) —
+    deliberately no `LIMIT`, since the whole point of this screen is seeing
+    every row. `taulaDeslletaments` uses `GROUP_CONCAT` to fold each
+    deslletament's `deslletament_posicio` rows (see the entry below) into
+    one display string per category, so multi-position bandes show as
+    "L2, L1, L3" in a single cell instead of needing their own row.
+  - **`/panell`**: stat cards (porcs a la granja, truges ara mateix via
+    `v_cens_truges_actual`, cicles actius + porcs/corralines summed from
+    `llistaCicles`), the same pinso-urgency logic already used on `/inici`
+    (kept duplicated rather than shared, since the two screens format the
+    warning differently — inline text list here vs. the home screen's own
+    layout), and the most recent quarter from `resumTrimestral()` with a
+    link into the existing `/resum` for the full history. Both screens
+    linked from `/inici`'s button row.
+  - **Real bug hit and fixed, another instance of trap #4 below**: the
+    pinso-warning card on `/panell` is a `Pressable` inside `<Link asChild>`
+    with `style={[styles.targeta, styles.targetaAvis]}` — an array — and it
+    reproduced the exact same web crash as the trap already documents
+    (`Failed to set an indexed property [0] on 'CSSStyleDeclaration'`),
+    caught immediately by testing on web with real data per this file's own
+    rule. Fixed by merging into one style object,
+    `styles.targetaAvisPressable`, instead of composing two. **Confirms the
+    trap isn't a one-off**: any new `Link asChild` + `Pressable` needs this
+    checked *every time*, `tsc`/export won't catch it.
+  - **Rotation decision, not yet built**: the user suggested rotating the
+    phone for a wide table. `app.json` locks `orientation: "portrait"`
+    app-wide, and letting one screen rotate needs `expo-screen-orientation`
+    — a **new native dependency**, meaning a fresh EAS dev-client build
+    before it works on the parents' phone, same cost already paid once for
+    the worker-login PIN discussion (2026-08-20 entry). Deliberately not
+    added this session: the horizontal `ScrollView` already makes the wide
+    tables usable in portrait without it. If real phone use shows this
+    isn't enough, that's the dependency to reach for, with the rebuild cost
+    that implies.
+  - Verified end-to-end on web against the real imported data (not
+    synthetic): all six `/taules` tabs render actual rows (666 pinso
+    deliveries, 28 càrregues, 15 cicles, 10 deslletaments including the
+    multi-position band from the entry below showing "L2, L1, L3"
+    correctly folded into one cell); `/panell` shows the real 3,638-pig /
+    620-truges (test data from earlier the same session, harmless — see
+    that entry) / 14-active-cicles totals and the real latest-quarter
+    numbers, and its "Veure totes les dades en detall" button lands on
+    `/taules`.
+- 2026-08-22 (multi-select posicions d'inseminar/gestació, schema v9): Same
+  day, follow-up on the cens de truges session below — the user pointed out
+  a deslletament can have **more than one** position active at once for both
+  inseminar and gestació (the Excel already showed this: col X examples like
+  `L2 + L4`), so the single-select pastilles from the morning session were
+  wrong.
+  - **Schema v9**: `deslletament.posicio_inseminar_id` /
+    `.posicio_gestacio_id` (two nullable single FKs) replaced by one bridge
+    table, `deslletament_posicio` (deslletament_id, ubicacio_id) — a single
+    table suffices for both categories since `ubicacio_reproduccio.tipus`
+    already says which is which, no need to duplicate that. Migration copies
+    any existing single values into the bridge table, then **drops the two
+    old columns** (`ALTER TABLE ... DROP COLUMN`, confirmed safe against a
+    real schema with views in `scripts/prova-migracio-9.mjs`, 10 checks —
+    fresh install, upgrade-from-v8 path including data migration, two
+    positions read back together, re-editing replaces rather than
+    accumulates, and the partial unique index rejects a live duplicate).
+  - `queries.ts`: `creaDeslletament`/`actualitzaDeslletament` now take
+    `posicionsInseminarIds`/`posicionsGestacioIds` (`string[]`) instead of
+    single nullable ids. Editing follows the same pattern already used for
+    `ocupacio_corral` on cicle edits (`actualitzaCicle`): soft-delete every
+    existing bridge row for that parent, then insert the fresh selection —
+    simpler than diffing, and positions carry no value of their own worth
+    preserving across an edit.
+  - Both `/deslletament/nova` and the base-edit section of
+    `/deslletament/[id]` now use toggleable pastilles (`Set<string>` state,
+    `accessibilityRole="checkbox"` not `"radio"`) instead of single-select.
+    Display joins the codis with `, ` (e.g. "L2, L1, L3").
+  - **Also fixed while touching this path**: `src/db/importacio.ts` was
+    already silently dropping any multi-value Excel string like `"L2 + L4"`
+    (`ubicacions.get()` on the raw un-split string never matched) — the
+    committed `assets/import/granja.json` happens to carry zero
+    posicioInseminar/posicioGestacio values today so this was never visible,
+    but `importacioDelText()` now splits on `+` and writes one bridge row
+    per matching code, so it'll work correctly whenever a corrected
+    spreadsheet does carry these.
+  - Verified end-to-end on web against the real imported data (not just the
+    migration script): created a real deslletament with two inseminar
+    positions and two gestació positions selected together, saved,
+    confirmed the display showed all of them; edited it to a different
+    combination and confirmed the old selection was fully replaced, not
+    accumulated; deleted the test record afterward, confirmed the rest of
+    the real deslletament list (including the 2026-08-13 band's insemination
+    data saved earlier the same day) was untouched.
+- 2026-08-22 (cens de truges, phase 1 of digitizing all of Cens24): Picked
+  back up where the 2026-08-20 session paused. Mid-design-conversation the
+  scope grew: the user wants **all of Cens24** eventually enterable from the
+  app, not just the sow-count feature, so this became phase 1 of that —
+  everything needed for a live sow count, with the rest (gestation
+  confirmation, transició, linking a cicle to its deslletament) deliberately
+  left for a later session (see "Where to pick up" item 6 below).
+  - **Schema v8**: new table `baixa_truja` (sow deaths — unlike the engreix
+    `baixa` table, which is optional because `v_cicle_resum` derives the real
+    number by difference, there is no such derivation for sows, so this table
+    **is** the only source of truth for sow deaths) and a new view,
+    `v_cens_truges_actual`, that computes the live sow count: latest manual
+    `cens_truges` recompte (unchanged table, already existed with no screen)
+    plus primales inseminated after that date (from `deslletament.primales`
+    /`.data_inseminacio`) minus `baixa_truja` and `truges_rebuig` loads after
+    that date. Verified against real SQLite in the now-usual way
+    (`scripts/prova-migracio-8.mjs`, 12 checks: fresh install, upgrade path,
+    and the total math itself — altes before the recompte date correctly
+    excluded, a pending (non-inseminated) deslletament correctly excluded, a
+    second later recompte correctly resets the base, a soft-deleted baixa
+    correctly ignored).
+  - **New screens**: `/deslletament` (list) and `/deslletament/[id]` — the
+    view+edit screen has **two independently-editable sections on the same
+    row**, matching Cens24's own two-stage fill-in (resposta B3): the
+    weaning-day fields (banda, dates, truges criades/desmamades, porcs
+    vius/desmamats, posicions, observacions), and — filled in later, days
+    after — the insemination fields (data_inseminacio, insem_total,
+    repetidores, primales). `/deslletament/nova` creates stage 1 only, since
+    stage 2 doesn't exist yet at weaning time. `/cens` (current count +
+    history), `/cens/recompte` (manual recompte, can be repeated — the view
+    always uses the most recent one as its base) and `/cens/baixa`
+    (baixa_truja entry). All linked from the dashboard.
+  - **One real limitation found, not fixed**: `v_cens_truges_actual` compares
+    dates with a strict `>`, so a baixa or alta recorded on the **same day**
+    as the base recompte doesn't count until the next day. Confirmed live: a
+    baixa_truja dated the same day as a same-day recompte didn't move the
+    total. Acceptable for now (a same-day recompte-then-death is a narrow
+    edge case) but worth remembering if it ever comes up as a real complaint.
+  - Verified end-to-end on web against the **already-imported real Cens24
+    history** (not synthetic data): the deslletament list shows the actual
+    imported bands going back to 2026-02, all correctly showing "falta la
+    inseminació" since only the historical weaning half of Cens24 was
+    imported, never the insemination half. Filled in a real insemination
+    (41/33/8) on the 2026-08-13 band through the new screen, confirmed it
+    saved and the list updated to "inseminades 8 primales". Made a manual
+    recompte and a baixa_truja through `/cens` and confirmed both appear in
+    the history and the total math matches what the migration script proved.
+    Ran against the web build's own local OPFS SQLite, not the parents'
+    phone — this test data doesn't reach them.
+  - **New trap worth remembering**: the worker-login PIN gate
+    (`AdminProvider`) holds `isAdmin` in memory only (by design, see
+    2026-08-20 entry), so a **hard browser navigation to an `(admin)` URL
+    reloads the whole app and bounces back to `/`** — this isn't a bug, it's
+    the intended "resets like a screen lock" behavior, but it means testing
+    admin screens by typing a URL directly (or via a browser-automation
+    `navigate` call) doesn't work; you have to unlock via the hamburger panel
+    and then click through the app's own links.
+  - **Not done / explicitly deferred**: `plenes` (gestation confirmation,
+    filled in even later than insemination) has no entry point yet; no
+    screen links a `cicle_engreix` to the `deslletament` it came from
+    (`cicle_engreix.deslletament_id` stays NULL from the UI, same as before);
+    no `transicio` screen. These are the rest of Cens24, saved for another
+    session per the user's own framing ("as you see fit, I want the whole
+    Cens24 in the app eventually").
 - 2026-08-20 (worker login / PIN gate): Fifth and last of the queued requests
   (see the 2026-08-13 entry below), implemented **differently from how it was
   first described** — the user reframed it mid-session: instead of a worker
@@ -362,7 +621,13 @@ Open, roughly in the order that unblocks the most:
    Store release if you want a different name; it's permanent after that.**
 1. **A corrected spreadsheet is coming.** Don't chase data inconsistencies in
    the current one (see the note under Project status). Re-import path:
-   `npm run importar` → undo on `/importar` → import.
+   `npm run importar` → undo on `/importar` → import — `/importar` now
+   detects and surfaces a stale import from an older file on its own (fixed
+   2026-08-22, see that entry above), so this no longer needs doing in a
+   specific order to work. **Also still pending, same entry**: the parents'
+   phone needs this exact undo-then-reimport run on their own device once
+   they update to a build carrying the corrected `assets/import/granja.json`
+   — their currently-deployed data has every imported date one day early.
 2. ~~OS notifications for feed~~ — done 2026-08-11 (`src/lib/notificacions.ts`),
    verified working on the phone via Expo Go.
 3. **Nothing syncs anywhere.** Supabase is proposed but not set up, so the
@@ -378,19 +643,21 @@ Open, roughly in the order that unblocks the most:
 5. ~~Worker login (PIN gate)~~ — done 2026-08-20, see Project status above.
    Was the fourth of the five queued requests; **cens de truges (below) is
    the last one remaining.**
-   **Tables still with no screen**: `tractament`, `cens_truges`,
-   `factura_pinso`. ~~`entrada_llavores`~~ got one 2026-08-11 (`/llavors`).
-   ~~`baixa`~~ got one 2026-08-13 (`/baixa/nova`). ~~`moviment`~~ got one
-   2026-08-13 (`/cicle/[id]/moviment/nou`). The rest are imported or
-   importable; none can be entered or viewed in the app.
-6. **Cens de truges — pick up here next session.** (breeding sow census,
-   request 3 from the 2026-08-13 queue) — last of the five queued requests,
-   deliberately saved for last since least defined; **explicitly paused on
-   2026-08-20** to design "all the missing columns" with the user rather
-   than guess at them. Mirrors the Excel's `cens24` sheet: initial count
-   from Excel import **and** a manual recount the user does by hand: additions
-   from inseminated primals (llavores don't count until first inseminated),
-   subtractions from baixes + truges de rebuig, no per-farm split.
+   **Tables still with no screen**: `tractament`, `factura_pinso`.
+   ~~`entrada_llavores`~~ got one 2026-08-11 (`/llavors`). ~~`baixa`~~ got
+   one 2026-08-13 (`/baixa/nova`). ~~`moviment`~~ got one 2026-08-13
+   (`/cicle/[id]/moviment/nou`). ~~`cens_truges`~~ and the new `baixa_truja`
+   got theirs 2026-08-22 (`/cens`, `/cens/recompte`, `/cens/baixa`). The rest
+   are imported or importable; none can be entered or viewed in the app.
+6. ~~Cens de truges~~ — **phase 1 done 2026-08-22**, see Project status
+   above: live sow count (`/cens`), manual recompte, baixa_truja, and
+   insemination entry on `/deslletament/[id]`. **What's left is the rest of
+   Cens24**, per the user's 2026-08-22 framing that they want the whole
+   sheet enterable eventually, not just the sow count: `plenes` (gestation
+   confirmation) has no entry point, no screen links a `cicle_engreix` to
+   its `deslletament`, and there's no `transicio` screen. Pick up there next
+   — no further design conversation needed, the columns are already mapped
+   in `docs/model-dades.md` and the schema already has every field.
 7. **Open question in `docs/model-dades.md` §9**: is the delivery-rate
    estimate good enough, or do they want to record the actual silo level now
    and then to correct it?
