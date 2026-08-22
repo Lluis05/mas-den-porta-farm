@@ -40,6 +40,78 @@ _Revised 2026-08-10 after the father answered the open questions — see `docs/e
 - **Version control**: git — the user will create the repo themselves later. Do not `git init` this folder until asked.
 
 ## Project status
+- 2026-08-22 (truges a la portada): The user asked for the sow count next
+  to the pig count on "the screen where the pig count shows" — `/panell`
+  already had it (added earlier the same day); `/inici` (the main admin
+  dashboard) didn't. Added a "Truges ara mateix" card next to "Porcs a la
+  granja", same `v_cens_truges_actual` total already used elsewhere, and
+  made the whole card a link to `/cens`. **Hit trap #4 while writing it**:
+  the new card started as `<Pressable style={[styles.targeta,
+  styles.targetaGran]}>` inside `<Link href="/cens" asChild>` — caught it
+  before testing, not after, since the pattern is now familiar; fixed by
+  merging into one style object, `targetaGranPressable`. Verified on web:
+  the card renders next to the pig count with no crash, shows the real
+  total (620, test data from earlier), and clicking it lands on `/cens`.
+- 2026-08-22 (Deslletaments a /taules: columnes que faltaven de Cens24, i
+  cicle_engreix.deslletament_id per fi es fa servir): The user pointed out
+  the Deslletaments table on `/taules` was missing several Cens24 columns:
+  porcs engreix, % baixes destete, porcs sales, data entrada, data primera
+  venda, edat primera venda, data buidat última sala, edat última venda —
+  and wanted "porcs sales" to link to that cicle. Two of those (porcs
+  engreix, % baixes destete) come straight from `transicio` via its real
+  `deslletament_id` FK — no work needed there. The rest all live on
+  `cicle_engreix`/`v_cicle_resum`, and **`cicle_engreix.deslletament_id` had
+  never once been set by anything** (flagged as a known gap in the
+  2026-08-22 cens-de-truges entry above) — every cicle's link to its
+  deslletament was NULL, imported or not.
+  - **Fixed the real gap, not worked around it**, since it directly blocked
+    what was asked: `scripts/importar-excel.mjs`'s `trobaBanda()` already
+    computes, for each numbered engreix sheet, the single best-matching row
+    of `Cens24` (same banda, closest entry date within 30 days, shared sala
+    codes) — it just threw away everything except the banda number
+    afterward. Now it also carries that matched row's `dataDesmamat`
+    through (`perLligar` entries gained the field, `trobaBanda` returns
+    `{banda, dataDesmamat}` instead of a bare number), exported to the JSON
+    as `cicle.deslletamentData`. `importacio.ts` builds a
+    `"bandaId|dataDesmamat" -> deslletamentId` map while inserting
+    deslletaments, then looks the cicle's match up in it when inserting
+    `cicle_engreix`, writing the real `deslletament_id` FK when found (null
+    when the matched Cens24 row falls outside the imported year, which is
+    common and expected — e.g. a band's transition period spans across
+    New Year, so the matching weaning row is from the prior year that
+    wasn't imported).
+  - `taulaDeslletaments()` in `queries.ts` now LEFT JOINs `transicio` (exact
+    FK) and `cicle_engreix`/`v_cicle_resum` (via the FK just added) to pull
+    all eight fields in one query. "Porcs sales" doesn't attempt to
+    reconstruct the Excel's own compact notation (`"26 E+5-6-D"`) — a
+    second query (`salesTextPerCicle`) fetches real `ocupacio_corral` rows
+    for every cicle referenced on the page and reuses the existing
+    `codiSala()` helper per sala, joined with commas (e.g. `"14, 19, 20
+    4-5-6E"`). Good enough to identify the rooms; exact Excel-string
+    reconstruction wasn't asked for.
+  - New capability worth remembering: `TaulaDades`'s `ColumnaTaula<T>` grew
+    an optional `enllac?: (fila: T) => string | null` — when it returns a
+    route, the cell renders as a bare `<Link href={...}>` (not
+    `Pressable`+`asChild`, so **trap #4 doesn't apply here** — that trap is
+    specifically about `Pressable` inside `Link asChild` with an array
+    style; a plain `Link` rendering as its own `Text`/anchor is a different,
+    unaffected code path). Used for "Porcs sales" → `/cicle/[id]`.
+  - Verified end-to-end on web against the real data: reran
+    `npm run importar`, confirmed in the regenerated JSON that cicles whose
+    matched weaning date falls in 2026 carry it (6 of the current 15 do —
+    the rest match a pre-2026 row, correctly excluded); undid the previous
+    import via the same `/importar` flow fixed earlier the same day,
+    reimported, and confirmed on `/taules` that "Porcs engreix", "%
+    baixes destete", "Porcs sales" (as clickable links), "Data entrada",
+    "Data primera venda"/"Edat 1a venda" (populated for the one band that's
+    actually sold something so far), and the rest all show real values;
+    clicked a "Porcs sales" cell and confirmed it lands on the right
+    cicle's own page showing the same rooms.
+  - **Same caveat as the date-bug entry above applies again**: this needs
+    the same undo-then-reimport run on the parents' actual phone once
+    they're on a build with the updated `assets/import/granja.json` — two
+    separate fixes from today (the date bug and this FK) both need that one
+    reimport to reach their real data, not two separate ones.
 - 2026-08-22 (totes les dates importades anaven un dia enrere — bug real
   arreglat i reimportat): The user noticed a date on `/taules` was one day
   behind the same date in the Excel. **Root cause, found and confirmed with

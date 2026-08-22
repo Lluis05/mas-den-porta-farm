@@ -49,6 +49,8 @@ type DadesImportacio = {
     banda: number;
     dataEntrada: string;
     sales: { codi: string; dataEntrada: string; porcs: Nul }[];
+    /** La data de deslletament de la fila de Cens24 a la qual s'ha lligat. */
+    deslletamentData: string | null;
   }[];
   carregues: {
     data: string;
@@ -249,6 +251,9 @@ export async function importaDades(
    */
   const ocupacio = new Map<string, number>();
 
+  /** "bandaId|dataDesmamat" -> deslletamentId, per lligar-hi els cicles. */
+  const deslletamentsPerBandaData = new Map<string, string>();
+
   const importacioId = Crypto.randomUUID();
 
   await db.withTransactionAsync(async () => {
@@ -323,6 +328,7 @@ export async function importaDades(
         d.observacions,
         importacioId
       );
+      deslletamentsPerBandaData.set(`${bandaId}|${d.dataDesmamat}`, deslletamentId);
 
       for (const ubicacioId of [
         ...ubicacionsDelText(d.posicioInseminar),
@@ -363,12 +369,17 @@ export async function importaDades(
 
       const entrada = c.sales.reduce((s, x) => s + (x.porcs ?? 0), 0);
       const cicleId = Crypto.randomUUID();
+      const deslletamentId = c.deslletamentData
+        ? (deslletamentsPerBandaData.get(`${bandaId}|${c.deslletamentData}`) ?? null)
+        : null;
       await db.runAsync(
         `INSERT INTO cicle_engreix
-           (id, banda_id, data_entrada, porcs_entrada, observacions, importacio_id)
-         VALUES (?, ?, ?, ?, ?, ?)`,
+           (id, banda_id, deslletament_id, data_entrada, porcs_entrada, observacions,
+            importacio_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
         cicleId,
         bandaId,
+        deslletamentId,
         c.dataEntrada,
         entrada,
         `Importat del full "${c.full}" de l'Excel`,

@@ -1,3 +1,4 @@
+import { Link, type Href } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '@/theme';
@@ -5,7 +6,10 @@ import { colors } from '@/theme';
 /**
  * Una columna d'una taula genèrica. `formata` sempre torna text: la taula
  * és de només consulta (resposta explícita: sense edició), així que no cal
- * cap tipus de valor més enllà del que es mostra.
+ * cap tipus de valor més enllà del que es mostra. `enllac`, si es dona, fa
+ * que la cel·la sigui un enllaç cap a una altra pantalla (p.ex. el cicle
+ * d'engreix) quan torna una ruta; si torna null, la cel·la es queda com a
+ * text normal.
  */
 export type ColumnaTaula<T> = {
   key: string;
@@ -13,6 +17,7 @@ export type ColumnaTaula<T> = {
   amplada?: number;
   numerica?: boolean;
   formata: (fila: T) => string;
+  enllac?: (fila: T) => string | null;
 };
 
 /**
@@ -43,14 +48,19 @@ export function TaulaDades<T extends { id: string }>({
         )}
         {files.map((f, i) => (
           <View key={f.id} style={[styles.filaCos, i % 2 === 1 && styles.filaParella]}>
-            {columnes.map((c) => (
-              <Text
-                key={c.key}
-                style={[styles.cella, { width: c.amplada ?? 110 }, c.numerica && styles.cellaNumerica]}
-              >
-                {c.formata(f)}
-              </Text>
-            ))}
+            {columnes.map((c) => {
+              const href = (c.enllac?.(f) ?? null) as Href | null;
+              const estil = [styles.cella, { width: c.amplada ?? 110 }, c.numerica && styles.cellaNumerica];
+              return href ? (
+                <Link key={c.key} href={href} style={[...estil, styles.cellaEnllac]}>
+                  {c.formata(f)}
+                </Link>
+              ) : (
+                <Text key={c.key} style={estil}>
+                  {c.formata(f)}
+                </Text>
+              );
+            })}
           </View>
         ))}
       </View>
@@ -85,5 +95,6 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   cellaNumerica: { textAlign: 'right', fontVariant: ['tabular-nums'] },
+  cellaEnllac: { color: colors.primari, fontWeight: '600' },
   buit: { padding: 16, fontSize: 13, color: colors.discret },
 });

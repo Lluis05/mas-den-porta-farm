@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import { reparteix, type Meitat } from '@/lib/corrals';
+import { codiSala, reparteix, type Meitat } from '@/lib/corrals';
 
 /**
  * Totes les consultes viuen aquí, no dins de les pantalles.
@@ -1636,12 +1636,23 @@ export type FilaDeslletamentTaula = {
   posicions_inseminar: string | null;
   posicions_gestacio: string | null;
   observacions: string | null;
+  // Del cicle d'engreix lligat (transicio.deslletament_id / cicle_engreix.deslletament_id):
+  // null si el cicle encara no s'ha creat o si el que hi ha no s'ha lligat.
+  cicle_id: string | null;
+  porcs_engreix: number | null;
+  pct_baixes_destete: number | null;
+  data_entrada_engreix: string | null;
+  data_primera_venda: string | null;
+  edat_primera_venda: number | null;
+  data_ultima_sortida: string | null;
+  edat_ultima_venda: number | null;
+  porcs_sales: string | null;
 };
 
 export async function taulaDeslletaments(
   db: SQLiteDatabase
 ): Promise<FilaDeslletamentTaula[]> {
-  return db.getAllAsync<FilaDeslletamentTaula>(
+  const files = await db.getAllAsync<Omit<FilaDeslletamentTaula, 'porcs_sales'>>(
     `SELECT
        d.id, b.numero AS banda, d.data_desmamat, d.truges_criades, d.truges_desmamades,
        d.porcs_vius_1a_setmana, d.porcs_desmamats, d.pct_baixes_parideres,
@@ -1655,12 +1666,78 @@ export async function taulaDeslletaments(
           JOIN ubicacio_reproduccio u ON u.id = dp.ubicacio_id
           WHERE dp.deslletament_id = d.id AND dp.esborrat_el IS NULL
             AND u.tipus = 'gestacio') AS posicions_gestacio,
-       d.observacions
+       d.observacions,
+       ce.id AS cicle_id,
+       t.porcs_retorn AS porcs_engreix,
+       t.pct_baixes AS pct_baixes_destete,
+       ce.data_entrada AS data_entrada_engreix,
+       vcr.data_primera_venda,
+       vcr.edat_primera_venda,
+       vcr.data_ultima_sortida,
+       vcr.edat_ultima_venda
      FROM deslletament d
      JOIN banda b ON b.id = d.banda_id
+     LEFT JOIN transicio t ON t.deslletament_id = d.id AND t.esborrat_el IS NULL
+     LEFT JOIN cicle_engreix ce ON ce.deslletament_id = d.id AND ce.esborrat_el IS NULL
+     LEFT JOIN v_cicle_resum vcr ON vcr.id = ce.id
      WHERE d.esborrat_el IS NULL
      ORDER BY d.data_desmamat DESC`
   );
+
+  const cicleIds = [...new Set(files.map((f) => f.cicle_id).filter((id): id is string => id != null))];
+  const salesPerCicle = await salesTextPerCicle(db, cicleIds);
+
+  return files.map((f) => ({
+    ...f,
+    porcs_sales: f.cicle_id ? (salesPerCicle.get(f.cicle_id) ?? null) : null,
+  }));
+}
+
+/**
+ * "Porcs sales" en text (una fila per sala, p.ex. "17, 18, 19"), a partir de
+ * l'ocupació real de corrals de cada cicle — no reconstrueix la notació
+ * exacta de l'Excel (p.ex. "26 E+5-6-D"), però és prou per identificar-hi
+ * les sales.
+ */
+async function salesTextPerCicle(
+  db: SQLiteDatabase,
+  cicleIds: string[]
+): Promise<Map<string, string>> {
+  const resultat = new Map<string, string>();
+  if (cicleIds.length === 0) return resultat;
+
+  const placeholders = cicleIds.map(() => '?').join(', ');
+  const files = await db.getAllAsync<{
+    cicle_id: string;
+    sala: number;
+    meitat: Meitat;
+    corral: number;
+  }>(
+    `SELECT oc.cicle_id, s.numero AS sala, c.meitat, c.numero AS corral
+     FROM ocupacio_corral oc
+     JOIN corral c ON c.id = oc.corral_id
+     JOIN sala s ON s.id = c.sala_id
+     WHERE oc.cicle_id IN (${placeholders}) AND oc.esborrat_el IS NULL
+     ORDER BY s.numero, c.meitat DESC, c.numero`,
+    ...cicleIds
+  );
+
+  const perCicleSala = new Map<string, Map<number, { meitat: Meitat; numero: number }[]>>();
+  for (const f of files) {
+    const perSala = perCicleSala.get(f.cicle_id) ?? new Map();
+    perCicleSala.set(f.cicle_id, perSala);
+    const corrals = perSala.get(f.sala) ?? [];
+    perSala.set(f.sala, corrals);
+    corrals.push({ meitat: f.meitat, numero: f.corral });
+  }
+
+  for (const [cicleId, perSala] of perCicleSala) {
+    const codis = [...perSala.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([sala, corrals]) => codiSala(sala, corrals));
+    resultat.set(cicleId, codis.join(', '));
+  }
+  return resultat;
 }
 
 export async function taulaCicles(db: SQLiteDatabase): Promise<CicleResum[]> {

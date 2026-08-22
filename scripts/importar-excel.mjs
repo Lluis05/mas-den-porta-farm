@@ -196,15 +196,18 @@ function importaCens() {
     if (!fila) continue;
     const bandaFila = enter(fila[0]);
     const entradaFila = data(fila[17]);
+    const dataDesmamat = data(fila[2]);
     if (bandaFila != null && entradaFila) {
       perLligar.push({
         banda: bandaFila,
         dataEntrada: entradaFila,
+        // Per poder lligar el cicle a la fila exacta de Cens24 d'on ve,
+        // no només a la banda (resposta pendent, veure trobaBanda).
+        dataDesmamat,
         sales: salesDelText(fila[15]),
       });
     }
 
-    const dataDesmamat = data(fila[2]);
     if (!dataDesmamat || !dataDesmamat.startsWith(String(ANY))) continue;
 
     const banda = bandaFila;
@@ -238,10 +241,11 @@ function importaCens() {
 }
 
 /**
- * Lliga un full numerat amb la seva banda. Els fulls no diuen de quina banda
- * són, així que es busca la fila de `Cens24` amb la data d'entrada més propera
- * i que comparteixi sales. Si cap encaixa prou, val més no importar el cicle
- * que endevinar-ne la banda.
+ * Lliga un full numerat amb la seva banda I amb la fila exacta de `Cens24`
+ * d'on ve (per poder desar cicle_engreix.deslletament_id): els fulls no
+ * diuen de quina banda són, així que es busca la fila de `Cens24` amb la
+ * data d'entrada més propera i que comparteixi sales. Si cap encaixa prou,
+ * val més no importar el cicle que endevinar-ne la banda.
  */
 function trobaBanda(cicle, perLligar) {
   const salesCicle = new Set(
@@ -272,7 +276,7 @@ function trobaBanda(cicle, perLligar) {
       `Full "${cicle.full}": lligat a la banda ${millor.banda} amb ${millor.dies.toFixed(0)} dies de diferència a la data d'entrada.`
     );
   }
-  return millor.banda;
+  return { banda: millor.banda, dataDesmamat: millor.dataDesmamat ?? null };
 }
 
 /** Només el número de sala d'un codi, per comparar. */
@@ -474,7 +478,12 @@ const pinso = importaPinso();
 const { deslletaments, perLligar } = importaCens();
 const carregues = [];
 const cicles = importaCicles()
-  .map((c) => ({ ...c, banda: trobaBanda(c, perLligar) }))
+  .map((c) => {
+    const trobat = trobaBanda(c, perLligar);
+    return trobat
+      ? { ...c, banda: trobat.banda, deslletamentData: trobat.dataDesmamat }
+      : { ...c, banda: null, deslletamentData: null };
+  })
   .filter((c) => c.banda != null);
 
 const escorxador = importaEscorxador();

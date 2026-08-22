@@ -4,11 +4,13 @@ import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import {
+  censTrugesActual,
   llistaCarregues,
   llistaCicles,
   porcsALaGranja,
   tipusPinsoAmbEntregues,
   type CarregaLlista,
+  type CensTrugesActual,
   type CicleLlista,
 } from '@/db/queries';
 import { useAdmin } from '@/lib/admin';
@@ -25,6 +27,7 @@ export default function Index() {
   const db = useSQLiteContext();
   const admin = useAdmin();
   const [porcs, setPorcs] = useState<number | null>(null);
+  const [cens, setCens] = useState<CensTrugesActual | null>(null);
   const [cicles, setCicles] = useState<CicleLlista[]>([]);
   const [hiHaMesCicles, setHiHaMesCicles] = useState(false);
   const [carregues, setCarregues] = useState<CarregaLlista[]>([]);
@@ -40,14 +43,16 @@ export default function Index() {
       let viu = true;
       (async () => {
         try {
-          const [total, llista, carr, pinso] = await Promise.all([
+          const [total, censActual, llista, carr, pinso] = await Promise.all([
             porcsALaGranja(db),
+            censTrugesActual(db),
             llistaCicles(db, N_PORTADA + 1),
             llistaCarregues(db, N_PORTADA + 1),
             tipusPinsoAmbEntregues(db),
           ]);
           if (!viu) return;
           setPorcs(total);
+          setCens(censActual);
           setHiHaMesCicles(llista.length > N_PORTADA);
           setCicles(llista.slice(0, N_PORTADA));
           setHiHaMesCarregues(carr.length > N_PORTADA);
@@ -122,9 +127,17 @@ export default function Index() {
           </View>
         )}
 
-        <View style={styles.targeta}>
-          <Text style={styles.titolSeccio}>Porcs a la granja</Text>
-          <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
+        <View style={styles.filaTargetes}>
+          <View style={[styles.targeta, styles.targetaGran]}>
+            <Text style={styles.titolSeccio}>Porcs a la granja</Text>
+            <Text style={styles.granTotal}>{porcs ?? '—'}</Text>
+          </View>
+          <Link href="/cens" asChild>
+            <Pressable style={styles.targetaGranPressable} accessibilityRole="button">
+              <Text style={styles.titolSeccio}>Truges ara mateix</Text>
+              <Text style={styles.granTotal}>{cens ? cens.total : '—'}</Text>
+            </Pressable>
+          </Link>
         </View>
 
         <View style={styles.botons}>
@@ -319,6 +332,19 @@ const styles = StyleSheet.create({
     borderColor: colors.vora,
   },
   targetaError: { backgroundColor: colors.perillFluix, borderColor: colors.perill },
+  filaTargetes: { flexDirection: 'row', gap: mides.espai },
+  targetaGran: { flex: 1 },
+  // Objecte sol, no [targeta, targetaGran]: aquest Pressable va dins d'un
+  // Link asChild, i un array hi trenca el web (trampa #4 a CLAUDE.md).
+  targetaGranPressable: {
+    flex: 1,
+    backgroundColor: colors.targeta,
+    borderRadius: mides.radi,
+    padding: mides.espai,
+    gap: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.vora,
+  },
   titolSeccio: { fontSize: 13, fontWeight: '600', color: colors.discret },
   titolError: { fontSize: 16, fontWeight: '600', color: colors.perill },
   textError: { color: colors.perill },

@@ -1,5 +1,5 @@
 {
-  "generat": "2026-08-22T15:57:32.571Z",
+  "generat": "2026-08-22T16:27:21.619Z",
   "origen": "/home/lluis/Documents/estat granja.xlsm",
   "any": 2026,
   "pinso": {
@@ -5681,7 +5681,8 @@
           ]
         }
       ],
-      "banda": 4
+      "banda": 4,
+      "deslletamentData": "2025-07-11"
     },
     {
       "full": "17",
@@ -5759,7 +5760,8 @@
           ]
         }
       ],
-      "banda": 5
+      "banda": 5,
+      "deslletamentData": "2025-08-01"
     },
     {
       "full": "19",
@@ -5891,7 +5893,8 @@
           ]
         }
       ],
-      "banda": 7
+      "banda": 7,
+      "deslletamentData": "2025-09-12"
     },
     {
       "full": "20",
@@ -6005,7 +6008,8 @@
           ]
         }
       ],
-      "banda": 1
+      "banda": 1,
+      "deslletamentData": "2025-10-03"
     },
     {
       "full": "21",
@@ -6106,7 +6110,8 @@
           ]
         }
       ],
-      "banda": 2
+      "banda": 2,
+      "deslletamentData": "2025-10-24"
     },
     {
       "full": "22",
@@ -6197,7 +6202,8 @@
           ]
         }
       ],
-      "banda": 3
+      "banda": 3,
+      "deslletamentData": "2025-11-14"
     },
     {
       "full": "23",
@@ -6250,7 +6256,8 @@
           ]
         }
       ],
-      "banda": 4
+      "banda": 4,
+      "deslletamentData": null
     },
     {
       "full": "24",
@@ -6298,7 +6305,8 @@
           ]
         }
       ],
-      "banda": 5
+      "banda": 5,
+      "deslletamentData": "2025-12-25"
     },
     {
       "full": "25",
@@ -6331,7 +6339,8 @@
           ]
         }
       ],
-      "banda": 6
+      "banda": 6,
+      "deslletamentData": "2025-01-16"
     },
     {
       "full": "26",
@@ -6373,7 +6382,8 @@
           "sortides": []
         }
       ],
-      "banda": 7
+      "banda": 7,
+      "deslletamentData": "2026-02-06"
     },
     {
       "full": "27",
@@ -6401,7 +6411,8 @@
           "sortides": []
         }
       ],
-      "banda": 1
+      "banda": 1,
+      "deslletamentData": "2026-02-27"
     },
     {
       "full": "28",
@@ -6422,7 +6433,8 @@
           "sortides": []
         }
       ],
-      "banda": 2
+      "banda": 2,
+      "deslletamentData": "2026-03-20"
     },
     {
       "full": "29",
@@ -6464,7 +6476,8 @@
           "sortides": []
         }
       ],
-      "banda": 3
+      "banda": 3,
+      "deslletamentData": "2026-04-10"
     },
     {
       "full": "30",
@@ -6499,7 +6512,8 @@
           "sortides": []
         }
       ],
-      "banda": 4
+      "banda": 4,
+      "deslletamentData": "2026-05-01"
     },
     {
       "full": "31",
@@ -6527,7 +6541,8 @@
           "sortides": []
         }
       ],
-      "banda": 5
+      "banda": 5,
+      "deslletamentData": "2026-05-22"
     }
   ],
   "carregues": [
